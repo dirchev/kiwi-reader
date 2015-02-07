@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "postinstall": "bower install",
-    "start" : "node server.js",
+    "start" : "node server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "latest",
