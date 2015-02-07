@@ -82,12 +82,17 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     console.log($scope.file.anotations[index]);
   }
 
-  $(document).on("click", ".selected", function() {
+  $(document).on("mouseover", ".selected", function() {
     var id = $(this).attr('id');
     var anotation_id = id.substr(9);
     $(this).popover({
       content: $scope.file.anotations[anotation_id].content,
       placement: 'top'
-    })
+    });
+    $(this).popover('show');
   });
+  $(document).on("mouseleave", ".selected", function() {
+    $(this).popover('hide');
+  });
+  
 });
