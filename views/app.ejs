@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Kiwi Reader</title>
+
+    <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="public/style/bootstrap-themes/paper.css">
+
+    <link rel="stylesheet" href="public/bower_components/toastr/toastr.css">
+    <link rel="stylesheet" href="public/style/style.css">
+    <link rel="stylesheet" href="public/style/animate.css">
+
+    <script src="public/bower_components/tinymce/tinymce.min.js"></script>
+    <script src="public/bower_components/angular/angular.min.js"></script>
+    <script src="public/bower_components/angular-ui-tinymce/src/tinymce.js"></script>
+    <script src="public/bower_components/ui-router/release/angular-ui-router.min.js"></script>
+    <script src="public/bower_components/ngUpload/ng-upload.js"></script>
+    <script src="public/bower_components/jquery/dist/jquery.js"></script>
+    <script src="public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="public/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="public/bower_components/toastr/toastr.js"></script>
+
+    <script src="public/app/app.js"></script>
+
+    <script src="public/app/directives/text_select.js"></script>
+
+    <script src="public/app/controllers/books.js"></script>
+    <script src="public/app/controllers/book.js"></script>
+    <script src="public/app/controllers/files.js"></script>
+    <script src="public/app/controllers/file.js"></script>
+    <script src="public/app/controllers/settings.js"></script>
+
+    <script src="public/app/factories/file.js"></script>
+    <script src="public/app/factories/book.js"></script>
+  </head>
+  <body ng-app="kiwiReader">
+    <nav class="navbar navbar-default border-sharp">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a ui-sref="books">Книги</a></li>
+            <li><a ui-sref="files">Файлове</a></li>
+            <li><a ui-sref="library">Библиотека</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{user.name}}<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a ui-sref="settings">Профил</a></li>
+                <li><a ui-sref="settings">Настройки</a></li>
+                <li><a href="/logout">Изход</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div><!-- /.navbar-collapse -->
+
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+      <div ui-view=""></div>
+    </div>
+  </body>
+</html>

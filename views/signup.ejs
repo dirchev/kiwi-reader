@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Регистрация в Kiwi Reader</title>
+    <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+
+    <style>
+        body { padding-top:80px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-6 col-sm-offset-3">
+        <h1><span class="fa fa-sign"></span> Регистрация</h1>
+
+        <!-- show any messages tha come back with authentication -->
+        <% if(message.length > 0) {%>
+            <div class="alert alert-danger">
+              <%= message %>
+            </div>
+        <% } %>
+        <!-- SIGNUP FORM -->
+        <form action="/signup" method="post">
+          <div class="form-group">
+            <label for="name">Име</label>
+            <input type="text" name="name" class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" id="email">
+          </div>
+          <div class="form-group">
+            <label for="password">Парола</label>
+            <input type="password" name="password" class="form-control" id="password">
+          </div>
+
+          <button type="submit" class="btn btn-warning btn-lg">
+            Регистрация
+          </button>
+        </form>
+
+        <hr>
+
+        <p>
+          Вече имаш акаунт? <a href="/login">Вход</a>
+        </p>
+        <p>
+          Или се върни в <a href="/">начало</a>.
+        </p>
+
+      </div>
+    </div>
+  </body>
+</html>

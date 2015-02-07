@@ -1,0 +1,6 @@
+.selected {
+  background-color: #f7ff00;
+}
+.border-sharp{
+  border-radius: 0 !important;
+}

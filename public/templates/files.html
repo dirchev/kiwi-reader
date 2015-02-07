@@ -1,0 +1,66 @@
+<div class="jumbotron">
+  <h1>Файлове</h1>
+  <!-- Single button -->
+  <div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      Нов файл <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a ng-click="newFile()">Празен файл</a></li>
+      <li><a data-toggle="modal" data-target="#newTxtFileModal">Вмъкни файл</a></li>
+    </ul>
+  </div>
+
+</div>
+<!-- Single button -->
+<div class="row">
+  <div ng-repeat="file in files track by $index" class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 10px;">
+    <button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      {{file.title}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a ui-sref="file({id : file._id})">Отвори</a></li>
+      <li><a ng-click="deleteFile(file._id)">Изтрий</a></li>
+      <li class="divider"></li>
+      <li><a data-toggle="collapse" data-target="#shareFile{{file._id}}" aria-expanded="false" aria-controls="shareFile{{file.id}}" ng-click="getSharedUsers(file._id, $index)">Споделяне...</a></li>
+    </ul>
+    <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="shareFile{{file._id}}">
+      <ul class="list-group">
+        <li class="list-group-item active">Този файл е достъпен от:</li>
+        <li class="list-group-item" ng-repeat="user in file.sharedUsers">{{user.name}}</li>
+      </ul>
+      <form ng-submit="shareFile(file._id, userToShare)">
+        <div class="input-group" style="margin-top: 10px">
+          <input type="email" class="form-control" required ng-model="userToShare" placeholder="Въведи email">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Сподели</button>
+          </span>
+        </div>
+      </form>
+      <a class="btn btn-danger btn-sm pull-right" style="margin-top: 10px;" data-toggle="collapse" data-target="#shareFile{{file._id}}" aria-label="Close">Затвори</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newTxtFileModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="">Създай файл</h4>
+      </div>
+      <div class="modal-body">
+
+        <form ng-upload="newTxtFile(content)" action="/api/file/txt" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="">Файл</label>
+            <input class="btn btn-default" type="file" name="txtFile">
+            <p class="help-block">Избери .txt, .doc, .odt или .docx файл</p>
+          </div>
+          <button type="submit" class="btn btn-primary" upload-submit data-dismiss="modal">Създай</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

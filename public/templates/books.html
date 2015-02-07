@@ -1,0 +1,15 @@
+<div class="jumbotron">
+  <h1>Книги</h1>
+  <a ng-click="newBook()" class="btn btn-default">Нова книга</a>
+</div>
+<div ng-repeat="book in books" class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    {{book.title}} <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a ui-sref="book({id : book._id})">Отвори</a></li>
+    <li><a ng-click="deleteBook(book._id)">Изтрий</a></li>
+    <li class="divider"></li>
+    <li><a>Сподели</a></li>
+  </ul>
+</div>
