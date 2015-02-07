@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
       "postinstall": "./node_modules/bower/bin/bower install"
-  }
+  },
   "dependencies": {
     "bcrypt-nodejs": "latest",
     "body-parser": "^1.11.0",
