@@ -7,7 +7,7 @@
   "moduleType": [
     "node"
   ],
-  "license": "MIT",
+  "license": "Apache 2",
   "private": true,
   "ignore": [
     "**/.*",

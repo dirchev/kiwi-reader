@@ -4,7 +4,6 @@
   "description": "Kiwi reader is app, where more than one people can read, comment and edit text, doc or book.",
   "main": "server.js",
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install",
     "start" : "node server.js"
   },
   "dependencies": {
