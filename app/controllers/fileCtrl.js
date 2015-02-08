@@ -4,11 +4,57 @@ var path = require('path');
 var fs = require('fs');
 var office = require('office');
 var cheerio = require('cheerio');
-
+var mongoose = require('mongoose');
 // save file to directory
 var saveFile = function(file, path){
   file.pipe(fs.createWriteStream(path));
 };
+
+var ObjectId = function(string){
+  return mongoose.Types.ObjectId(string)
+}
+var getUsersNamesInFile = function(file, cb){
+  //count all users in files anotations and comments
+  if(file.anotations.length === 0){
+    cb(file);
+    return;
+  }
+  var usersCount = 0;
+  for(var i in file.anotations){
+    if(file.anotations[i])
+    usersCount++;
+    for(var j in file.anotations[i].comments){
+      if(file.anotations[i].comments[j]){
+        usersCount++;
+      }
+    }
+  }
+  console.log(usersCount);
+  // now we got usersCount
+  // we set new variable, to count changed users name
+  var changedUsersCount = 0;
+  for(i in file.anotations){
+    User.findOne({_id : ObjectId(file.anotations[i].user)}).exec(function(err,user){
+      file.anotations[i].user = user.data.name;
+      changedUsersCount++;
+      if(changedUsersCount === usersCount){
+        cb(file);
+        return;
+      }
+      for(j in file.anotations[i].comments){
+        User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).exec(function(err,user2){
+          file.anotations[i].comments[j].user = user2.data.name;
+          changedUsersCount++;
+          // if we have changed all users, we are ready to send parsed file
+          if(changedUsersCount === usersCount){
+            cb(file);
+            return;
+          }
+        });
+      }
+    })
+  }
+}
 
 // gets .docx file path and returns its content (actually <body> tag content), converted to html
 var parseDocx = function(document, callback){
@@ -133,12 +179,17 @@ module.exports = {
   },
   readOne: function(req, res){
     var file_id = req.params.file_id;
-    File.findOne({_id : file_id , users: req.user._id}, function(err, data){
-      if(err)
+    File.findOne({_id : file_id , users: req.user._id}).lean().exec(function(err, data){
+      var file = data;
+      if(err){
         console.log(err);
-      else
-        res.json(data);
-    })
+        res.json({success:false, message:'Възникна проблем при намирането на файла.'})
+      } else {
+        getUsersNamesInFile(file, function(newFile){
+          res.json(newFile);
+        })
+      }
+    });
   },
   delete: function(req, res){
     var file_id = req.params.file_id;
