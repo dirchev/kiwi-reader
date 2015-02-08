@@ -19,7 +19,14 @@ var fileSchema = mongoose.Schema({
       type: ObjectId,
       ref: 'User'
     },
-    content: String
+    title: String,
+    comments: [{
+      user: {
+        type: ObjectId,
+        ref: 'User'
+      },
+      content: String
+    }]
   }]
 });
 

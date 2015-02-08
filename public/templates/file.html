@@ -1,27 +1,43 @@
 <div class="row">
   <div class="col-md-3" style="position: relative; height: 100% overflow: hidden;">
     <div class="hidden-sm hidden-xs" style="position: fixed; width: inherit;">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-            <b>Коментари</b>
-        </div>
-        <div class="list-group">
-          <a class="list-group-item" ng-repeat="anotation in file.anotations" ng-click="selectAnotation(anotation, $index)">
-            {{anotation.content}}
-          </a>
-          <div ng-hide="file.anotations.length" class="list-group-item">
-            Нямате направени коментари. Създайте нов като селектирате част от текста, която искате да коментирате и натиснете "Коментар".
+      <h3>Анотации</h3>
+      <div class="well well-sm text-center" ng-hide="file.anotations.length">
+        <p>
+          Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
+        </p>
+      </div>
+      <accordion close-others="true">
+        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user}} {{anotation.title}}" ng-click="selectAnotation(anotation, $index)">
+          <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
+            <h4>{{comment.user}}</h4>
+            <p>
+              {{comment.content}}
+            </p>
           </div>
-        </div>
-      </div>
-      <div>
-      </div>
+          <div class="btn-group btn-group-sm bottom-buffer-sm">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
+            <button type="button" class="btn btn-danger">Затвори анотацията</button>
+          </div>
+          <div id="commentBox{{$index}}" class="collapse well well-sm">
+            <form ng-submit="addComment($index, comment)">
+              <div class="form-group">
+                  <textarea class="form-control" ng-model="comment" rows="4" placeholder="Напиши твоят коментар тук..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-success">
+                Коментирай
+              </button>
+            </form>
+          </div>
+        </accordion-group>
+      </accordion>
+
       <div ng-show="selectedText" class="panel panel-default">
         <div class="panel-body text-center">
           {{selectedText}}
         </div>
         <div class="panel-footer" ng-hide="anotationBox">
-          <a class="btn btn-primary" ng-click="anotationBox = true">Коментар</a>
+          <a class="btn btn-primary" ng-click="anotationBox = true">Създай анотация</a>
           <a class="btn btn-danger" ng-click="cancelAnotation()">Отказ</a>
         </div>
         <div class="panel-footer" ng-show="anotationBox">
@@ -39,7 +55,7 @@
     <input type="text" class="form-control" ng-model="file.title"  style="padding: 10px; border: solid 1px #cdcdcd; border-radius: 0;">
     <div style="border: solid 1px #cdcdcd; margin-top: 20px;">
       <div class="border-sharp btn-group">
-        <a class="btn btn-primary border-sharp" ng-click="editMode = !editMode">Промени</a>
+        <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">Промени</a>
         <a class="btn btn-warning border-sharp">Махни highliting</a>
       </div>
       <div ng-show="editMode" style="margin-top: 10px">

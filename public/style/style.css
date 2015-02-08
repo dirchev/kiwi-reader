@@ -4,3 +4,9 @@
 .border-sharp{
   border-radius: 0 !important;
 }
+.bottom-buffer{
+  margin-bottom: 20px;
+}
+.bottom-buffer-sm{
+  margin-bottom: 10px;
+}

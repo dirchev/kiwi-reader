@@ -21,6 +21,10 @@ module.exports = function(app, passport, busboy){
     fileCtrl.update(req, res);
   });
 
+  app.put('/api/file/:file_id/anotations', isLoggedIn, function(req, res){
+    fileCtrl.updateAnotations(req, res);
+  });
+
   app.get('/api/file', isLoggedIn, function(req, res){
     fileCtrl.read(req, res);
   });
@@ -39,7 +43,14 @@ module.exports = function(app, passport, busboy){
 
   app.get('/api/file/:file_id/share', isLoggedIn, function(req, res){
     fileCtrl.getShared(req, res)
-  })
+  });
+
+  app.post('/api/file/anotation', isLoggedIn, function(req, res){
+    fileCtrl.addAnotation(req, res);
+  });
+  app.post('/api/file/comment', isLoggedIn, function(req, res){
+    fileCtrl.addComment(req, res);
+  });
 
 };
 // route middleware to make sure a user is logged in

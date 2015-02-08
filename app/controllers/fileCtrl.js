@@ -99,7 +99,26 @@ module.exports = {
     }
   },
   update: function(req,res){
-    File.update({_id: req.params.file_id, users: req.user._id}, req.body.file, {upsert: true}, function (err) {
+    var newFile = req.body.file;
+    console.log(newFile);
+    if(typeof newFile !== 'undefined'){
+      File.update(
+        {_id: req.params.file_id, users: req.user._id},
+        {'title' : newFile.title, 'content': newFile.content},
+        {upsert: true},
+        function (err) {
+          if(err)
+            console.log(err);
+          res.json({success: true});
+        }
+      )
+    } else {
+      res.json({success: true});
+    }
+  },
+  updateAnotations: function(req, res){
+    var anotations = req.body.anotations;
+    File.update({_id: req.params.file_id}, {anotations:anotations}, {upsert:true}, function(err, data){
       if(err)
         console.log(err);
       res.json({success: true});
@@ -188,7 +207,71 @@ module.exports = {
         }
       }
     })
+  },
+  addAnotation: function(req, res){
+    var file_id = req.body.id;
+    var anotation = {
+        title: req.body.anotation,
+        user: req.user._id,
+        comments: []
+    }
+    // File.find({_id : file_id, users: req.user._id}).exec(function(err, file){
+    //   if(err){
+    //     console.log(err);
+    //     res.json({success:false, message: 'Грешка при запазването на коментара.'});
+    //   }
+    //   file.anotations.push(anotation);
+    //   file.save(function(err, newFile){
+    //     console.log(newFile)
+    //     var anotation_id = newFile.anotations[newFile.anotations.length-1]._id;
+    //     res.json({success:true, anotation_id: anotation_id});
+    //
+    //   });
+    // })
+    File.update(
+      {_id : file_id, users: req.user._id},
+      {$push: {'anotations':anotation}},
+      {upsert: true},
+      function(err, data){
+        if(err){
+          console.log(err);
+          res.json({success:false,message: 'Грешка при запазването на коментара.'});
+        } else {
+          File.findById(file_id, function(err, file){
+            if(err){
+              console.log(err);
+            } else {
+              var anotation_id = file.anotations[file.anotations.length-1]._id;
+              res.json({success:true, anotation_id: anotation_id});
+            }
+          })
+        }
+      }
+    );
+  },
+  addComment: function(req, res){
+    var file_id = req.body.id;
+    var anotation_index = req.body.anotation_index;
+    var user = req.user;
+    var comment = {
+      content: req.body.comment,
+      user: user._id
+    };
+    File.findOne({_id: file_id, users: user._id}).exec(function(err, file){
+      if(err){
+        console.log(err);
+        res.json({success:false,message: 'Грешка при запазването на коментара.'});
+      } else {
+        file.anotations[anotation_index].comments.push(comment);
+        file.save(function(err){
+          if(err){
+            console.log(err);
+            res.json({success:false,message: 'Грешка при запазването на коментара.'});
+          } else {
+            res.json({success:true});
+          }
+        })
+      }
+    })
   }
-
-
 }
