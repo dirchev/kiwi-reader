@@ -6,7 +6,7 @@ module.exports = {
     'facebookAuth' : {
         'clientID'      : '485936691536149', // your App ID
         'clientSecret'  : '5fa7250632139239e47807f72738816b', // your App Secret
-        'callbackURL'   : 'http://localhost:8080/auth/facebook/callback'
+        'callbackURL'   : 'https://kiwi-reader.herokuapp.com/auth/facebook/callback'
     },
 
     'twitterAuth' : {

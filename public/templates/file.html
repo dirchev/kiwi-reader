@@ -9,8 +9,15 @@
       </div>
       <accordion close-others="true">
         <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user}} {{anotation.title}}" ng-click="selectAnotation(anotation, $index)">
+          <div class="well well-sm text-center">
+            <h4>{{anotation.user}}</h4>
+            <p>
+              {{anotation.title}}
+            </p>
+          </div>
+          <hr>
           <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
-            <h4>{{comment.user}}</h4>
+            <h5>{{comment.user}}</h5>
             <p>
               {{comment.content}}
             </p>
@@ -43,9 +50,9 @@
         <div class="panel-footer" ng-show="anotationBox">
           <form ng-submit="addAnotation()">
             <div class="form-group">
-              <textarea class="form-control" ng-model="anotation" placeholder="Коментар..." rows="5" ></textarea>
+              <textarea class="form-control" ng-model="anotation" placeholder="Съдържание..." rows="5" ></textarea>
             </div>
-            <button type="submit" class="btn btn-default">Коментирай</button>
+            <button type="submit" class="btn btn-default">Създай</button>
           </form>
         </div>
       </div>

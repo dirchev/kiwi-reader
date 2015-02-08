@@ -34,25 +34,29 @@ var getUsersNamesInFile = function(file, cb){
   // we set new variable, to count changed users name
   var changedUsersCount = 0;
   for(i in file.anotations){
-    User.findOne({_id : ObjectId(file.anotations[i].user)}).exec(function(err,user){
-      file.anotations[i].user = user.data.name;
-      changedUsersCount++;
-      if(changedUsersCount === usersCount){
-        cb(file);
-        return;
-      }
-      for(j in file.anotations[i].comments){
-        User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).exec(function(err,user2){
-          file.anotations[i].comments[j].user = user2.data.name;
-          changedUsersCount++;
-          // if we have changed all users, we are ready to send parsed file
-          if(changedUsersCount === usersCount){
-            cb(file);
-            return;
-          }
-        });
-      }
-    })
+    (function(i){
+      User.findOne({_id : ObjectId(file.anotations[i].user)}).exec(function(err,user){
+        file.anotations[i].user = user.data.name;
+        changedUsersCount++;
+        if(changedUsersCount === usersCount){
+          cb(file);
+          return;
+        }
+        for(j in file.anotations[i].comments){
+          (function(j){
+            User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).exec(function(err,user2){
+              file.anotations[i].comments[j].user = user2.data.name;
+              changedUsersCount++;
+              // if we have changed all users, we are ready to send parsed file
+              if(changedUsersCount === usersCount){
+                cb(file);
+                return;
+              }
+            })
+          })(j)
+        }
+      })
+    })(i)
   }
 }
 
