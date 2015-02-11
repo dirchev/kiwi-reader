@@ -29,7 +29,6 @@ var getUsersNamesInFile = function(file, cb){
       }
     }
   }
-  console.log(usersCount);
   // now we got usersCount
   // we set new variable, to count changed users name
   var changedUsersCount = 0;
@@ -148,9 +147,8 @@ module.exports = {
       req.pipe(req.busboy);
     }
   },
-  update: function(req,res){
+  update: function(req, res){
     var newFile = req.body.file;
-    console.log(newFile);
     if(typeof newFile !== 'undefined'){
       File.update(
         {_id: req.params.file_id, users: req.user._id},

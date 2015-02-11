@@ -3,16 +3,30 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
   $scope.selectedText = '';
   $scope.selection;
   $scope.anotationBox = false;
+  $scope.disableHighlighting = 0;
   $scope.editModeOptions = {
     menubar    : false,
     height     : '500px',
     resize     : false,
     code       : true
   }
+  $scope.openedAnotations = [];
+
   var file_id = $stateParams.id;
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
+    for(i in $scope.file.anotations){
+      $scope.openedAnotations.push(false);
+    }
+    $scope.$watch('openedAnotations', function(newAnotations){
+      $('.selected').css('background-color', '#f7ff00');
+      for(i in $scope.openedAnotations){
+        if($scope.openedAnotations[i] === true){
+          selectAnotation(i);
+        }
+      }
+    },true);
     if($scope.file.content === ''){
       $scope.editMode = true;
     }
@@ -23,11 +37,47 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
       .success(function(data){
         File.getOne(file_id).success(function(file){
           $scope.file = file;
+          for(i in $scope.file.anotations){
+            $scope.openedAnotations.push(false);
+          }
           if(cb){
             cb();
           }
         })
       });
+  }
+
+  $scope.$watch('file.title', function(){
+    updateFile();
+  });
+
+  $scope.$watch('disableHighlighting', function(){
+    if(!$scope.disableHighlighting){
+      $('.selected').css('background-color', '#f7ff00');
+    } else {
+      $('.selected').css('background-color', 'inherit');
+    }
+  });
+
+
+  var selectAnotation = function(index){
+    $scope.disableHighlighting = 0;
+    var anotation = $scope.file.anotations[index];
+    $('.selected').css('background-color', '#f7ff00');
+    var old = $location.hash();
+    $location.hash('selection' + anotation._id);
+    $anchorScroll()
+    $location.hash(old);
+    $('#selection' + anotation._id).css('background-color', '#ffab7b');
+  }
+  var deSelectAnotation = function(index){
+    var anotation = $scope.file.anotations[index];
+    $('.selected').css('background-color', '#f7ff00');
+    var old = $location.hash();
+    $location.hash('selection' + anotation._id);
+    $anchorScroll()
+    $location.hash(old);
+    $('#selection' + anotation._id).css('background-color', '#f7ff00');
   }
 
   $scope.toggleEditMode = function(){
@@ -60,14 +110,6 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     }
   }
 
-  $scope.selectAnotation = function(anotation, index){
-    $('.selected').css('background-color', '#f7ff00');
-    var old = $location.hash();
-    $location.hash('selection'+index);
-    $anchorScroll()
-    $location.hash(old);
-    $('#selection' + index).css('background-color', '#3b91db');
-  }
 
   $scope.cancelAnotation = function(){
     $scope.anotation = '';

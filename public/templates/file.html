@@ -8,7 +8,7 @@
         </p>
       </div>
       <accordion close-others="true">
-        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user}} {{anotation.title}}" ng-click="selectAnotation(anotation, $index)">
+        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user}} {{anotation.title}}" is-open="openedAnotations[$index]">
           <div class="well well-sm text-center">
             <h4>{{anotation.user}}</h4>
             <p>
@@ -63,7 +63,7 @@
     <div style="border: solid 1px #cdcdcd; margin-top: 20px;">
       <div class="border-sharp btn-group">
         <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">Промени</a>
-        <a class="btn btn-warning border-sharp">Махни highliting</a>
+        <a class="btn btn-warning border-sharp" ng-click="disableHighlighting = !disableHighlighting">Махни highliting</a>
       </div>
       <div ng-show="editMode" style="margin-top: 10px">
         <textarea
