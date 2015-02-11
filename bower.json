@@ -29,7 +29,7 @@
     "ngUpload": "~0.5.14"
   },
   "resolutions": {
-    "angular": "1.3.12",
+    "angular": "1.3.13",
     "tinymce": "4.1.7"
   },
   "main": "server.js",
