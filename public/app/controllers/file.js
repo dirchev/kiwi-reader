@@ -34,17 +34,17 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
 
   var updateFile = function(cb){
     File.update(file_id, $scope.file)
-      .success(function(data){
-        File.getOne(file_id).success(function(file){
-          $scope.file = file;
-          for(i in $scope.file.anotations){
-            $scope.openedAnotations.push(false);
-          }
-          if(cb){
-            cb();
-          }
-        })
-      });
+    .success(function(data){
+      File.getOne(file_id).success(function(file){
+        $scope.file = file;
+        for(i in $scope.file.anotations){
+          $scope.openedAnotations.push(false);
+        }
+        if(cb){
+          cb();
+        }
+      })
+    });
   }
 
   $scope.$watch('file.title', function(){
@@ -70,6 +70,7 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     $location.hash(old);
     $('#selection' + anotation._id).css('background-color', '#ffab7b');
   }
+
   var deSelectAnotation = function(index){
     var anotation = $scope.file.anotations[index];
     $('.selected').css('background-color', '#f7ff00');
@@ -149,6 +150,19 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
 
   var emptyElement =  function( el ){
       return !$.trim(el.html())
+  }
+
+  $scope.deleteAnotation = function(anotation_id){
+    File.deleteAnotation(file_id, anotation_id).success(function(data){
+      if(data.success){
+        toastr.success('Успешно изтрихте анотацията.');
+        $('#selection'+anotation_id).contents().unwrap();
+        $scope.file.content = $('#previewBox').html();
+        updateFile();
+      } else {
+        toastr.error(data.message);
+      }
+    })
   }
 
   $(document).on("mouseover", ".selected", function() {

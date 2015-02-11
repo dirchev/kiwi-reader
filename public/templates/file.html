@@ -8,23 +8,23 @@
         </p>
       </div>
       <accordion close-others="true">
-        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user}} {{anotation.title}}" is-open="openedAnotations[$index]">
+        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
           <div class="well well-sm text-center">
-            <h4>{{anotation.user}}</h4>
+            <h4>{{anotation.user.name}}</h4>
             <p>
               {{anotation.title}}
             </p>
           </div>
           <hr>
           <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
-            <h5>{{comment.user}}</h5>
+            <h5>{{comment.user.name}}</h5>
             <p>
               {{comment.content}}
             </p>
           </div>
           <div class="btn-group btn-group-sm bottom-buffer-sm">
             <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
-            <button type="button" class="btn btn-danger">Затвори анотацията</button>
+            <button type="button" class="btn btn-danger" ng-if="anotation.user.id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
           </div>
           <div id="commentBox{{$index}}" class="collapse well well-sm">
             <form ng-submit="addComment($index, comment)">

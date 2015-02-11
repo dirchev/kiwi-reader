@@ -34,8 +34,11 @@ var getUsersNamesInFile = function(file, cb){
   var changedUsersCount = 0;
   for(i in file.anotations){
     (function(i){
-      User.findOne({_id : ObjectId(file.anotations[i].user)}).exec(function(err,user){
-        file.anotations[i].user = user.data.name;
+      User.findOne({_id : ObjectId(file.anotations[i].user)}).lean().exec(function(err,user){
+        file.anotations[i].user = {
+          id: user._id,
+          name: user.data.name
+        };
         changedUsersCount++;
         if(changedUsersCount === usersCount){
           cb(file);
@@ -43,8 +46,11 @@ var getUsersNamesInFile = function(file, cb){
         }
         for(j in file.anotations[i].comments){
           (function(j){
-            User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).exec(function(err,user2){
-              file.anotations[i].comments[j].user = user2.data.name;
+            User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).lean().exec(function(err,user2){
+              file.anotations[i].comments[j].user = {
+                id: user2._id,
+                name: user2.data.name
+              };
               changedUsersCount++;
               // if we have changed all users, we are ready to send parsed file
               if(changedUsersCount === usersCount){
@@ -267,20 +273,7 @@ module.exports = {
         title: req.body.anotation,
         user: req.user._id,
         comments: []
-    }
-    // File.find({_id : file_id, users: req.user._id}).exec(function(err, file){
-    //   if(err){
-    //     console.log(err);
-    //     res.json({success:false, message: 'Грешка при запазването на коментара.'});
-    //   }
-    //   file.anotations.push(anotation);
-    //   file.save(function(err, newFile){
-    //     console.log(newFile)
-    //     var anotation_id = newFile.anotations[newFile.anotations.length-1]._id;
-    //     res.json({success:true, anotation_id: anotation_id});
-    //
-    //   });
-    // })
+    };
     File.update(
       {_id : file_id, users: req.user._id},
       {$push: {'anotations':anotation}},
@@ -326,5 +319,26 @@ module.exports = {
         })
       }
     })
+  },
+  deleteAnotation: function(req, res){
+    var file_id = req.params.file_id;
+    var anotation_id = req.params.anotation_id;
+    File.findOne({_id: file_id, users:req.user._id}).lean().exec(function(err, file){
+      if(err){
+        console.log(err);
+        res.json({success:false, message:"Грешка при изтриването на анотацията."});
+      } else {
+        for(i in file.anotations){
+          var user = file.anotations[i].user;
+          if(user == req.user.id){
+            File.findById(file_id).exec(function(err, file){
+              file.anotations.splice(i,1);
+              file.save();
+              res.json({success:true});
+            });
+          }
+        }
+      }
+    });
   }
 }

@@ -29,6 +29,9 @@ app.factory('File', function($http){
     },
     updateAnotations: function(file, anotations){
       return $http.put('/api/file/' + file + '/anotations', {anotations: anotations});
+    },
+    deleteAnotation: function(file, anotation){
+      return $http.delete('/api/file/'+file+'/anotation/'+anotation);
     }
   }
 })

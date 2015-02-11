@@ -33,6 +33,10 @@ module.exports = function(app, passport, busboy){
     fileCtrl.readOne(req, res);
   })
 
+  app.delete('/api/file/:file_id/anotation/:anotation_id', isLoggedIn, function(req, res){
+    fileCtrl.deleteAnotation(req, res);
+  })
+
   app.delete('/api/file/:file_id', isLoggedIn, function(req, res){
     fileCtrl.delete(req, res)
   })
@@ -48,6 +52,8 @@ module.exports = function(app, passport, busboy){
   app.post('/api/file/anotation', isLoggedIn, function(req, res){
     fileCtrl.addAnotation(req, res);
   });
+
+
   app.post('/api/file/comment', isLoggedIn, function(req, res){
     fileCtrl.addComment(req, res);
   });
