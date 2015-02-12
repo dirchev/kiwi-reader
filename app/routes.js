@@ -1,32 +1,4 @@
-var EPub = require('epub');
 module.exports = function(app, passport){
-
-  // TESTS
-  app.get('/book', function(req, res){
-    var book = new EPub('./book.epub', '/book/111/image/', '/book/111/chapters/');
-    book.on("end", function(){
-      book.flow.forEach(function(chapter){
-        console.log(chapter.id);
-      });
-      book.getChapter("item-9", function(error, text){
-        res.send(text);
-      });
-    });
-    book.parse();
-  });
-
-  app.get('/book/:book_id/:data_type/:data_id/*', function(req, res){
-    var book = new EPub('./book.epub');
-    book.on("end", function(){
-      console.log("Book ID: " + req.params.book_id);
-      console.log("Data Type: " + req.params.data_type);
-      console.log("Data ID: " + req.params.data_id);
-      book.getImage(req.params.data_id, function(error, img, mimeType){
-        res.send(img);
-      });
-    });
-    book.parse();
-  })
 
   // HOME PAGE with login links
   app.get('/', function(req, res){
@@ -39,7 +11,6 @@ module.exports = function(app, passport){
   });
 
   // PROCESS LOGIN
-  // uncomment later
   app.post('/login', passport.authenticate('local-login', {
       successRedirect : '/app', // redirect to the secure profile section
       failureRedirect : '/login', // redirect back to the signup page if there is an error

@@ -12,6 +12,12 @@ var getBookTitle = function(filePath, callback){
 }
 module.exports = function(app, passport){
 
+  app.get('/api/book', isLoggedIn, function(req, res){
+    Book.find({users: req.user._id}, function(err, books){
+      res.json(books);
+    });
+  });
+
   app.post('/api/book', isLoggedIn, function(req, res){
     var book = new Book();
     book.file = '/uploads/books/book.epub';
@@ -39,12 +45,6 @@ module.exports = function(app, passport){
       }
 
     })
-  });
-
-  app.get('/api/book', isLoggedIn, function(req, res){
-    Book.find({users: req.user._id}, function(err, books){
-      res.json(books);
-    });
   });
 
   app.post('/api/book/:book_id/share', isLoggedIn, function(req, res){

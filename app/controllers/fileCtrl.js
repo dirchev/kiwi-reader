@@ -34,7 +34,9 @@ var getUsersNamesInFile = function(file, cb){
   var changedUsersCount = 0;
   for(i in file.anotations){
     (function(i){
-      User.findOne({_id : ObjectId(file.anotations[i].user)}).lean().exec(function(err,user){
+      var user_id = file.anotations[i].user
+      User.findOne({_id : ObjectId(user_id)}).lean()
+     .exec(function(err,user){
         file.anotations[i].user = {
           id: user._id,
           name: user.data.name
@@ -46,7 +48,9 @@ var getUsersNamesInFile = function(file, cb){
         }
         for(j in file.anotations[i].comments){
           (function(j){
-            User.findOne({_id : ObjectId(file.anotations[i].comments[j].user)}).lean().exec(function(err,user2){
+            var user_id = file.anotations[i].comments[j].user
+            User.findOne({_id : ObjectId(user_id)}).lean()
+            .exec(function(err,user2){
               file.anotations[i].comments[j].user = {
                 id: user2._id,
                 name: user2.data.name
@@ -78,17 +82,18 @@ var parseDocx = function(document, callback){
 }
 
 module.exports = {
-
   create: function(req, res){
     var file = new File();
     file.title = 'Неозаглавен файл';
     file.content = '';
     file.users.push(req.user._id);
     file.save(function(err, file){
-      if(err)
-        console.log(err);
-      else
-        res.json({success: true});
+      if(err){
+          console.log(err);
+          res.json({success: false, message: "Грешка при създаването на файл."});
+        } else {
+          res.json({success: true});
+        }
     });
   },
   createFromFile: function(req, res){
@@ -112,7 +117,8 @@ module.exports = {
           fileType = 'office';
           saveFile(file, filePath);
         } else {
-          console.log(mimetype);
+          console.log("Bad file format: " + mimetype);
+          res.json({success:false, message:'Този файл не се поддържа!'});
         }
       });
       req.busboy.on('finish', function() {
@@ -173,15 +179,17 @@ module.exports = {
   updateAnotations: function(req, res){
     var anotations = req.body.anotations;
     File.update({_id: req.params.file_id}, {anotations:anotations}, {upsert:true}, function(err, data){
-      if(err)
+      if(err){
         console.log(err);
+      }
       res.json({success: true});
     });
   },
   read: function(req, res){
     File.find({users: req.user._id}, function(err, data){
-      if(err)
+      if(err){
         console.log(err);
+      }
       res.json(data);
     })
   },
