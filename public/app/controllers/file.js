@@ -88,25 +88,18 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     });
   }
   $scope.checkForDeletedAnotations = function(){
-    var updated = false;
     if(typeof $scope.file !== 'undefined'){
       for(i in $scope.file.anotations){
         if(!$('#selection' + $scope.file.anotations[i]._id).length || emptyElement($('#selection' + $scope.file.anotations[i]._id))){
-          $scope.file.anotations.splice(i, 1);
-          updated = true;
+          File.deleteAnotation(file_id, $scope.file.anotations[i]._id).success(function(data){
+            if(data.success){
+              console.log('Успешно изтрихте анотация');
+              updateFile();
+            } else {
+              console.log(data.message);
+            }
+          })
         }
-      }
-      if(updated){
-        File.updateAnotations(file_id, $scope.file.anotations).success(function(data){
-          if(data.success){
-            toastr.warning('Изтрихте текст, върху който беше направена анотация. Анотацията е изтрита автоматично.');
-            File.getOne(file_id).success(function(data){
-              $scope.file = data;
-            })
-          } else {
-            toastr.error(data.msg)
-          }
-        })
       }
     }
   }

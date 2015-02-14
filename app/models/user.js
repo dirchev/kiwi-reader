@@ -27,8 +27,14 @@ var userSchema = mongoose.Schema({
         name         : String
     },
     data : {
-      name: String,
-      email: String,
+      name: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        required: true
+      },
       photo: String
     }
 });

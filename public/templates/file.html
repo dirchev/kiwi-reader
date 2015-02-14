@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-md-3" style="position: relative; height: 100% overflow: hidden;">
-    <div class="hidden-sm hidden-xs" style="position: fixed; width: inherit;">
-      <h3>Анотации</h3>
-      <div class="well well-sm text-center" ng-hide="file.anotations.length">
+  <div ng-hide="editMode" class="col-md-3" style="position: relative; height: 100% overflow: hidden;">
+    <div class="hidden-sm hidden-xs well well-sm" style="position: fixed; width: inherit;">
+      <h3 class="text-center">Анотации</h3>
+      <div ng-hide="file.anotations.length">
         <p>
           Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
         </p>
@@ -58,12 +58,14 @@
       </div>
     </div>
   </div>
-  <div class="col-md-offset-1 col-md-8">
+  <div ng-class="editMode ? 'col-md-offset-1 col-md-10' : 'col-md-offset-1 col-md-8'">
     <input type="text" class="form-control" ng-model="file.title"  style="padding: 10px; border: solid 1px #cdcdcd; border-radius: 0;">
     <div style="border: solid 1px #cdcdcd; margin-top: 20px;">
       <div class="border-sharp btn-group">
-        <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">Промени</a>
-        <a class="btn btn-warning border-sharp" ng-click="disableHighlighting = !disableHighlighting">Махни highliting</a>
+        <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">
+          <span ng-if="editMode">Преглед</span>
+          <span ng-if="!editMode">Редакция</span>
+        </a>
       </div>
       <div ng-show="editMode" style="margin-top: 10px">
         <textarea

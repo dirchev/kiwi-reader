@@ -27,9 +27,6 @@ app.factory('File', function($http){
     addComment: function(file, anotation, comment){
       return $http.post('/api/file/comment', {id:file, anotation_index:anotation, comment:comment})
     },
-    updateAnotations: function(file, anotations){
-      return $http.put('/api/file/' + file + '/anotations', {anotations: anotations});
-    },
     deleteAnotation: function(file, anotation){
       return $http.delete('/api/file/'+file+'/anotation/'+anotation);
     }

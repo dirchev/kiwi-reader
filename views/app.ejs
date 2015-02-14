@@ -5,18 +5,22 @@
     <meta charset="utf-8">
     <title>Kiwi Reader</title>
 
+    <!-- Meta tags -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap-theme.min.css"> -->
     <link rel="stylesheet" href="public/style/bootstrap-themes/paper.css">
-
     <link rel="stylesheet" href="public/bower_components/toastr/toastr.css">
     <link rel="stylesheet" href="public/style/style.css">
     <link rel="stylesheet" href="public/style/animate.css">
 
+    <!-- Bower components -->
     <script src="public/bower_components/tinymce/tinymce.min.js"></script>
     <script src="public/bower_components/angular/angular.min.js"></script>
+    <script src="public/bower_components/angular-socket-io/socket.js"></script>
     <script src="public/bower_components/angular-ui-tinymce/src/tinymce.js"></script>
     <script src="public/bower_components/ui-router/release/angular-ui-router.min.js"></script>
     <script src="public/bower_components/ngUpload/ng-upload.js"></script>
@@ -26,18 +30,20 @@
     <script src="public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="public/bower_components/toastr/toastr.js"></script>
 
+    <!-- Angular app files -->
     <script src="public/app/app.js"></script>
-
     <script src="public/app/directives/text_select.js"></script>
-
     <script src="public/app/controllers/books.js"></script>
     <script src="public/app/controllers/book.js"></script>
     <script src="public/app/controllers/files.js"></script>
     <script src="public/app/controllers/file.js"></script>
     <script src="public/app/controllers/settings.js"></script>
-
     <script src="public/app/factories/file.js"></script>
     <script src="public/app/factories/book.js"></script>
+
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    
   </head>
   <body ng-app="kiwiReader">
     <nav class="navbar navbar-default border-sharp">

@@ -5,10 +5,10 @@ var fs = require('fs');
 var office = require('office');
 var cheerio = require('cheerio');
 
-var fileCtrl = require('../controllers/fileCtrl');
 
 module.exports = function(app, passport, busboy){
-
+  var fileCtrl = require('../controllers/fileCtrl')(app);
+  
   app.post('/api/file', isLoggedIn, function(req, res){
     fileCtrl.create(req, res);
   });

@@ -7,25 +7,33 @@ var ObjectId = Schema.ObjectId;
 var fileSchema = mongoose.Schema({
   title: {
       type: String,
-      default: 'Неозаглвен файл'
+      default: 'Неозаглвен файл',
   },
   content: {
       type: String,
-      default: ''
+      default: '',
   },
   users: [{type: ObjectId, ref: 'User'}],
   anotations: [{
     user: {
       type: ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     },
-    title: String,
+    title: {
+      type :String,
+      required: true
+    },
     comments: [{
       user: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
       },
-      content: String
+      content: {
+        type: String,
+        required: true
+      }
     }]
   }]
 });

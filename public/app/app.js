@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ui.tinymce']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ui.tinymce', 'btford.socket-io']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/files");
