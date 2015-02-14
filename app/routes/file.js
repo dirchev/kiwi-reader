@@ -8,57 +8,27 @@ var cheerio = require('cheerio');
 
 module.exports = function(app, passport, busboy){
   var fileCtrl = require('../controllers/fileCtrl')(app);
-  
-  app.post('/api/file', isLoggedIn, function(req, res){
-    fileCtrl.create(req, res);
-  });
 
-  app.post('/api/file/txt', isLoggedIn, function(req, res){
-    fileCtrl.createFromFile(req, res);
-  });
+  // get all files
+  app.get('/api/file', isLoggedIn, fileCtrl.read)
+  // get file with id = file_id
+  app.get('/api/file/:file_id', isLoggedIn, fileCtrl.readOne)
 
-  app.put('/api/file/:file_id', isLoggedIn, function(req, res){
-    fileCtrl.update(req, res);
-  });
+  // create new blank file
+  app.post('/api/file', isLoggedIn, fileCtrl.create)
+  // import file
+  app.post('/api/file/txt', isLoggedIn, fileCtrl.createFromFile)
 
-  app.put('/api/file/:file_id/anotations', isLoggedIn, function(req, res){
-    fileCtrl.updateAnotations(req, res);
-  });
+  //delete file
+  app.delete('/api/file/:file_id', isLoggedIn, fileCtrl.delete)
 
-  app.get('/api/file', isLoggedIn, function(req, res){
-    fileCtrl.read(req, res);
-  });
-
-  app.get('/api/file/:file_id', isLoggedIn, function(req, res){
-    fileCtrl.readOne(req, res);
-  })
-
-  app.delete('/api/file/:file_id/anotation/:anotation_id', isLoggedIn, function(req, res){
-    fileCtrl.deleteAnotation(req, res);
-  })
-
-  app.delete('/api/file/:file_id', isLoggedIn, function(req, res){
-    fileCtrl.delete(req, res)
-  })
-
-  app.post('/api/file/:file_id/share', isLoggedIn, function(req, res){
-    fileCtrl.share(req, res);
-  })
-
-  app.get('/api/file/:file_id/share', isLoggedIn, function(req, res){
-    fileCtrl.getShared(req, res)
-  });
-
-  app.post('/api/file/anotation', isLoggedIn, function(req, res){
-    fileCtrl.addAnotation(req, res);
-  });
-
-
-  app.post('/api/file/comment', isLoggedIn, function(req, res){
-    fileCtrl.addComment(req, res);
-  });
+  // share file
+  app.post('/api/file/:file_id/share', isLoggedIn, fileCtrl.share)
+  // get file shares
+  app.get('/api/file/:file_id/share', isLoggedIn, fileCtrl.getShared)
 
 };
+
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 

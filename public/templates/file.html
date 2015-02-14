@@ -24,7 +24,7 @@
           </div>
           <div class="btn-group btn-group-sm bottom-buffer-sm">
             <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
-            <button type="button" class="btn btn-danger" ng-if="anotation.user.id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
+            <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
           </div>
           <div id="commentBox{{$index}}" class="collapse well well-sm">
             <form ng-submit="addComment($index, comment)">

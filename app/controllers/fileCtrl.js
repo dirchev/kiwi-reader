@@ -6,7 +6,7 @@ var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 
-module.exports = function(app){
+module.exports = function(){
   return {
     create: function(req, res){
       var file = new File();
@@ -85,23 +85,6 @@ module.exports = function(app){
         req.pipe(req.busboy);
       }
     },
-    update: function(req, res){
-      var newFile = req.body.file;
-      if(typeof newFile !== 'undefined'){
-        File.update(
-          {_id: req.params.file_id, users: req.user._id},
-          {'title' : newFile.title, 'content': newFile.content},
-          {upsert: true},
-          function (err) {
-            if(err)
-              console.log(err);
-            res.json({success: true});
-          }
-        )
-      } else {
-        res.json({success: true});
-      }
-    },
     read: function(req, res){
       File.find({users: req.user._id}, function(err, data){
         if(err){
@@ -119,9 +102,7 @@ module.exports = function(app){
           console.log(err);
           res.json({success:false, message:'Възникна проблем при намирането на файла.'});
         } else {
-          getUsersNamesInFile(file, function(newFile){
-            res.json(newFile);
-          })
+          res.json(file);
         }
       });
     },
@@ -193,83 +174,110 @@ module.exports = function(app){
         }
       })
     },
-    addAnotation: function(req, res){
-      var file_id = req.body.id;
-      var anotation = {
-          title: req.body.anotation,
-          user: req.user._id,
-          comments: []
-      };
+    updateTitle: function(file_id, title, callback){
+      File.findById(file_id).exec(function(err, file){
+        if(err){
+          console.log(err)
+          callback(err);
+        } else {
+          file.title = title;
+          file.save(function(err, data){
+            if(err){
+              console.log(err)
+              callback(err);
+            } else {
+              callback(null, data);
+            }
+          });
+        }
+      })
+    },
+    updateContent: function(file_id, content, callback){
+      File.findById(file_id).exec(function(err, file){
+        if(err){
+          console.log(err)
+          callback(err);
+        } else {
+          file.content = content;
+          file.save(function(err, data){
+            if(err){
+              console.log(err)
+              callback(err);
+            } else {
+              callback(null, data);
+            }
+          });
+        }
+      });
+    },
+    // adds anotation to file
+    addAnotation: function(file_id, anotation, callback){
       File.update(
-        {_id : file_id, users: req.user._id},
+        {_id : file_id},
         {$push: {'anotations':anotation}},
         {upsert: true},
         function(err, data){
           if(err){
             console.log(err);
-            res.json({success:false,message: 'Грешка при запазването на коментара.'});
+            callback('Грешка при запазването на коментара.');
           } else {
             File.findById(file_id, function(err, file){
               if(err){
                 console.log(err);
               } else {
-                var anotation_id = file.anotations[file.anotations.length-1]._id;
-                res.json({success:true, anotation_id: anotation_id});
+                callback(null, file.anotations);
               }
             })
           }
         }
       );
-    },
-    addComment: function(req, res){
-      var file_id = req.body.id;
-      var anotation_index = req.body.anotation_index;
-      var user = req.user;
-      var comment = {
-        content: req.body.comment,
-        user: user._id
-      };
-      File.findOne({_id: file_id, users: user._id}).exec(function(err, file){
-        if(err){
+    }, // end of addAnotation
+    // adds comment to a specific anotation in file
+    addComment: function(file_id, anotation_index, comment, callback){
+      // search for file with specific id, where the user is from the file users
+      File.findOne({_id: file_id}).exec(function(err, file){
+        // if there is an err of file is missing, send message to the client
+        if(err || !file){
           console.log(err);
-          res.json({success:false,message: 'Грешка при запазването на коментара.'});
+          callback(err);
         } else {
+          // push the comment in the specified anotation
           file.anotations[anotation_index].comments.push(comment);
+          // save the file and if no errors, send success to client
           file.save(function(err){
             if(err){
               console.log(err);
-              res.json({success:false,message: 'Грешка при запазването на коментара.'});
+              callback(err);
             } else {
-              res.json({success:true});
+              callback();
             }
           })
         }
       })
-    },
-    deleteAnotation: function(req, res){
-      var file_id = req.params.file_id;
-      var anotation_id = req.params.anotation_id;
-      File.findOne({_id: file_id, users:req.user._id}).lean().exec(function(err, file){
+    }, // end of addComment
+
+    // deletes anotation from a file
+    deleteAnotation: function(file_id, anotation_index, callback){
+      File.findOne({_id: file_id}).exec(function(err, file){
         if(err){
           console.log(err);
-          res.json({success:false, message:"Грешка при изтриването на анотацията."});
+          callback(err);
         } else {
-          for(i in file.anotations){
-            var user = file.anotations[i].user;
-            if(user == req.user.id){
-              File.findById(file_id).exec(function(err, file){
-                file.anotations.splice(i,1);
-                file.save();
-                res.json({success:true});
-              });
+          file.anotations.splice(anotation_index, 1);
+          file.save(function(err, file){
+            if(err){
+              console.log(err);
+              callback(err);
+            } else {
+              callback();
             }
-          }
+          })
         }
-      });
-    }
-  }
+      })
+    } // end of deleteAnotation
 
-}
+  } // end of return object
+} // end of module.exports
 
 
 // save file to directory
@@ -279,67 +287,7 @@ var saveFile = function(file, path){
 
 var ObjectId = function(string){
   return mongoose.Types.ObjectId(string)
-}
-var getUsersNamesInFile = function(file, cb){
-  //count all users in files anotations and comments
-  if(file.anotations.length === 0){
-    cb(file);
-    return;
-  }
-  var usersCount = 0;
-  for(var i in file.anotations){
-    if(file.anotations[i])
-    usersCount++;
-    for(var j in file.anotations[i].comments){
-      if(file.anotations[i].comments[j]){
-        usersCount++;
-      }
-    }
-  }
-  // now we got usersCount
-  // we set new variable, to count changed users name
-  var changedUsersCount = 0;
-  for(i in file.anotations){
-    (function(i){
-      var user_id = file.anotations[i].user;
-      User.findById(ObjectId(user_id)).lean()
-     .exec(function(err,user){
-        if(!user || err){
-          console.log('User not found');
-          throw new Error('Anotation with undefined or broken user id');
-        } else {
-          file.anotations[i].user = {
-            id: user._id,
-            name: user.data.name
-          };
-          changedUsersCount++;
-          if(changedUsersCount === usersCount){
-            cb(file);
-            return;
-          }
-          for(j in file.anotations[i].comments){
-            (function(j){
-              var user_id = file.anotations[i].comments[j].user
-              User.findOne({_id : ObjectId(user_id)}).lean()
-              .exec(function(err,user2){
-                file.anotations[i].comments[j].user = {
-                  id: user2._id,
-                  name: user2.data.name
-                };
-                changedUsersCount++;
-                // if we have changed all users, we are ready to send parsed file
-                if(changedUsersCount === usersCount){
-                  cb(file);
-                  return;
-                }
-              })
-            })(j)
-          }
-        }
-      })
-    })(i)
-  }
-}
+};
 
 // gets .docx file path and returns its content (actually <body> tag content), converted to html
 var parseDocx = function(document, callback){
@@ -351,4 +299,4 @@ var parseDocx = function(document, callback){
     var html = $('body').html();
     callback(html);
   });
-}
+};

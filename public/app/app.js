@@ -7,36 +7,36 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
       url: "/home",
-      templateUrl: "public/templates/home.html"
+      templateUrl: "/templates/home.html"
     })
     .state('books', {
       url: "/books",
-      templateUrl: "public/templates/books.html",
+      templateUrl: "/templates/books.html",
       controller: "BooksCtrl"
     })
     .state('book', {
       url: "/book/:id",
-      templateUrl: "public/templates/book.html",
+      templateUrl: "/templates/book.html",
       controller: "BookCtrl"
     })
     .state('files', {
       url: "/files",
-      templateUrl: "public/templates/files.html",
+      templateUrl: "/templates/files.html",
       controller: "FilesCtrl"
     })
     .state('file', {
       url: "/file/:id/:anotation",
-      templateUrl: "public/templates/file.html",
+      templateUrl: "/templates/file.html",
       controller: "FileCtrl"
     })
     .state('settings', {
       url: "/settings",
-      templateUrl: "public/templates/settings.html",
+      templateUrl: "/templates/settings.html",
       controller: "SettingsCtrl"
     })
     .state('library', {
       url: "/library",
-      templateUrl: "public/templates/library.html",
+      templateUrl: "/templates/library.html",
       //controller: "SettingsCtrl"
     });
 });

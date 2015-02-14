@@ -10,6 +10,7 @@ var getBookTitle = function(filePath, callback){
   });
   book.parse();
 }
+
 module.exports = function(app, passport){
 
   app.get('/api/book', isLoggedIn, function(req, res){

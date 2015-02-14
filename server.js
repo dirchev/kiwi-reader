@@ -15,11 +15,10 @@ var session      = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var busboy = require('connect-busboy');
-
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 var configDB = require('./config/database.js');
-
-
 // configuration ===============================================================
 mongoose.connect(configDB.url, {}, function(){
   console.log('Successfully connected to database.');
@@ -31,11 +30,11 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({ extended: true, limit: '7mb' }));
-app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(busboy());
 
 
-app.use("/public", express.static(__dirname + '/public'));
+app.use("/", express.static(__dirname + '/public'));
 app.use("/uploads", express.static(__dirname + '/uploads'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
@@ -50,7 +49,9 @@ require('./app/routes/auth.js')(app, passport);
 require('./app/routes/book.js')(app, passport);
 require('./app/routes/file.js')(app, passport, busboy);
 require('./app/routes/user.js')(app, passport);
+require('./app/socket.js')(io);
 
-app.listen(port);
+
 // launch ======================================================================
+http.listen(port);
 console.log('Magic happens on port ' + port)

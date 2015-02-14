@@ -15,10 +15,14 @@ var fileSchema = mongoose.Schema({
   },
   users: [{type: ObjectId, ref: 'User'}],
   anotations: [{
+    _id: String,
     user: {
-      type: ObjectId,
-      ref: 'User',
-      required: true
+      _id: {
+        type: ObjectId,
+        ref: 'User',
+        required: true
+      },
+      name: String
     },
     title: {
       type :String,
@@ -26,9 +30,12 @@ var fileSchema = mongoose.Schema({
     },
     comments: [{
       user: {
-        type: ObjectId,
-        ref: 'User',
-        required: true
+        _id: {
+          type: ObjectId,
+          ref: 'User',
+          required: true
+        },
+        name: String
       },
       content: {
         type: String,

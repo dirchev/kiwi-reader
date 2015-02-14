@@ -1,9 +1,8 @@
-app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $rootScope, $location, $anchorScroll){
+app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window){
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.selection;
   $scope.anotationBox = false;
-  $scope.disableHighlighting = 0;
   $scope.editModeOptions = {
     menubar    : false,
     height     : '500px',
@@ -11,7 +10,7 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     code       : true
   }
   $scope.openedAnotations = [];
-
+  var socket;
   var file_id = $stateParams.id;
 
   File.getOne(file_id).success(function(data){
@@ -30,38 +29,88 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     if($scope.file.content === ''){
       $scope.editMode = true;
     }
-  });
 
-  var updateFile = function(cb){
-    File.update(file_id, $scope.file)
-    .success(function(data){
-      File.getOne(file_id).success(function(file){
-        $scope.file = file;
-        for(i in $scope.file.anotations){
-          $scope.openedAnotations.push(false);
-        }
-        if(cb){
-          cb();
-        }
+    socket = $window.io();
+    socket.emit('open:file', file_id);
+
+    $scope.$watch('file.title', function(){
+      socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
+    });
+    $scope.$watch('file.content', function(){
+      socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+    });
+
+    socket.on('update:title', function(title){
+      $scope.$apply(function(){
+        $scope.file.title = title;
       })
     });
-  }
 
-  $scope.$watch('file.title', function(){
-    updateFile();
+    socket.on('update:content', function(content){
+      $scope.$apply(function(){
+        $scope.file.content = content;
+        $scope.checkForDeletedAnotations();
+      });
+    });
+
+    socket.on('update:anotations', function(anotation){
+      $scope.$apply(function(){
+        $scope.file.anotations.push(anotation);
+      });
+    });
+
+    socket.on('delete:anotation', function(anotation_index){
+      $scope.$apply(function(){
+        $scope.file.anotations.splice(anotation_index, 1);
+      })
+    });
+
+    socket.on('update:comment', function(data){
+      $scope.$apply(function(){
+        $scope.file.anotations[data.anotation_index].comments.push(data.comment);
+      });
+    });
+
+    socket.on('error', function(error){
+      toastr.error(error);
+    })
   });
 
-  $scope.$watch('disableHighlighting', function(){
-    if(!$scope.disableHighlighting){
-      $('.selected').css('background-color', '#f7ff00');
+  $scope.addAnotation = function(){
+    var id;
+    if($scope.file.anotations.length === 0){
+      id = '0';
     } else {
-      $('.selected').css('background-color', 'inherit');
+      id = parseInt($scope.file.anotations[$scope.file.anotations.length - 1]._id);
+      id = id + 1;
     }
-  });
+    var data = {
+      anotation: {
+        _id: id,
+        user: {
+          _id: $rootScope.user._id,
+          name: $rootScope.user.name
+        },
+        title: $scope.anotation
+      },
+      file_id: file_id
+    };
+    var selection = $scope.selection;
+    var span = document.createElement("span");
+    span.appendChild(selection.extractContents());
+    span.setAttribute('id', 'selection' + id);
+    span.setAttribute('class', 'selected');
+    selection.insertNode(span);
+    $scope.file.content = $('#previewBox').html();
+    socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+    $scope.cancelAnotation();
+
+    $scope.file.anotations.push(data.anotation);
+    socket.emit('add:anotation', data);
+  }
 
 
   var selectAnotation = function(index){
-    $scope.disableHighlighting = 0;
     var anotation = $scope.file.anotations[index];
     $('.selected').css('background-color', '#f7ff00');
     var old = $location.hash();
@@ -83,27 +132,38 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
 
   $scope.toggleEditMode = function(){
     $scope.editMode = !$scope.editMode;
-    updateFile(function(){
-      $scope.checkForDeletedAnotations();
-    });
+    $scope.checkForDeletedAnotations();
   }
+
   $scope.checkForDeletedAnotations = function(){
     if(typeof $scope.file !== 'undefined'){
       for(i in $scope.file.anotations){
         if(!$('#selection' + $scope.file.anotations[i]._id).length || emptyElement($('#selection' + $scope.file.anotations[i]._id))){
-          File.deleteAnotation(file_id, $scope.file.anotations[i]._id).success(function(data){
-            if(data.success){
-              console.log('Успешно изтрихте анотация');
-              updateFile();
-            } else {
-              console.log(data.message);
-            }
-          })
+          var anotation = $scope.file.anotations[i]._id;
+          socket.emit('delete:anotation', {file_id: file_id, anotation_index: i});
+          $scope.file.anotations.splice(i,1);
         }
       }
     }
   }
 
+  $scope.deleteAnotation = function(anotation_id){
+    if(typeof $scope.file !== 'undefined'){
+      for(i in $scope.file.anotations){
+        if($scope.file.anotations[i]._id === anotation_id){
+          var anotation = $scope.file.anotations[i]._id;
+          socket.emit('delete:anotation', {file_id: file_id, anotation_index: i});
+          $scope.file.anotations.splice(i,1);
+          $("#selection" + anotation_id).contents().unwrap();
+          $scope.file.content = $('#previewBox').html();
+        }
+      }
+    }
+  }
+
+  var emptyElement =  function( el ){
+      return !$.trim(el.html())
+  }
 
   $scope.cancelAnotation = function(){
     $scope.anotation = '';
@@ -112,65 +172,48 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     $scope.anotationBox = false;
   }
 
-  $scope.addAnotation = function(){
-    File.addAnotation(file_id, $scope.anotation).success(function(data){
-      if(data.success){
-        toastr.success('Успешно започнахте коментар.');
-        var selection = $scope.selection;
-        var span = document.createElement("span");
-        span.appendChild(selection.extractContents());
-        span.setAttribute('id', 'selection' + data.anotation_id);
-        span.setAttribute('class', 'selected');
-        selection.insertNode(span);
-        $scope.file.content = $('#previewBox').html();
-        updateFile();
-      }
-      $scope.cancelAnotation();
-    });
-  }
-
-  $scope.addComment = function(anotationIndex, comment){
-    File.addComment(file_id, anotationIndex, comment).success(function(data){
-      if(data.success){
-        updateFile(function(){
-          toastr.success('Коментарът е поставен успешно');
-        });
-      } else {
-        toastr.error(data.message);
-      }
-    })
-  }
-
-  var emptyElement =  function( el ){
-      return !$.trim(el.html())
-  }
-
-  $scope.deleteAnotation = function(anotation_id){
-    File.deleteAnotation(file_id, anotation_id).success(function(data){
-      if(data.success){
-        toastr.success('Успешно изтрихте анотацията.');
-        $('#selection'+anotation_id).contents().unwrap();
-        $scope.file.content = $('#previewBox').html();
-        updateFile();
-      } else {
-        toastr.error(data.message);
-      }
-    })
+  $scope.addComment = function(anotation_index, comment_content){
+    var comment = {
+      user: {
+        _id: $rootScope.user._id,
+        name: $rootScope.user.name
+      },
+      content: comment_content
+    }
+    $scope.file.anotations[anotation_index].comments.push(comment);
+    var data = {
+      file_id : file_id,
+      anotation_index : anotation_index,
+      comment : comment
+    }
+    socket.emit('add:comment', data);
   }
 
   $(document).on("mouseover", ".selected", function() {
     var id = $(this).attr('id');
-    var anotation_id = id.substr(9);
-    for(i in $scope.file.anotations){
-      if($scope.file.anotations[i]._id === anotation_id){
-        $(this).popover({
-          content: $scope.file.anotations[i].title,
-          placement: 'top'
-        });
-        $(this).popover('show');
-        break;
+    if(typeof id === 'undefined'){
+      $(this).contents().unwrap();
+      $scope.file.content = $('#previewBox').html();
+    } else {
+      var anotation_id = id.substr(9);
+      var found = false;
+      for(i in $scope.file.anotations){
+        if($scope.file.anotations[i]._id === anotation_id){
+          found = true;
+          $(this).popover({
+            content: $scope.file.anotations[i].title,
+            placement: 'top'
+          });
+          $(this).popover('show');
+          break;
+        }
+      }
+      if(!found){
+        $(this).contents().unwrap();
+        $scope.file.content = $('#previewBox').html();
       }
     }
+
   });
   $(document).on("mouseleave", ".selected", function() {
     $(this).popover('hide');
