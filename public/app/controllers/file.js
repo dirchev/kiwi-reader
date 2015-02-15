@@ -1,4 +1,4 @@
-app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window){
+app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window, $timeout){
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.selection;
@@ -33,11 +33,26 @@ app.controller("FileCtrl", function($scope, $http, $stateParams, $sce, File, $ro
     socket = $window.io();
     socket.emit('open:file', file_id);
 
+
+    // When connection is not that fast, this is not working as it has to
+    // $scope.$watch('file.title', function(){
+    //   socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
+    // });
+    // $scope.$watch('file.content', function(){
+    //   socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+    // });
+
     $scope.$watch('file.title', function(){
-      socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
+      $timeout(function(){
+        socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
+        $timeout.cancel();
+      }, 1000)
     });
     $scope.$watch('file.content', function(){
-      socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+      $timeout(function(){
+        socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+        $timeout.cancel();
+      }, 1000)
     });
 
     socket.on('update:title', function(title){

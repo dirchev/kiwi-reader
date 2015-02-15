@@ -17,18 +17,6 @@ app.factory('File', function($http){
     },
     getShared: function(file_id){
       return $http.get('/api/file/' + file_id + '/share');
-    },
-    update: function(id, file){
-      return $http.put('/api/file/' + id, {file: file})
-    },
-    addAnotation: function(file, anotation){
-      return $http.post('/api/file/anotation',{id: file, anotation: anotation});
-    },
-    addComment: function(file, anotation, comment){
-      return $http.post('/api/file/comment', {id:file, anotation_index:anotation, comment:comment})
-    },
-    deleteAnotation: function(file, anotation){
-      return $http.delete('/api/file/'+file+'/anotation/'+anotation);
     }
   }
 })

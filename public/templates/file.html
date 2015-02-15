@@ -59,7 +59,7 @@
     </div>
   </div>
   <div ng-class="editMode ? 'col-md-offset-1 col-md-10' : 'col-md-offset-1 col-md-8'">
-    <input type="text" class="form-control" ng-model="file.title"  style="padding: 10px; border: solid 1px #cdcdcd; border-radius: 0;">
+    <input id="titleBox" type="text" class="form-control" ng-model="file.title"  style="padding: 10px; border: solid 1px #cdcdcd; border-radius: 0;">
     <div style="border: solid 1px #cdcdcd; margin-top: 20px;">
       <div class="border-sharp btn-group">
         <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">
@@ -69,6 +69,7 @@
       </div>
       <div ng-show="editMode" style="margin-top: 10px">
         <textarea
+          id="contentBox"
           ui-tinymce="editModeOptions"
           ng-model="file.content"
           class="form-control">
