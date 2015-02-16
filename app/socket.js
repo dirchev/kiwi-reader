@@ -37,6 +37,7 @@ module.exports = function(io){
       socket.to('file' + file_id).emit('update:anotations', anotation);
       fileCtrl.addAnotation(file_id, anotation, function(err, anotations){
         if(err){
+          console.log(err);
           socket.to('file' + file_id).emit('error', err);
         }
       })
@@ -57,6 +58,7 @@ module.exports = function(io){
       file_id = data.file_id;
       anotation_index = data.anotation_index;
       comment = data.comment;
+      console.log('adding comment');
       socket.to('file' + file_id).emit('update:comment', {anotation_index: anotation_index, comment: comment});
       fileCtrl.addComment(file_id, anotation_index, comment, function(err){
         if(err){

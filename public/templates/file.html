@@ -27,9 +27,9 @@
             <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
           </div>
           <div id="commentBox{{$index}}" class="collapse well well-sm">
-            <form ng-submit="addComment($index, comment)">
+            <form ng-submit="addComment($index, comment); comment = ''">
               <div class="form-group">
-                  <textarea class="form-control" ng-model="comment" rows="4" placeholder="Напиши твоят коментар тук..."></textarea>
+                  <input type="text" class="form-control" ng-model="comment" placeholder="Напиши твоя коментар тук...">
               </div>
               <button type="submit" class="btn btn-success">
                 Коментирай

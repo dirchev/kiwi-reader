@@ -33,7 +33,7 @@ var userSchema = mongoose.Schema({
       },
       email: {
         type: String,
-        required: true
+        required: false
       },
       photo: String
     }

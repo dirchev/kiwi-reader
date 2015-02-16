@@ -11,7 +11,6 @@ module.exports = function(app, passport){
   });
 
   // PROCESS LOGIN
-  // uncomment later
   app.post('/login', passport.authenticate('local-login', {
       successRedirect : '/app', // redirect to the secure profile section
       failureRedirect : '/login', // redirect back to the signup page if there is an error
@@ -44,6 +43,19 @@ module.exports = function(app, passport){
       failureRedirect : '/'
     }));
 
+  // ====================================
+  // TWITTER ROUTES =====================
+  // ====================================
+  // routes for twitter auth and login
+  app.get('/auth/twitter', passport.authenticate('twitter'));
+
+  // handle the callback after twitter has authenticated the user
+  app.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+      successRedirect : '/app',
+      failureRedirect : '/'
+    })
+  );
 
   // LOGOUT
   app.get('/logout', function(req, res){

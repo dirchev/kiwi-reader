@@ -1,6 +1,7 @@
 app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window, $timeout){
   $scope.editMode = false;
   $scope.selectedText = '';
+  $scope.comment = '';
   $scope.selection;
   $scope.anotationBox = false;
   $scope.editModeOptions = {
@@ -88,7 +89,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
 
     socket.on('error', function(error){
       toastr.error(error);
-    })
+    });
   });
 
   $scope.addAnotation = function(){
@@ -108,7 +109,8 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         },
         title: $scope.anotation
       },
-      file_id: file_id
+      file_id: file_id,
+      comments: []
     };
     var selection = $scope.selection;
     var span = document.createElement("span");
@@ -194,6 +196,9 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         name: $rootScope.user.name
       },
       content: comment_content
+    }
+    if( typeof $scope.file.anotations[anotation_index].comments  === 'undefined'){
+      $scope.file.anotations[anotation_index].comments = [];
     }
     $scope.file.anotations[anotation_index].comments.push(comment);
     var data = {
