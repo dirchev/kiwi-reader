@@ -16,17 +16,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- Favicons -->
-    <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="https://scotch.io/favicon.ico">
-    <link rel="apple-touch-icon" sizes="57x57" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-57.png">
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-57.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-152.png">
-    <meta name="application-name" content="Scotch Scotch scotch">
-    <meta name="msapplication-TileImage" content="https://scotch.io/wp-content/themes/thirty/img/icons/favicon-144.png">
-    <meta name="msapplication-TileColor" content="#2A2A2A">
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
     <!-- SEO -->
     <meta name="author" content="Dimitar Mirchev">
@@ -35,9 +41,9 @@
 
     <!-- Social: Twitter -->
     <meta name="twitter:card" content="">
-    <meta name="twitter:site" content="">
-    <meta name="twitter:creator" content="">
-    <meta name="twitter:title" content="">
+    <meta name="twitter:site" content="kiwi-reader.herokuapp.com">
+    <meta name="twitter:creator" content="Dimitar Mirchev">
+    <meta name="twitter:title" content="Kiwi Reader">
     <meta name="twitter:description" content="">
     <meta name="twitter:image:src" content="">
 
@@ -45,18 +51,18 @@
     <meta property="fb:admins" content="">
     <meta property="fb:app_id" content="">
     <meta property="og:url" content="">
-    <meta property="og:type" content="">
-    <meta property="og:title" content="">
+    <meta property="og:type" content="Productivity">
+    <meta property="og:title" content="Kiwi Reader">
     <meta property="og:image" content="">
     <meta property="og:description" content="">
-    <meta property="og:site_name" content="">
-    <meta property="article:author" content="">
-    <meta property="article:publisher" content="">
+    <meta property="og:site_name" content="Kiwi Reader">
+    <meta property="article:author" content="Dimtiar Mirchev">
+    <meta property="article:publisher" content="Dimtiar Mirchev">
 
     <!-- Social: Google+ / Schema.org  -->
-    <link rel="author" href="">
-    <link rel="publisher" href="">
-    <meta itemprop="name" content="">
+    <link rel="author" href="Dimitar Mirchev">
+    <link rel="publisher" href="Dimitar Mirchev">
+    <meta itemprop="name" content="Kiwi Reader">
     <meta itemprop="description" content="">
     <meta itemprop="image" content="">
 
@@ -102,12 +108,15 @@
             <img src="img/logo2.png" alt="Kiwi Reader Logo"/>
             <p class="lead">Документи и книги, прочетени заедно.</p>
             <div class="links">
-                <a href="https://scotch.io" class="btn btn-info">Вход</a>
-                <a href="https://digital.scotch.io" class="btn btn-danger">Регистрация</a>
+                <a href="/login" class="btn btn-info">Вход</a>
+                <a href="/signup" class="btn btn-danger">Регистрация</a>
             </div>
         </div>
 
-        <h1 class="text-center"><img src="img/logo1.png" alt="Kiwi Reader Logo" style="margin: 0 auto;"/><br> <small>проект на Димитър Мирчев</small></h1>
+        <h1 class="text-center">
+          <img id="bigLogo" src="img/logo1.png" alt="Kiwi Reader Logo" style="margin: 0 auto;"/><br>
+          <small>проект на Димитър Мирчев</small>
+        </h1>
         <div class="zoomed-action">
             <div class="top-part">
                 <i class="fa fa-dot-circle-o"></i>

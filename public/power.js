@@ -73,7 +73,7 @@ function createScrollMagic() {
             z: 1 /* Force 3D aka use of GPU */
         },
         {
-            scale: 1,
+            scale: 1.3,
             z: 1
         }
     );
@@ -88,8 +88,10 @@ function createScrollMagic() {
     .on('progress', function(e) {
         if (e.progress * 100 >= 90) {
             $('body').addClass('show-nav');
+            $('#bigLogo').hide();
         } else {
             $('body').removeClass('show-nav');
+            $('#bigLogo').show();
         }
     });
 
