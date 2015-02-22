@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var rmdir = require('rimraf');
 var epubParser = require('../epub-parser');
+var awsService = require('../aws-service');
 
 module.exports = function(){
   return {
@@ -97,14 +98,15 @@ module.exports = function(){
                 console.log(err);
                 res.json({success:false, message: 'Грешка при изтриването на файла.'});
               } else {
-                var bookFolderPath = __dirname + '/../../uploads/extracted/' + book.id;
-                rmdir(bookFolderPath, function(err){
+                var remoteDir = 'extracted/' + book.id;
+                awsService().deleteDir(remoteDir, function(err){
                   if(err){
                     console.log('Folder was not deleted successfully');
                     console.log(err);
+                    res.json({success:false, message: 'Грешка при изтриването на файла.'});
                   }
                   res.json({success:true});
-                })
+                });
               }
             });
           } else {

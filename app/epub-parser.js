@@ -3,6 +3,7 @@ var fs = require('fs');
 var unzip = require('unzip');
 var fstream = require('fstream');
 var xml_json = require('xml2js');
+var awsService = require('./aws-service');
 
 var folderPath;
 var bookId;
@@ -19,7 +20,11 @@ module.exports = {
       .pipe(unzip.Parse())
       .pipe(writeStream)
       .on('close', function(){
-        cb();
+        var localDir = outputPath;
+        var arr = localDir.split('/')
+        var remoteDir = arr[arr.length-2] + '/' + arr[arr.length-1];
+        console.log(remoteDir);
+        awsService().uploadDir(localDir, remoteDir, cb);
       });
   },
   getContent : function(fp, id, cb){

@@ -33,7 +33,7 @@ app.use(busboy());
 
 
 app.use("/", express.static(__dirname + '/public'));
-app.use("/uploads", express.static(__dirname + '/uploads'));
+//app.use("/uploads", express.static(__dirname + '/uploads'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
@@ -47,6 +47,7 @@ require('./app/routes/auth.js')(app, passport);
 require('./app/routes/book.js')(app, passport);
 require('./app/routes/file.js')(app, passport, busboy);
 require('./app/routes/user.js')(app, passport);
+require('./app/routes/uploads.js')(app, passport);
 
 // socket ======================================================================
 require('./app/socket.js')(io);
