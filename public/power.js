@@ -88,9 +88,12 @@ function createScrollMagic() {
     .on('progress', function(e) {
         if (e.progress * 100 >= 90) {
             $('body').addClass('show-nav');
-            $('#bigLogo').hide();
         } else {
             $('body').removeClass('show-nav');
+        }
+        if (e.progress * 100 >= 40) {
+            $('#bigLogo').hide();
+        } else {
             $('#bigLogo').show();
         }
     });

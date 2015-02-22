@@ -3,21 +3,32 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book){
 
   var getBooks = function(){
     Book.get().success(function(data){
-      $scope.books = data;
+      if(data.success){
+        $scope.books = data.books;
+      } else {
+        toastr.error(data.message);
+      }
     });
   };
 
-  $scope.newBook = function(){
-    Book.create().success(function(data){
+  $scope.newBook = function(data){
+    $('#newBookModal').hide();
+    if(data.success){
       getBooks();
       toastr.success('Успешно добавихте нова книга.');
-    })
+    } else {
+      toastr.error(data.message);
+    }
   };
 
   $scope.deleteBook = function(id){
     Book.delete(id).success(function(data){
-      getBooks();
-      toastr.success('Успешно изтрихте книга.');
+      if(data.success){
+        getBooks();
+        toastr.success('Успешно изтрихте книга.');
+      } else {
+        toastr.error(data.message);
+      }
     })
   };
 

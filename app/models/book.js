@@ -5,8 +5,15 @@ var ObjectId = Schema.ObjectId;
 // defina the schema for our user model
 var bookSchema = mongoose.Schema({
   title: String,
-  file: String,
-  users: [{type: ObjectId, ref: 'User'}]
+  users: [{
+    _id: {type: ObjectId, ref: 'User'},
+    position: Number
+  }],
+  opf: Object,
+  anotations: [{
+    _id: String,
+    title: String
+  }]
 });
 
 module.exports = mongoose.model('Book', bookSchema);

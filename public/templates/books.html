@@ -1,6 +1,6 @@
 <div class="jumbotron">
   <h1>Книги</h1>
-  <a ng-click="newBook()" class="btn btn-default">Нова книга</a>
+  <a data-toggle="modal" data-target="#newBookModal" class="btn btn-default">Нова книга</a>
 </div>
 <div ng-repeat="book in books" class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -12,4 +12,30 @@
     <li class="divider"></li>
     <li><a>Сподели</a></li>
   </ul>
+</div>
+
+<div class="modal fade" id="newBookModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="">Вмъкни книга</h4>
+      </div>
+      <div class="modal-body">
+
+        <form ng-upload="newBook(content)" action="/api/book" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="">Файл</label>
+            <input class="btn btn-default" type="file" name="bookFile">
+            <p class="help-block">Избери .txt, .doc, .odt или .docx файл</p>
+          </div>
+          <button id="createDocFile" type="submit" class="btn btn-primary"
+           upload-submit data-dismiss="modal">
+            Създай
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
 </div>

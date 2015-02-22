@@ -12,6 +12,7 @@ var session      = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var busboy = require('connect-busboy');
+var morgan = require('morgan')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 

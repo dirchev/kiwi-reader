@@ -167,46 +167,47 @@ module.exports = function(passport){
   // ================================================================
   // TWITTER ========================================================
   // ================================================================
-  passport.use('twitter', new TwitterStrategy({
-    consumerKey    : configAuth.twitterAuth.consumerKey,
-    consumerSecret : configAuth.twitterAuth.consumerSecret,
-    callbackURL    : configAuth.twitterAuth.callbackURL
-  },
-  function(token, tokenSecter, profile, done) {
-    // make the code async
-    // User.findOne wont file until we have all our data back from Twitter
-    process.nextTick(function(){
+  passport.use(new TwitterStrategy({
+      consumerKey    : configAuth.twitterAuth.consumerKey,
+      consumerSecret : configAuth.twitterAuth.consumerSecret,
+      callbackURL    : configAuth.twitterAuth.callbackURL
+    },
+    function(token, tokenSecret, profile, done) {
+      // make the code async
+      // User.findOne wont file until we have all our data back from Twitter
+      process.nextTick(function(){
 
-      User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+        User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
 
-        // if there is an error, stop everything and return that
-        // ie an err connection to the database
-        if(err){
-          return done(err);
-        }
+          // if there is an error, stop everything and return that
+          // ie an err connection to the database
+          if(err){
+            return done(err);
+          }
 
-        // if the user is found, log him
-        if(user){
-          return done(null, err);
-        } else {
-          // if there is not user, create
-          var newUser = new User();
-          // set all data, that will be saved
-          newUser.twitter.id = profile.id;
-          newUser.twitter.token = token;
-          newUser.twitter.username = profile.username;
-          newUser.twitter.displayName = profile.displayName;
-          newUser.data.name = profile.displayName;
+          // if the user is found, log him
+          if(user){
+            return done(null, err);
+          } else {
+            // if there is not user, create
+            var newUser = new User();
+            // set all data, that will be saved
+            newUser.twitter.id = profile.id;
+            newUser.twitter.token = token;
+            newUser.twitter.username = profile.username;
+            newUser.twitter.displayName = profile.displayName;
+            newUser.data.name = profile.displayName;
 
-          //save user to db
-          newUser.save(function(err){
-            if(err)
-              throw err;
-            return done(null, newUser);
-          });
-        }
-      });
-    })
+            //save user to db
+            newUser.save(function(err){
+              if(err)
+                throw err;
+              return done(null, newUser);
+            });
+          }
+        });
+      })
 
-    }));
+    }
+  ));
 };

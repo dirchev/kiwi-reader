@@ -1,11 +1,9 @@
 <div class="row">
-  <div id="area" class="col-sm-10">
-
-  </div>
-  <div class="col-sm-2">
-    <h2>Части</h2>
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="chapter in book.chapters">{{chapter.title}}</li>
-    </ul>
+  <div id="area" class="col-sm-offset-2 col-sm-8">
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-default" ng-click="updatePosition(-1)">Предишна страница</button>
+      <button type="button" class="btn btn-default" ng-click="updatePosition(+1)">Следваща страница</button>
+    </div>
+    <div preview-box content="page"></div>
   </div>
 </div>
