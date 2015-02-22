@@ -31,7 +31,7 @@
     "passport-google-oauth": "~0.1.5",
     "passport-local": "~0.1.6",
     "passport-twitter": "^1.0.2",
-    "rerequest": "^0.2.1",
+    "request": "^2.53.0",
     "rimraf": "^2.2.8",
     "s3": "^4.4.0",
     "socket.io": "^1.3.3",
