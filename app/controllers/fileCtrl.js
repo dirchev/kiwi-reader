@@ -52,7 +52,7 @@ module.exports = function(){
           }
         });
         req.busboy.on('finish', function() {
-          fs.readFile(__dirname + '../../uploads/files/' + fileName, 'utf8', function(err, fileContent){
+          fs.readFile(__dirname + '/../../uploads/files/' + fileName, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
               res.json({success:false, message:'Грешка при запазването на файла.'});
