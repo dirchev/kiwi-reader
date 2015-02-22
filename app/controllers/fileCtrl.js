@@ -42,7 +42,7 @@ module.exports = function(){
           } else if(mimetype = 'application/msword') {
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
-            saveFile(file, filePath);
+            saveFile(file, filename);
           } else {
             console.log("Bad file format: " + mimetype);
             res.json({success:false, message:'Този файл не се поддържа!'});
@@ -282,8 +282,8 @@ module.exports = function(){
 
 
 // save file to directory
-var saveFile = function(file, path){
-  file.pipe(fstream.Writer(path));
+var saveFile = function(file, filename){
+  file.pipe(fstream.Writer(__dirname + '../../uploads/files/' + filename));
 };
 
 var ObjectId = function(string){
