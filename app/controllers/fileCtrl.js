@@ -2,6 +2,7 @@ var File = require('../models/file');
 var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
+var fstream = require('fstream');
 var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
@@ -282,7 +283,7 @@ module.exports = function(){
 
 // save file to directory
 var saveFile = function(file, path){
-  file.pipe(fs.createWriteStream(path));
+  file.pipe(fstream.Writer(path));
 };
 
 var ObjectId = function(string){
