@@ -42,14 +42,15 @@ module.exports = function(){
           } else if(mimetype = 'application/msword') {
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
-            saveFile(file, filename);
+            fileName = filename;
+            saveFile(file, fileName);
           } else {
             console.log("Bad file format: " + mimetype);
             res.json({success:false, message:'Този файл не се поддържа!'});
           }
         });
         req.busboy.on('finish', function() {
-          fs.readFile(filePath, 'utf8', function(err, fileContent){
+          fs.readFile(__dirname + '../../uploads/files/' + fileName, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
               res.json({success:false, message:'Грешка при запазването на файла.'});
