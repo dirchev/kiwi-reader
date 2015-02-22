@@ -6,7 +6,6 @@ var fstream = require('fstream');
 var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
-
 module.exports = function(){
   return {
     create: function(req, res){
@@ -24,21 +23,24 @@ module.exports = function(){
       });
     },
     createFromFile: function(req, res){
-      var filePath, fileType;
+      var filePath, fileType, fileName;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
           if(mimetype === 'text/plain'){
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'txt';
-            saveFile(file, filePath);
+            fileName = filename;
+            saveFile(file, fileName);
           } else if(mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
-            saveFile(file, filePath);
+            fileName = filename;
+            saveFile(file, fileName);
           } else if(mimetype === 'application/vnd.oasis.opendocument.text'){
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
-            saveFile(file, filePath);
+            fileName = filename;
+            saveFile(file, fileName);
           } else if(mimetype = 'application/msword') {
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
