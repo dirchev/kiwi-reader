@@ -28,24 +28,19 @@ module.exports = function(){
       var filePath, fileType, fileName;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-          console.log(file._read())
           if(mimetype === 'text/plain'){
-            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'txt';
             fileName = filename;
             saveFile(file, fileName);
           } else if(mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
             fileName = filename;
             saveFile(file, fileName);
           } else if(mimetype === 'application/vnd.oasis.opendocument.text'){
-            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
             fileName = filename;
             saveFile(file, fileName);
           } else if(mimetype = 'application/msword') {
-            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'office';
             fileName = filename;
             saveFile(file, fileName);
@@ -55,7 +50,7 @@ module.exports = function(){
           }
         });
         req.busboy.on('finish', function() {
-          fs.readFile(__dirname + '/../../uploads/files/' + fileName, 'utf8', function(err, fileContent){
+          fs.readFile(__dirname + '/../../../tmp/' + fileName, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
               res.json({success:false, message:'Грешка при запазването на файла.'});
@@ -63,7 +58,7 @@ module.exports = function(){
               var file = new File();
               file.title = 'Неозаглавен файл';
               if(fileType === 'txt'){
-                file.content = fileContent.replace(/\r?\n/g, '<br />');;
+                file.content = fileContent.replace(/\r?\n/g, '<br />');
                 file.users.push(req.user._id);
                 file.save(function(err){
                   if(err){
@@ -72,7 +67,7 @@ module.exports = function(){
                   res.json({success:true});
                 });
               } else if (fileType === 'office'){
-                parseDocx(filePath, function(content){
+                parseDocx(__dirname + '/../../../tmp/' + fileName, function(content){
                   file.content = content;
                   file.users.push(req.user._id);
                   file.save(function(err){
@@ -288,9 +283,10 @@ module.exports = function(){
 
 
 // save file to directory
-var saveFile = function(file, filename){
-  var outputPath = __dirname + '/../../uploads/files/' + filename;
-  file.pipe(fstream.Writer(outputPath))
+var saveFile = function(file, fileName){
+  var outputPath = __dirname + '/../../../tmp/' + fileName;
+  console.log(outputPath);
+  file.pipe(fstream.Writer(outputPath));
 };
 
 var ObjectId = function(string){
