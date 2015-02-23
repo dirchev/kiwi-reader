@@ -6,6 +6,8 @@ var fstream = require('fstream');
 var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
+var awsService = require('../aws-service');
+
 module.exports = function(){
   return {
     create: function(req, res){
@@ -26,6 +28,7 @@ module.exports = function(){
       var filePath, fileType, fileName;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+          console.log(file._read())
           if(mimetype === 'text/plain'){
             filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
             fileType = 'txt';
@@ -286,7 +289,8 @@ module.exports = function(){
 
 // save file to directory
 var saveFile = function(file, filename){
-  file.pipe(fstream.Writer(__dirname + '../../uploads/files/' + filename));
+  var outputPath = __dirname + '/../../uploads/files/' + filename;
+  file.pipe(fstream.Writer(outputPath))
 };
 
 var ObjectId = function(string){

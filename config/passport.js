@@ -167,7 +167,7 @@ module.exports = function(passport){
   // ================================================================
   // TWITTER ========================================================
   // ================================================================
-  passport.use(new TwitterStrategy({
+  passport.use('twitter', new TwitterStrategy({
       consumerKey    : configAuth.twitterAuth.consumerKey,
       consumerSecret : configAuth.twitterAuth.consumerSecret,
       callbackURL    : configAuth.twitterAuth.callbackURL
@@ -187,7 +187,7 @@ module.exports = function(passport){
 
           // if the user is found, log him
           if(user){
-            return done(null, err);
+            return done(null, user);
           } else {
             // if there is not user, create
             var newUser = new User();
