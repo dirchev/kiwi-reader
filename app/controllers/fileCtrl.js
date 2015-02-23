@@ -31,7 +31,7 @@ module.exports = function(){
           if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimetype === 'application/vnd.oasis.opendocument.text' || mimetype === 'application/msword'){
             fileType = 'office';
             fileName = filename;
-            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
+            filePath = path.join(__dirname + '../../../uploads/books', path.basename(filename));
             saveFile(file, filePath);
           } else if( mimetype === 'text/plain' ){
             fileType = 'txt';
