@@ -28,29 +28,20 @@ module.exports = function(){
       var filePath, fileType, fileName;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-          if(mimetype === 'text/plain'){
+          if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimetype === 'application/vnd.oasis.opendocument.text' || mimetype === 'application/msword'){
+            fileType = 'office';
+            fileName = filename;
+            filePath = path.join(__dirname + '../../../uploads/files', path.basename(filename));
+            saveFile(file, filePath);
+          } else if( mimetype === 'text/plain' ){
             fileType = 'txt';
-            fileName = filename;
-            saveFile(file, fileName);
-          } else if(mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            fileType = 'office';
-            fileName = filename;
-            saveFile(file, fileName);
-          } else if(mimetype === 'application/vnd.oasis.opendocument.text'){
-            fileType = 'office';
-            fileName = filename;
-            saveFile(file, fileName);
-          } else if(mimetype = 'application/msword') {
-            fileType = 'office';
-            fileName = filename;
-            saveFile(file, fileName);
           } else {
             console.log("Bad file format: " + mimetype);
             res.json({success:false, message:'Този файл не се поддържа!'});
           }
         });
         req.busboy.on('finish', function() {
-          fs.readFile('/tmp/' + fileName, 'utf8', function(err, fileContent){
+          fs.readFile(filePath, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
               res.json({success:false, message:'Грешка при запазването на файла.'});
@@ -67,7 +58,7 @@ module.exports = function(){
                   res.json({success:true});
                 });
               } else if (fileType === 'office'){
-                parseDocx('/tmp/' + fileName, function(content){
+                parseDocx(filePath, function(content){
                   file.content = content;
                   file.users.push(req.user._id);
                   file.save(function(err){
@@ -283,12 +274,8 @@ module.exports = function(){
 
 
 // save file to directory
-var saveFile = function(file, fileName){
-  if (!fs.existsSync('/tmp/'))
-  fs.mkdirSync('/tmp/');
-  var outputPath = '/tmp/' + fileName;
-  console.log(outputPath);
-  file.pipe(fstream.Writer(outputPath));
+var saveFile = function(file, path){
+  file.pipe(fs.createWriteStream(path));
 };
 
 var ObjectId = function(string){
