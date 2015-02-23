@@ -43,6 +43,7 @@ app.controller("FilesCtrl", function($scope, $http, File){
       }
     })
   }
+  
   $scope.newTxtFile = function(data){
     if(data.success){
       File.get().success(function(data2){
