@@ -40,7 +40,8 @@
     "xml2json": "^0.5.1"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.10.x",
+    "npm" : "1.4.21"
   },
   "author": "Dimitar Mirchev",
   "license": "Apache 2",

@@ -284,6 +284,8 @@ module.exports = function(){
 
 // save file to directory
 var saveFile = function(file, fileName){
+  if (!fs.existsSync('/tmp/'))
+  fs.mkdirSync('/tmp/');
   var outputPath = '/tmp/' + fileName;
   console.log(outputPath);
   file.pipe(fstream.Writer(outputPath));
