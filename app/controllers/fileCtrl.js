@@ -31,16 +31,20 @@ module.exports = function(){
           if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimetype === 'application/vnd.oasis.opendocument.text' || mimetype === 'application/msword'){
             fileType = 'office';
             fileName = filename;
-            filePath = path.join(__dirname + '../../../uploads/books', path.basename(filename));
+            filePath = path.join(__dirname + '/../../uploads/books', path.basename(filename));
             saveFile(file, filePath);
           } else if( mimetype === 'text/plain' ){
             fileType = 'txt';
+            fileName = filename;
+            filePath = path.join(__dirname + '/../../uploads/books', path.basename(filename));
+            saveFile(file, filePath);
           } else {
             console.log("Bad file format: " + mimetype);
             res.json({success:false, message:'Този файл не се поддържа!'});
           }
         });
         req.busboy.on('finish', function() {
+          console.log(filePath);
           fs.readFile(filePath, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
