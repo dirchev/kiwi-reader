@@ -50,7 +50,7 @@ module.exports = function(){
           }
         });
         req.busboy.on('finish', function() {
-          fs.readFile(__dirname + '/../../../tmp/' + fileName, 'utf8', function(err, fileContent){
+          fs.readFile('/tmp/' + fileName, 'utf8', function(err, fileContent){
             if(err){
               console.log(err);
               res.json({success:false, message:'Грешка при запазването на файла.'});
@@ -67,7 +67,7 @@ module.exports = function(){
                   res.json({success:true});
                 });
               } else if (fileType === 'office'){
-                parseDocx(__dirname + '/../../../tmp/' + fileName, function(content){
+                parseDocx('/tmp/' + fileName, function(content){
                   file.content = content;
                   file.users.push(req.user._id);
                   file.save(function(err){
@@ -284,7 +284,7 @@ module.exports = function(){
 
 // save file to directory
 var saveFile = function(file, fileName){
-  var outputPath = __dirname + '/../../../tmp/' + fileName;
+  var outputPath = '/tmp/' + fileName;
   console.log(outputPath);
   file.pipe(fstream.Writer(outputPath));
 };
