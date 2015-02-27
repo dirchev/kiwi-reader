@@ -1,4 +1,4 @@
-var fileCtrl = require('./controllers/fileCtrl')();
+var fileCtrl = require('../controllers/fileCtrl')();
 
 module.exports = function(io){
   io.on('connection', function(socket){

@@ -3,7 +3,7 @@ var fs = require('fs');
 var unzip = require('unzip');
 var fstream = require('fstream');
 var xml_json = require('xml2js');
-var awsService = require('./aws-service');
+var awsService = require('./aws');
 
 var folderPath;
 var bookId;

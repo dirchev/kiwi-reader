@@ -1,4 +1,4 @@
-var awsService = require('../aws-service');
+var awsService = require('../services/aws');
 
 module.exports = function(app){
     app.get('/uploads/*', function(req, res){

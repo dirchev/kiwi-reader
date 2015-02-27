@@ -3,8 +3,8 @@ var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
 var rmdir = require('rimraf');
-var epubParser = require('../epub-parser');
-var awsService = require('../aws-service');
+var epubParser = require('../services/epub-parser');
+var awsService = require('../services/aws');
 
 module.exports = function(){
   return {

@@ -6,7 +6,8 @@ var fstream = require('fstream');
 var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
-var awsService = require('../aws-service');
+var awsService = require('../services/aws');
+var docParser = require('../services/doc-parser');
 
 module.exports = function(){
   return {
@@ -28,15 +29,15 @@ module.exports = function(){
       var filePath, fileType, fileName;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-          if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimetype === 'application/vnd.oasis.opendocument.text' || mimetype === 'application/msword'){
-            fileType = 'office';
+          if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
+            fileType = 'docx';
             fileName = filename;
-            filePath = path.join(__dirname + '/../../uploads/books', path.basename(filename));
+            filePath = path.join(__dirname + '/../../uploads/files', path.basename(filename));
             saveFile(file, filePath);
           } else if( mimetype === 'text/plain' ){
             fileType = 'txt';
             fileName = filename;
-            filePath = path.join(__dirname + '/../../uploads/books', path.basename(filename));
+            filePath = path.join(__dirname + '/../../uploads/files', path.basename(filename));
             saveFile(file, filePath);
           } else {
             console.log("Bad file format: " + mimetype);
@@ -61,11 +62,12 @@ module.exports = function(){
                 });
               }
             });
-          } else if (fileType === 'office'){
-            parseDocx(filePath, function(content){
+          } else if (fileType === 'docx'){
+            docParser.docxToHTML(filePath).then(function(result){
+              var html = result.value;
               var file = new File();
-              file.title = 'Неозаглавен файл';
-              file.content = content;
+              file.title = fileName;
+              file.content = html;
               file.users.push(req.user._id);
               file.save(function(err){
                 if(err){
@@ -73,7 +75,7 @@ module.exports = function(){
                 }
                 res.json({success:true});
               });
-            });
+            })
           } else {
             res.json({success:false, message:'Този файл не е поддържан.'})
           }
@@ -283,16 +285,4 @@ var saveFile = function(file, path){
 
 var ObjectId = function(string){
   return mongoose.Types.ObjectId(string)
-};
-
-// gets .docx file path and returns its content (actually <body> tag content), converted to html
-var parseDocx = function(document, callback){
-  office.parse(document, function(err, data){
-    if(err){
-      console.log(err);
-    }
-    var $ = cheerio.load(data);
-    var html = $('body').html();
-    callback(html);
-  });
 };

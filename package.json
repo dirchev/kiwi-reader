@@ -1,7 +1,7 @@
 {
   "name": "kiwi-reader",
   "version": "0.0.1",
-  "description": "Kiwi reader is app, where more than one people can read, comment and edit text, doc or book.",
+  "description": "Kiwi reader is app, where more than one people can read, comment and edit text files, docs or books.",
   "main": "server.js",
   "scripts": {
     "postinstall": "bower cache clean && bower install",
@@ -25,7 +25,6 @@
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
     "morgan": "~1.0.0",
-    "office": "0.0.8",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
@@ -36,12 +35,11 @@
     "s3": "^4.4.0",
     "socket.io": "^1.3.3",
     "unzip": "^0.1.11",
-    "xml2js": "^0.4.5",
     "xml2json": "^0.5.1"
   },
   "engines": {
     "node": "0.10.x",
-    "npm" : "1.4.21"
+    "npm": "1.4.x"
   },
   "author": "Dimitar Mirchev",
   "license": "Apache 2",
