@@ -1,3 +1,3 @@
 node_modules/*
-!node_modules/mammoth
+!node_modules/mammoth/*
 public/bower_components
