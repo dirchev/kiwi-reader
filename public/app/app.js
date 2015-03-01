@@ -38,6 +38,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/library",
       templateUrl: "/templates/library.html",
       //controller: "SettingsCtrl"
+    })
+    .state('profile', {
+      url: "/profile",
+      templateUrl: "/templates/profile.html",
+      controller: "ProfileCtrl"
     });
 });
 
