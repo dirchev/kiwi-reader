@@ -26,58 +26,70 @@ module.exports = function(){
     },
     createFromFile: function(req, res){
       var filePath, fileType, fileName;
+      var fileReady = false;
       if (req.busboy) {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-          if( mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
+          if(mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
             fileType = 'docx';
             fileName = filename;
             filePath = path.join(__dirname + '/../../uploads/files', path.basename(filename));
-            saveFile(file, filePath);
+            saveFile(file, filePath, function(){
+              fileReady = true;
+            });
           } else if( mimetype === 'text/plain' ){
             fileType = 'txt';
             fileName = filename;
             filePath = path.join(__dirname + '/../../uploads/files', path.basename(filename));
-            saveFile(file, filePath);
+            saveFile(file, filePath, function(){
+              fileReady = true;
+            });
           } else {
             console.log("Bad file format: " + mimetype);
             res.json({success:false, message:'Този файл не се поддържа!'});
           }
         });
         req.busboy.on('finish', function() {
-          if(fileType === 'txt'){
-            fs.readFile(filePath, 'utf8', function(err, fileContent){
-              if(err){
-                res.json({success:false, message:'Грешка при запазването на файла.'});
-              } else {
-                var file = new File();
-                file.title = 'Неозаглавен файл';
-                file.content = fileContent.replace(/\r?\n/g, '<br />');
-                file.users.push(req.user._id);
-                file.save(function(err){
+          var interval = setInterval(function(){
+            if(fileReady){
+              console.log('checking if file is ready...');
+              clearInterval(interval);
+              fileReady = false;
+              if(fileType === 'txt'){
+                fs.readFile(filePath, 'utf8', function(err, fileContent){
                   if(err){
                     res.json({success:false, message:'Грешка при запазването на файла.'});
+                  } else {
+                    var file = new File();
+                    file.title = 'Неозаглавен файл';
+                    file.content = fileContent.replace(/\r?\n/g, '<br />');
+                    file.users.push(req.user._id);
+                    file.save(function(err){
+                      if(err){
+                        res.json({success:false, message:'Грешка при запазването на файла.'});
+                      }
+                      res.json({success:true});
+                    });
                   }
-                  res.json({success:true});
                 });
+              } else if (fileType === 'docx'){
+                docParser.docxToHTML(filePath).then(function(result){
+                  var html = result.value;
+                  var file = new File();
+                  file.title = fileName;
+                  file.content = html;
+                  file.users.push(req.user._id);
+                  file.save(function(err){
+                    if(err){
+                      res.json({success:false, message:'Грешка при запазването на файла.'});
+                    }
+                    res.json({success:true});
+                  });
+                })
+              } else {
+                res.json({success:false, message:'Този файл не е поддържан.'})
               }
-            });
-          } else if (fileType === 'docx'){
-            docParser.docxToHTML(filePath).then(function(result){
-              var html = result.value;
-              var file = new File();
-              file.title = fileName;
-              file.content = html;
-              file.users.push(req.user._id);
-              file.save(function(err){
-                if(err){
-                  res.json({success:false, message:'Грешка при запазването на файла.'});
-                }
-                res.json({success:true});
-              });
-            })
-          } else {
-            res.json({success:false, message:'Този файл не е поддържан.'})
-          }
+            }
+          }, 500)
         });
         req.pipe(req.busboy);
       }
@@ -278,8 +290,12 @@ module.exports = function(){
 
 
 // save file to directory
-var saveFile = function(file, path){
-  file.pipe(fs.createWriteStream(path));
+var saveFile = function(file, path, cb){
+    console.log('uploading file...');
+  file.pipe(fs.createWriteStream(path)).on('close', function(){
+    console.log('file uploaded!');
+    cb();
+  });
 };
 
 var ObjectId = function(string){
