@@ -2,7 +2,6 @@ var File = require('../models/file');
 var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
-var office = require('office');
 var cheerio = require('cheerio');
 
 

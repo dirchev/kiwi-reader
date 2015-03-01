@@ -3,7 +3,6 @@ var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
 var fstream = require('fstream');
-var office = require('office');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 var awsService = require('../services/aws');
