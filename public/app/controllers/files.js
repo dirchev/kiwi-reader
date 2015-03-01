@@ -43,7 +43,7 @@ app.controller("FilesCtrl", function($scope, $http, File){
       }
     })
   }
-  
+
   $scope.newTxtFile = function(data){
     if(data.success){
       File.get().success(function(data2){
@@ -53,7 +53,7 @@ app.controller("FilesCtrl", function($scope, $http, File){
       });
     } else {
       $('#newTxtFileModal').modal('hide');
-      toastr.success('Възникна грешка, опитайте отново.');
+      toastr.error(data.message);
     }
     $('#createDocFile').button('reset');
   }
