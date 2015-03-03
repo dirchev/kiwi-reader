@@ -136,28 +136,32 @@ module.exports = function(){
     },
     share: function(req, res){
       // Put data in variables for easy access
-      var file_id = req.params.file_id;
-      var user_email = req.body.user_email;
-      // Get all data for the user, we want to share file to
-      User.findOne({'data.email': user_email}, function(err, user){
-        if(err){
-          console.log('Error while searching for user: ' + err);
-        } else if(!user){
-          // if user not exists (bad email) send message to client
-          res.json({success:false, message: 'Не е намерен потребител с този email.'});
-        } else {
-          // update file, that is with mentioned id, if the user who wants
-          //to share it is its owner and if it is not shared to the samo user before
-          File.update({$and:[{_id: file_id, users: req.user._id}, {users: {$ne: user._id}}]},{$push: {'users':user._id}},{upsert:true}, function(err, file){
-            if(err){
-              console.log('Error while updating file: ' + err);
-              res.json({success:false, message: 'Този файл вече е споделен с този потребител.'});
-            } else {
-              res.json({success:true, file: file});
-            }
-          })
-        }
-      })
+      if(!userEnteredEmail(req.user)){
+        res.json({success:false, message: 'Не може да споделяте файлове без да сте въвели email. Въведете Вашият email от меню "Профил".'});
+      } else {
+        var file_id = req.params.file_id;
+        var user_email = req.body.user_email;
+        // Get all data for the user, we want to share file to
+        User.findOne({'data.email': user_email}, function(err, user){
+          if(err){
+            console.log('Error while searching for user: ' + err);
+          } else if(!user){
+            // if user not exists (bad email) send message to client
+            res.json({success:false, message: 'Не е намерен потребител с този email.'});
+          } else {
+            // update file, that is with mentioned id, if the user who wants
+            //to share it is its owner and if it is not shared to the samo user before
+            File.update({$and:[{_id: file_id, users: req.user._id}, {users: {$ne: user._id}}]},{$push: {'users':user._id}},{upsert:true}, function(err, file){
+              if(err){
+                console.log('Error while updating file: ' + err);
+                res.json({success:false, message: 'Този файл вече е споделен с този потребител.'});
+              } else {
+                res.json({success:true, file: file});
+              }
+            })
+          }
+        })
+      }
     },
     getShared: function(req, res){
       var file_id = req.params.file_id;
@@ -297,6 +301,21 @@ var saveFile = function(file, path, cb){
     cb();
   });
 };
+
+var userEnteredEmail = function(user){
+  User.findById(user._id).exec(function(err, user){
+    if(err || !user){
+      return false;
+    } else {
+      if(user.data.email){
+        return true;
+      } else {
+        return false;
+      }
+    }
+  })
+}
+
 
 var ObjectId = function(string){
   return mongoose.Types.ObjectId(string)

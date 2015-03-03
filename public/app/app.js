@@ -39,11 +39,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "/templates/library.html",
       //controller: "SettingsCtrl"
     })
-    // .state('profile', {
-    //   url: "/profile",
-    //   templateUrl: "/templates/profile.html",
-    //   controller: "ProfileCtrl"
-    // });
+    .state('profile', {
+      url: "/profile",
+      templateUrl: "/templates/profile.html",
+      controller: "ProfileCtrl"
+    });
 });
 
 app.run(function($rootScope, $http){

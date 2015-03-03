@@ -29,7 +29,7 @@
     <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/bower_components/toastr/toastr.js"></script>
-    
+
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
@@ -42,6 +42,7 @@
     <script src="/app/controllers/files.js"></script>
     <script src="/app/controllers/file.js"></script>
     <script src="/app/controllers/settings.js"></script>
+    <script src="/app/controllers/profile.js"></script>
     <script src="/app/factories/file.js"></script>
     <script src="/app/factories/book.js"></script>
 
@@ -64,15 +65,15 @@
           <ul class="nav navbar-nav">
             <li><a ui-sref="books">Книги</a></li>
             <li><a ui-sref="files">Файлове</a></li>
-            <li><a ui-sref="library">Библиотека</a></li>
+            <!-- <li><a ui-sref="library">Библиотека</a></li> -->
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{user.name}}<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="settings">Профил</a></li>
-                <li><a ui-sref="settings">Настройки</a></li>
+                <li><a ui-sref="profile">Профил</a></li>
+                <!-- <li><a ui-sref="settings">Настройки</a></li> -->
                 <li><a href="/logout">Изход</a></li>
               </ul>
             </li>

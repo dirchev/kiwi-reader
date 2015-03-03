@@ -10,3 +10,17 @@
 .bottom-buffer-sm{
   margin-bottom: 10px;
 }
+.fullwidth{
+  width: 100%;
+}
+.page-preview{
+  height: 700px;
+  overflow: scroll;
+  text-align:center;
+}
+.page-preview::-webkit-scrollbar {
+    display: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}

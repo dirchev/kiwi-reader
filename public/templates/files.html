@@ -15,8 +15,8 @@
 <!-- Single button -->
 <div class="row">
   <div ng-repeat="file in files track by $index" class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 10px;">
-    <button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      {{file.title}} <span class="caret"></span>
+    <button type="button" class="btn btn-default dropdown-toggle text-center fullwidth" data-toggle="dropdown" aria-expanded="false">
+      {{ file.title | limitTo: 35 }}{{file.title.length > 35 ? '...' : ''}} <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
       <li><a ui-sref="file({id : file._id})">Отвори</a></li>

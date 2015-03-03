@@ -19,7 +19,7 @@ $(function() {
     $('#site-nav a').click(function(){
         $('html, body').animate({
             scrollTop: $( $.attr(this, 'href') ).offset().top - 100
-        }, 500);
+        }, 300);
         return false;
     });
 
@@ -73,13 +73,13 @@ function createScrollMagic() {
             z: 1 /* Force 3D aka use of GPU */
         },
         {
-            scale: 1.3,
+            scale: 1,
             z: 1
         }
     );
     var zoomScene = new ScrollScene({
         triggerElement: '#call-to-action',
-        duration: 1500, /* distance of zoom scroll */
+        duration: 1000, /* distance of zoom scroll */
         offset: 0
     })
     .addTo(scrollMagicController)
