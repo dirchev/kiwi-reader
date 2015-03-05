@@ -12,7 +12,32 @@ var bookSchema = mongoose.Schema({
   opf: Object,
   anotations: [{
     _id: String,
-    title: String
+    user: {
+      _id: {
+        type: ObjectId,
+        ref: 'User',
+        required: true
+      },
+      name: String
+    },
+    title: {
+      type :String,
+      required: true
+    },
+    comments: [{
+      user: {
+        _id: {
+          type: ObjectId,
+          ref: 'User',
+          required: true
+        },
+        name: String
+      },
+      content: {
+        type: String,
+        required: true
+      }
+    }]
   }]
 });
 
