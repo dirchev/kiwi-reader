@@ -136,7 +136,7 @@ module.exports = function(){
     },
     share: function(req, res){
       // Put data in variables for easy access
-      if(!userEnteredEmail(req.user)){
+      if(userEnteredEmail(req.user) === false){
         res.json({success:false, message: 'Не може да споделяте файлове без да сте въвели email. Въведете Вашият email от меню "Профил".'});
       } else {
         var file_id = req.params.file_id;
@@ -302,8 +302,8 @@ var saveFile = function(file, path, cb){
   });
 };
 
-var userEnteredEmail = function(user){
-  User.findById(user._id).exec(function(err, user){
+var userEnteredEmail = function(data){
+  User.findById(data._id).exec(function(err, user){
     if(err || !user){
       return false;
     } else {

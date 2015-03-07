@@ -46,9 +46,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     var position = $scope.book.users[userIndex].position;
     var pageId = $scope.book.opf.spines[position];
     $scope.scrolled = 0;
-    $(".page-preview").animate({
-        scrollTop:  0
-    });
+    $(".page-preview").scrollTop(0);
     renderPage(pageId);
   }
 
@@ -66,9 +64,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     if(!scrolledToBottom()){
       // if he does not, scroll down
       $scope.scrolled = $scope.scrolled + 300;
-      $(".page-preview").animate({
-          scrollTop:  $scope.scrolled
-      });
+      $(".page-preview").scrollTop($scope.scrolled);
     } else {
       // else, render next page
       $scope.updatePosition(1);
@@ -76,15 +72,24 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   }
 
   $scope.previousPage = function(){
-    // check if user got to the top of page
-    // if he does not, scroll up
-    // else, render prev page
-    $scope.updatePosition(-1);
+    if(!scrolledToTop()){
+      // if he does not, scroll down
+      $scope.scrolled = $scope.scrolled - 300;
+      $(".page-preview").scrollTop($scope.scrolled);
+    } else {
+      // else, render next page
+      $scope.updatePosition(-1);
+    }
   }
 
   var scrolledToBottom = function(){
     var elem = $('.page-preview');
     return elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()
+  }
+
+  var scrolledToTop = function(){
+    var elem = $('.page-preview');
+    return elem.scrollTop() === 0;
   }
 
 });

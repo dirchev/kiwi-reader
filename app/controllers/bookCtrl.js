@@ -129,7 +129,7 @@ module.exports = function(){
     },
     share: function(req, res){
       // Put data in variables for easy access
-      if(!userEnteredEmail(req.user)){
+      if(userEnteredEmail(req.user) === false){
         res.json({success:false, message: 'Не може да споделяте книги без да сте въвели email. Въведете Вашият email от меню "Профил".'});
       } else {
         var book_id = req.params.book_id;
@@ -186,8 +186,8 @@ module.exports = function(){
   }
 };
 
-var userEnteredEmail = function(user){
-  User.findById(user._id).exec(function(err, user){
+var userEnteredEmail = function(data){
+  User.findById(data._id).exec(function(err, user){
     if(err || !user){
       return false;
     } else {
