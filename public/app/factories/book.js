@@ -17,6 +17,9 @@ app.factory('Book', function($http){
     },
     getShared: function(book_id){
       return $http.get('/api/book/' + book_id + '/share');
+    },
+    updateUserPosition: function(book_id, data){
+      return $http.post('/api/book/' + book_id + '/position', data);
     }
   }
 })

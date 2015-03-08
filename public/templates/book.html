@@ -1,10 +1,17 @@
+<button ng-click="showContent = !showContent" type="button" data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-default pull-right hidden-sm hidden-xs" style="position:relative;">
+  Съдържание
+</button>
 <div class="row">
-  <div id="area" class="col-sm-offset-2 col-sm-8">
-    <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-default" ng-click="prevPage()">Предишна страница</button>
-      <button type="button" class="btn btn-default" ng-click="nextPage()">Следваща страница</button>
+  <div ng-class="showContent ? 'col-sm-offset-1 col-sm-7': 'col-sm-offset-2 col-sm-8'">
+      <button type="button" class="btn btn-default" ng-click="previousPage()">Предишна страница</button>
+      <button type="button" class="btn btn-default pull-right" ng-click="nextPage()">Следваща страница</button>
+    <div id="page-preview" class="page-preview" preview-box text-select content="page">
     </div>
-    <div class="page-preview" preview-box content="page">
+  </div>
+  <div ng-show="showContent" style="height: 700px;" class="col-sm-4">
+    <div class="page-preview text-center" style="height: 100%; overflow: scroll">
+      <div class="toc" preview-box content="toc">
+      </div>
     </div>
   </div>
 </div>

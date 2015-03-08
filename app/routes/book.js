@@ -15,6 +15,7 @@ module.exports = function(app, passport){
 
   app.get('/api/book/:book_id/share', isLoggedIn, bookCtrl.getShared)
 
+  app.post('/api/book/:book_id/position', isLoggedIn, bookCtrl.setUserPosition)
 };
 
 // route middleware to make sure a user is logged in

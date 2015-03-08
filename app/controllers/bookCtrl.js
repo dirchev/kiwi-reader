@@ -182,6 +182,27 @@ module.exports = function(){
           }
         }
       })
+    },
+    setUserPosition: function(req, res){
+      var book_id = req.params.book_id;
+      var userIndex = req.body.userIndex;
+      var position = req.body.position;
+      Book.findById(book_id).exec(function(err, book){
+        if(err){
+          console.log(err);
+          res.json({success:false, message:"Грешка при обновяването на позицията: книгата не може да бъде намерена."});
+        } else {
+          book.users[userIndex].position = position;
+          book.save(function(err){
+            if(err){
+              console.log(err);
+              res.json({success:false, message:"Грешка при обновяването на позицията: информацията не може да бъде запазена."});
+            } else {
+              res.json({success:true});
+            }
+          })
+        }
+      })
     }
   }
 };

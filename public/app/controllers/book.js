@@ -3,6 +3,9 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   var userIndex;
   var scrolled = 0;
   $scope.scrolled = 0;
+  $scope.selectedText = '';
+  $scope.selection;
+  $scope.toc;
 
   // set arrow keys rules
   $(document).keydown(function(e) {
@@ -32,6 +35,14 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
           userIndex = i;
         }
       }
+      var tocFileHref = $scope.book.opf.manifest['toc'] || $scope.book.opf.manifest['ncx'];
+      tocFileHref = tocFileHref.href;
+      $http.get(tocFileHref).success(function(data){
+        $scope.toc = data;
+        var r = /[^\/]*$/;
+        var tocFolder = tocFileHref.replace(r, ''); // '/this/is/a/folder/'
+        $scope.toc = $scope.toc.replace(/href="/g, 'link-location="'+tocFolder);
+      })
       var pageId = $scope.book.opf.spines[$scope.book.users[userIndex].position];
       renderPage(pageId);
     }
@@ -43,17 +54,48 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     } else {
       $scope.book.users[userIndex].position += 1;
     }
+    updateUserPosition();
     var position = $scope.book.users[userIndex].position;
     var pageId = $scope.book.opf.spines[position];
     $scope.scrolled = 0;
-    $(".page-preview").scrollTop(0);
+    $("#page-preview").scrollTop(0);
     renderPage(pageId);
   }
 
+
   var renderPage = function(id){
-    $http.get($scope.book.opf['manifest'][id].href).success(function(data){
-      $scope.page = data.replace(/src="/g, 'src="/uploads/extracted/' + book_id + '/' + $scope.book.opf.contentPath + '/');
-      $scope.page = $scope.page.replace(/href="/g, 'href="/uploads/extracted/' + book_id + '/' + $scope.book.opf.contentPath + '/');
+    var pageHref = $scope.book.opf['manifest'][id].href;
+    var r = /[^\/]*$/;
+    var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/'
+    $http.get(pageHref).success(function(data){
+      $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
+      $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
+      $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
+      $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
+      $scope.page = $scope.page.replace(/<link/g, '<aaaa');
+    });
+  }
+
+  $scope.renderPageLink = function(link){
+    for(i in $scope.book.opf.manifest){
+      if($scope.book.opf.manifest[i].href === link){
+        for(var j = 0; j<$scope.book.opf.spines.length; j++){
+          if($scope.book.opf.spines[j] === i){
+            $scope.book.users[userIndex].position = j;
+            var pageId = $scope.book.opf.spines[j];
+            updateUserPosition();
+            break;
+          }
+        }
+        break;
+      }
+    }
+    var pageHref = link;
+    var r = /[^\/]*$/;
+    var pageFolder = link.replace(r, ''); // '/this/is/a/folder/'
+    $http.get(pageHref).success(function(data){
+      $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
+      $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
       $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
       $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
       $scope.page = $scope.page.replace(/<link/g, '<aaaa');
@@ -63,8 +105,8 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.nextPage = function(){
     if(!scrolledToBottom()){
       // if he does not, scroll down
-      $scope.scrolled = $scope.scrolled + 300;
-      $(".page-preview").scrollTop($scope.scrolled);
+      $scope.scrolled = $("#page-preview").scrollTop() + ($("#page-preview").height() - 200);
+      $("#page-preview").scrollTop($scope.scrolled);
     } else {
       // else, render next page
       $scope.updatePosition(1);
@@ -73,9 +115,9 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   $scope.previousPage = function(){
     if(!scrolledToTop()){
-      // if he does not, scroll down
-      $scope.scrolled = $scope.scrolled - 300;
-      $(".page-preview").scrollTop($scope.scrolled);
+      // if he does not, scroll up
+      $scope.scrolled = $("#page-preview").scrollTop() - ($("#page-preview").height() - 200);
+      $("#page-preview").scrollTop($scope.scrolled);
     } else {
       // else, render next page
       $scope.updatePosition(-1);
@@ -83,13 +125,27 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   }
 
   var scrolledToBottom = function(){
-    var elem = $('.page-preview');
+    var elem = $('#page-preview');
     return elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()
   }
 
   var scrolledToTop = function(){
-    var elem = $('.page-preview');
-    return elem.scrollTop() === 0;
+    var elem = $('#page-preview');
+    return elem.scrollTop() == 0;
+  }
+
+  var updateUserPosition = function(){
+    var data = {
+      userIndex : userIndex,
+      position: $scope.book.users[userIndex].position
+    };
+    Book.updateUserPosition(book_id, data).success(function(data){
+      if(data.success){
+        //toastr.success('Успешно запазена позиция.');
+      } else {
+        toastr.error(data.message);
+      }
+    })
   }
 
 });
