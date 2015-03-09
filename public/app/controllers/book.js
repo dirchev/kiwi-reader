@@ -69,6 +69,8 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/'
     $http.get(pageHref).success(function(data){
       $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
+      $scope.page = $scope.page.replace(/href="http/g, 'link-location="http');
+      $scope.page = $scope.page.replace(/href="https/g, 'link-location="https');
       $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
       $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
       $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
@@ -77,29 +79,36 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   }
 
   $scope.renderPageLink = function(link){
-    for(i in $scope.book.opf.manifest){
-      if($scope.book.opf.manifest[i].href === link){
-        for(var j = 0; j<$scope.book.opf.spines.length; j++){
-          if($scope.book.opf.spines[j] === i){
-            $scope.book.users[userIndex].position = j;
-            var pageId = $scope.book.opf.spines[j];
-            updateUserPosition();
-            break;
+    if(validURL(link)) {
+      window.open(link, '_tab');
+      return;
+    } else {
+      for(i in $scope.book.opf.manifest){
+        if($scope.book.opf.manifest[i].href === link){
+          for(var j = 0; j<$scope.book.opf.spines.length; j++){
+            if($scope.book.opf.spines[j] === i){
+              $scope.book.users[userIndex].position = j;
+              var pageId = $scope.book.opf.spines[j];
+              updateUserPosition();
+              break;
+            }
           }
+          break;
         }
-        break;
       }
+      var pageHref = link;
+      var r = /[^\/]*$/;
+      var pageFolder = link.replace(r, ''); // removes filename and returns folder
+      $http.get(pageHref).success(function(data){
+        $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
+        $scope.page = $scope.page.replace(/href="http/g, 'link-location="http');
+        $scope.page = $scope.page.replace(/href="https/g, 'link-location="https');
+        $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
+        $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
+        $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
+        $scope.page = $scope.page.replace(/<link/g, '<aaaa');
+      });
     }
-    var pageHref = link;
-    var r = /[^\/]*$/;
-    var pageFolder = link.replace(r, ''); // '/this/is/a/folder/'
-    $http.get(pageHref).success(function(data){
-      $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
-      $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
-      $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
-      $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
-      $scope.page = $scope.page.replace(/<link/g, '<aaaa');
-    });
   }
 
   $scope.nextPage = function(){
@@ -146,6 +155,20 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
         toastr.error(data.message);
       }
     })
+  }
+
+  var validURL= function (str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    if(!pattern.test(str)) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 });

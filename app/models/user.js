@@ -36,7 +36,8 @@ var userSchema = mongoose.Schema({
         required: false
       },
       photo: String
-    }
+    },
+    bookmarks: [String]
 });
 
 // methods ===========================
