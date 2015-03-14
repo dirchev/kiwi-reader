@@ -3,19 +3,21 @@ var bookCtrl = require('../controllers/bookCtrl')();
 
 module.exports = function(app, passport){
 
-  app.get('/api/book', isLoggedIn, bookCtrl.read)
+  app.get('/api/book', isLoggedIn, bookCtrl.read);
 
-  app.post('/api/book', isLoggedIn, bookCtrl.create)
+  app.post('/api/book', isLoggedIn, bookCtrl.create);
 
-  app.get('/api/book/:book_id', isLoggedIn, bookCtrl.readOne)
+  app.get('/api/book/:book_id', isLoggedIn, bookCtrl.readOne);
 
-  app.post('/api/book/:book_id/share', isLoggedIn, bookCtrl.share)
+  app.post('/api/book/:book_id/share', isLoggedIn, bookCtrl.share);
 
-  app.delete('/api/book/:book_id', isLoggedIn, bookCtrl.delete)
+  app.delete('/api/book/:book_id', isLoggedIn, bookCtrl.delete);
 
-  app.get('/api/book/:book_id/share', isLoggedIn, bookCtrl.getShared)
+  app.get('/api/book/:book_id/share', isLoggedIn, bookCtrl.getShared);
 
-  app.post('/api/book/:book_id/position', isLoggedIn, bookCtrl.setUserPosition)
+  app.post('/api/book/:book_id/position', isLoggedIn, bookCtrl.setUserPosition);
+
+  app.post('/api/book/:book_id/rename', isLoggedIn, bookCtrl.rename);
 };
 
 // route middleware to make sure a user is logged in

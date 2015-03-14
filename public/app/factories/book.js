@@ -7,7 +7,7 @@ app.factory('Book', function($http){
       return $http.get('/api/book/' + id);
     },
     create: function(){
-      return $http.post('/api/book')
+      return $http.post('/api/book');
     },
     delete: function(id){
       return $http.delete('/api/book/' + id);
@@ -20,6 +20,9 @@ app.factory('Book', function($http){
     },
     updateUserPosition: function(book_id, data){
       return $http.post('/api/book/' + book_id + '/position', data);
+    },
+    rename: function(book_id, name){
+      return $http.post('/api/book/' + book_id + '/rename', {name: name});
     }
-  }
-})
+  };
+});

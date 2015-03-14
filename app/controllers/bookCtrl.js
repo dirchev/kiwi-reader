@@ -15,7 +15,7 @@ module.exports = function(){
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype){
           if(mimetype !== 'application/epub+zip'){
             res.json({
-              success:false,
+              success: false,
               message: 'Позволени са само .epub файлове.'
             });
           } else {
@@ -31,7 +31,7 @@ module.exports = function(){
           book.save(function(err, book){
             if(err){
               console.log(err);
-              res.json({success:false, message: 'Грешка при създаването на нова книга.'})
+              res.json({success:false, message: 'Грешка при създаването на нова книга.'});
             } else {
               var outputPath = __dirname + '/../../uploads/extracted/' + book.id;
               var epubPath = filePath;
@@ -43,10 +43,10 @@ module.exports = function(){
                   book.save(function(err, book){
                     if(err){
                       console.log(err);
-                      res.json({success:false, message: 'Грешка при създаването на нова книга.'})
+                      res.json({success:false, message: 'Грешка при създаването на нова книга.'});
                     }
                     res.send({success:true, book: book});
-                  })
+                  });
                 });
               });
             }
@@ -80,7 +80,7 @@ module.exports = function(){
           } else {
             res.json({success:true, book:book});
           }
-        })
+        });
     },
     delete: function(req, res){
       var book_id = req.params.book_id;
@@ -113,19 +113,19 @@ module.exports = function(){
             for(var i = 0 ; i < book.users.length ; i++){
               if(book.users[i]._id.toString() === user._id.toString()){
                 book.users.splice(i, 1);
-                book.save(function(err){
-                  if(err){
-                    console.log(err);
-                    res.json({success:false, message: 'Грешка при изтриването на книгата.'});
-                  } else {
-                    res.json({success:true});
-                  }
-                });
               }
             }
+            book.save(function(err){
+              if(err){
+                console.log(err);
+                res.json({success:false, message: 'Грешка при изтриването на книгата.'});
+              } else {
+                res.json({success:true});
+              }
+            });
           }
         }
-      })
+      });
     },
     share: function(req, res){
       // Put data in variables for easy access
@@ -154,9 +154,9 @@ module.exports = function(){
               } else {
                 res.json({success:true});
               }
-            })
+            });
           }
-        })
+        });
       }
     },
     getShared: function(req, res){
@@ -181,7 +181,7 @@ module.exports = function(){
             });
           }
         }
-      })
+      });
     },
     setUserPosition: function(req, res){
       var book_id = req.params.book_id;
@@ -200,11 +200,25 @@ module.exports = function(){
             } else {
               res.json({success:true});
             }
-          })
+          });
         }
-      })
+      });
+    },
+    rename: function(req, res){
+      var book_id = req.params.book_id;
+      var newName = req.body.name;
+      Book.update({_id: book_id, "users._id": req.user._id}, {title:newName}, {upsert:false}, function(err, rows){
+        if(err){
+          console.log('Error while updating book name ' + err);
+          res.json({success:false, message: 'Грешка при преименуването на книгата.'});
+        } else if(rows === 0) {
+          res.json({success:false, message: 'Книгата не е намерена.'});
+        }else {
+          res.json({success:true});
+        }
+      });
     }
-  }
+  };
 };
 
 var userEnteredEmail = function(data){
@@ -218,8 +232,8 @@ var userEnteredEmail = function(data){
         return false;
       }
     }
-  })
-}
+  });
+};
 
 var saveFile = function(file, path){
   file.pipe(fs.createWriteStream(path));

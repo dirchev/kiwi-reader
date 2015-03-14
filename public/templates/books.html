@@ -9,9 +9,10 @@
     </button>
     <ul class="dropdown-menu" role="menu">
       <li><a ui-sref="book({id : book._id})">Отвори</a></li>
-      <li><a ng-click="deleteBook(book._id)">Изтрий</a></li>
+      <li><a data-toggle="collapse" data-target="#renameBook{{book._id}}" aria-expanded="false" aria-controls="renameBook{{book.id}}">Преименувай</a></li>
+      <li><a data-toggle="collapse" data-target="#shareBook{{book._id}}" aria-expanded="false" aria-controls="shareBook{{book.id}}" ng-click="getSharedUsers(book._id, $index)">Сподели</a></li>
       <li class="divider"></li>
-      <li><a data-toggle="collapse" data-target="#shareBook{{book._id}}" aria-expanded="false" aria-controls="shareBook{{book.id}}" ng-click="getSharedUsers(book._id, $index)">Споделяне...</a></li>
+      <li><a ng-click="deleteBook(book._id)">Изтрий</a></li>
     </ul>
     <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="shareBook{{book._id}}">
       <ul class="list-group">
@@ -27,6 +28,17 @@
         </div>
       </form>
       <a class="btn btn-danger btn-sm pull-right" style="margin-top: 10px;" data-toggle="collapse" data-target="#shareBook{{book._id}}" aria-label="Close">Затвори</a>
+    </div>
+    <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="renameBook{{book._id}}">
+      <form ng-submit="rename(book._id, newName)">
+        <div class="input-group" style="margin-top: 10px">
+          <input type="text" class="form-control" required ng-model="newName" placeholder="Въведи ново име">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Преименувай</button>
+          </span>
+        </div>
+      </form>
+      <a class="btn btn-danger btn-sm pull-right" style="margin-top: 10px;" data-toggle="collapse" data-target="#renameBook{{book._id}}" aria-label="Close">Затвори</a>
     </div>
   </div>
 </div>

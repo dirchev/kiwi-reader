@@ -3,10 +3,9 @@ var fileCtrl = require('../controllers/fileCtrl')();
 module.exports = function(io){
   io.on('connection', function(socket){
 
-    console.log('a user connected');
     socket.on('open:file', function(file_id){
       socket.join('file' + file_id);
-      console.log('user joined room file' + file_id)
+      console.log('user joined room file' + file_id);
     });
 
     socket.on('set:title', function(data){
@@ -40,7 +39,7 @@ module.exports = function(io){
           console.log(err);
           socket.to('file' + file_id).emit('error', err);
         }
-      })
+      });
     });
 
     socket.on('delete:anotation', function(data){
@@ -51,7 +50,7 @@ module.exports = function(io){
         if(err){
           socket.to('file' + file_id).emit('error', err);
         }
-      })
+      });
     });
 
     socket.on('add:comment', function(data){
@@ -64,7 +63,8 @@ module.exports = function(io){
         if(err){
           socket.to('file' + file_id).emit('error', err);
         }
-      })
-    })
-  })
-}
+      });
+    });
+
+  });
+};

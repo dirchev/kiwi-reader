@@ -12,7 +12,6 @@ var session      = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var busboy = require('connect-busboy');
-var morgan = require('morgan')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -33,7 +32,6 @@ app.use(busboy());
 
 
 app.use("/", express.static(__dirname + '/public'));
-//app.use("/uploads", express.static(__dirname + '/uploads'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
@@ -55,4 +53,4 @@ require('./app/services/socket.js')(io);
 
 // launch ======================================================================
 http.listen(port);
-console.log('Magic happens on port ' + port)
+console.log('Magic happens on port ' + port);
