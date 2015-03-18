@@ -14,21 +14,37 @@ var scrollMagicController = new ScrollMagic({
 /*=================================
 =            DOM READY            =
 =================================*/
-$(function() {
+// $(function() {
+//
+//     $('#site-nav a').click(function(){
+//         $('html, body').animate({
+//             scrollTop: $( $.attr(this, 'href') ).offset().top - 100
+//         }, 300);
+//         return false;
+//     });
+//
+//     // Only if not IE, not touch, and not mobile
+//     if ($(window).width() > 768 && !is_touch_device() && !is_ie()) {
+//         createScrollMagic();
+//     } else {
+//         $('body').addClass('no-scroll-magic');
+//     }
+// });
 
-    $('#site-nav a').click(function(){
-        $('html, body').animate({
-            scrollTop: $( $.attr(this, 'href') ).offset().top - 100
-        }, 300);
-        return false;
-    });
+$(document).ready(function(){
+  $('#site-nav a').click(function(){
+      $('html, body').animate({
+          scrollTop: $( $.attr(this, 'href') ).offset().top - 100
+      }, 300);
+      return false;
+  });
 
-    // Only if not IE, not touch, and not mobile
-    if ($(window).width() > 768 && !is_touch_device() && !is_ie()) {
-        createScrollMagic();
-    } else {
-        $('body').addClass('no-scroll-magic');
-    }
+  // Only if not IE, not touch, and not mobile
+  if ($(window).width() > 768 && !is_touch_device() && !is_ie()) {
+      createScrollMagic();
+  } else {
+      $('body').addClass('no-scroll-magic');
+  }
 });
 
 
@@ -145,7 +161,7 @@ function createScrollMagic() {
 }
 
 function destroyScrollMagic() {
-    scrollMagicController.destroy(true)
+    scrollMagicController.destroy(true);
     scrollMagicController = null;
     $('*').removeAttr('style');
 }
@@ -153,7 +169,7 @@ function destroyScrollMagic() {
 
 function is_touch_device() {
     return 'ontouchstart' in window || 'onmsgesturechange' in window;
-};
+}
 
 function is_ie() {
     // Disable for IE
