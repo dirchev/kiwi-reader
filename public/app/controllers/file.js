@@ -2,26 +2,26 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.comment = '';
-  $scope.selection;
   $scope.anotationBox = false;
+
   $scope.editModeOptions = {
     menubar    : false,
     height     : '500px',
     resize     : false,
     code       : true
-  }
+  };
   $scope.openedAnotations = [];
   var socket;
   var file_id = $stateParams.id;
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
-    for(i in $scope.file.anotations){
+    for(var i in $scope.file.anotations){
       $scope.openedAnotations.push(false);
     }
     $scope.$watch('openedAnotations', function(newAnotations){
       $('.selected').css('background-color', '#f7ff00');
-      for(i in $scope.openedAnotations){
+      for(var i in $scope.openedAnotations){
         if($scope.openedAnotations[i] === true){
           selectAnotation(i);
         }
@@ -47,19 +47,19 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       $timeout(function(){
         socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
         $timeout.cancel();
-      }, 1000)
+      }, 1000);
     });
     $scope.$watch('file.content', function(){
       $timeout(function(){
         socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
         $timeout.cancel();
-      }, 1000)
+      }, 1000);
     });
 
     socket.on('update:title', function(title){
       $scope.$apply(function(){
         $scope.file.title = title;
-      })
+      });
     });
 
     socket.on('update:content', function(content){
@@ -78,7 +78,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     socket.on('delete:anotation', function(anotation_index){
       $scope.$apply(function(){
         $scope.file.anotations.splice(anotation_index, 1);
-      })
+      });
     });
 
     socket.on('update:comment', function(data){
@@ -121,10 +121,9 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     $scope.file.content = $('#previewBox').html();
     socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
     $scope.cancelAnotation();
-
     $scope.file.anotations.push(data.anotation);
     socket.emit('add:anotation', data);
-  }
+  };
 
 
   var selectAnotation = function(index){
@@ -132,29 +131,29 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     $('.selected').css('background-color', '#f7ff00');
     var old = $location.hash();
     $location.hash('selection' + anotation._id);
-    $anchorScroll()
+    $anchorScroll();
     $location.hash(old);
     $('#selection' + anotation._id).css('background-color', '#ffab7b');
-  }
+  };
 
   var deSelectAnotation = function(index){
     var anotation = $scope.file.anotations[index];
     $('.selected').css('background-color', '#f7ff00');
     var old = $location.hash();
     $location.hash('selection' + anotation._id);
-    $anchorScroll()
+    $anchorScroll();
     $location.hash(old);
     $('#selection' + anotation._id).css('background-color', '#f7ff00');
-  }
+  };
 
   $scope.toggleEditMode = function(){
     $scope.editMode = !$scope.editMode;
     $scope.checkForDeletedAnotations();
-  }
+  };
 
   $scope.checkForDeletedAnotations = function(){
     if(typeof $scope.file !== 'undefined'){
-      for(i in $scope.file.anotations){
+      for(var i in $scope.file.anotations){
         if(!$('#selection' + $scope.file.anotations[i]._id).length || emptyElement($('#selection' + $scope.file.anotations[i]._id))){
           var anotation = $scope.file.anotations[i]._id;
           socket.emit('delete:anotation', {file_id: file_id, anotation_index: i});
@@ -162,11 +161,11 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         }
       }
     }
-  }
+  };
 
   $scope.deleteAnotation = function(anotation_id){
     if(typeof $scope.file !== 'undefined'){
-      for(i in $scope.file.anotations){
+      for(var i in $scope.file.anotations){
         if($scope.file.anotations[i]._id === anotation_id){
           var anotation = $scope.file.anotations[i]._id;
           socket.emit('delete:anotation', {file_id: file_id, anotation_index: i});
@@ -176,18 +175,18 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         }
       }
     }
-  }
+  };
 
   var emptyElement =  function( el ){
-      return !$.trim(el.html())
-  }
+      return !$.trim(el.html());
+  };
 
   $scope.cancelAnotation = function(){
     $scope.anotation = '';
     $scope.selection = '';
     $scope.selectedText = '';
     $scope.anotationBox = false;
-  }
+  };
 
   $scope.addComment = function(anotation_index, comment_content){
     var comment = {
@@ -196,7 +195,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         name: $rootScope.user.name
       },
       content: comment_content
-    }
+    };
     if( typeof $scope.file.anotations[anotation_index].comments  === 'undefined'){
       $scope.file.anotations[anotation_index].comments = [];
     }
@@ -205,9 +204,9 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       file_id : file_id,
       anotation_index : anotation_index,
       comment : comment
-    }
+    };
     socket.emit('add:comment', data);
-  }
+  };
 
   $(document).on("mouseover", ".selected", function() {
     var id = $(this).attr('id');
@@ -217,7 +216,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     } else {
       var anotation_id = id.substr(9);
       var found = false;
-      for(i in $scope.file.anotations){
+      for(var i in $scope.file.anotations){
         if($scope.file.anotations[i]._id === anotation_id){
           found = true;
           $(this).popover({
@@ -233,8 +232,8 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         $scope.file.content = $('#previewBox').html();
       }
     }
-
   });
+
   $(document).on("mouseleave", ".selected", function() {
     $(this).popover('hide');
   });
