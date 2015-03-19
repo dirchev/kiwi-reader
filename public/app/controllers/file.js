@@ -4,12 +4,6 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   $scope.comment = '';
   $scope.anotationBox = false;
 
-  $scope.editModeOptions = {
-    menubar    : false,
-    height     : '500px',
-    resize     : false,
-    code       : true
-  };
   $scope.openedAnotations = [];
   var socket;
   var file_id = $stateParams.id;

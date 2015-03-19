@@ -1,4 +1,4 @@
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ui.tinymce', 'btford.socket-io']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'btford.socket-io']);
 
 //routes
 app.config(function($stateProvider, $urlRouterProvider) {
