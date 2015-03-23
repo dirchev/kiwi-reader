@@ -33,7 +33,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
           userIndex = i;
         }
       }
-      var tocFileHref = $scope.book.opf.manifest['toc'] || $scope.book.opf.manifest['ncx'];
+      var tocFileHref = $scope.book.opf.manifest.toc || $scope.book.opf.manifest.ncx;
       tocFileHref = tocFileHref.href;
       $http.get(tocFileHref).success(function(data){
         $scope.toc = data;
@@ -67,7 +67,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     var r = /[^\/]*$/;
     var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/'
     $http.get(pageHref).success(function(data){
-      $scope.page = data.replace(/src="/g, 'src="'+pageFolder);
+      $scope.page = data.replace(/src="/g, 'style="max-width:100%" src="'+pageFolder);
       $scope.page = $scope.page.replace(/href="http/g, 'link-location="http');
       $scope.page = $scope.page.replace(/href="https/g, 'link-location="https');
       $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);

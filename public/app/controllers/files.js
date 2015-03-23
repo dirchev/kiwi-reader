@@ -11,8 +11,8 @@ app.controller("FilesCtrl", function($scope, $http, File){
           toastr.success('Успешно създадохте файл.');
         });
       }
-    })
-  }
+    });
+  };
 
   $scope.deleteFile = function(file_id){
     File.delete(file_id).success(function(data){
@@ -21,9 +21,9 @@ app.controller("FilesCtrl", function($scope, $http, File){
       toastr.success('Успешно изтрихте файл.');
       });
     });
-  }
+  };
 
-  $scope.shareFile = function(file, user){
+  $scope.shareFile = function(file, user, index){
     File.share(file, user).success(function(data){
         if(data.success){
           File.get().success(function(data){
@@ -33,16 +33,30 @@ app.controller("FilesCtrl", function($scope, $http, File){
         } else {
           toastr.error(data.message.toString(), 'Неуспешно споделяне.');
         }
-      })
-  }
+      });
+    $scope.getSharedUsers(file, index);
+  };
 
   $scope.getSharedUsers = function(file_id, index){
     File.getShared(file_id).success(function(data){
       if(data.success){
         $scope.files[index].sharedUsers = data.users;
       }
-    })
-  }
+    });
+  };
+
+  $scope.rename = function(file_id, name){
+    File.rename(file_id, name).success(function(data){
+      if(data.success){
+        toastr.success('Успешно променихте името');
+      } else {
+        toastr.error(data.message);
+      }
+    });
+    File.get().success(function(data){
+      $scope.files = data;
+    });
+  };
 
   $scope.newTxtFile = function(data){
     if(data.success){
@@ -56,6 +70,6 @@ app.controller("FilesCtrl", function($scope, $http, File){
       toastr.error(data.message);
     }
     $('#createDocFile').button('reset');
-  }
+  };
 
-})
+});

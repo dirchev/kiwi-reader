@@ -10,9 +10,11 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
+
     for(var i in $scope.file.anotations){
       $scope.openedAnotations.push(false);
     }
+
     $scope.$watch('openedAnotations', function(newAnotations){
       $('.selected').css('background-color', '#f7ff00');
       for(var i in $scope.openedAnotations){
@@ -21,6 +23,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
         }
       }
     },true);
+
     if($scope.file.content === ''){
       $scope.editMode = true;
     }
@@ -36,6 +39,20 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     // $scope.$watch('file.content', function(){
     //   socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
     // });
+
+    $scope.$watch('file.public', function(oldVal, newVal){
+      if(oldVal !== newVal){
+        File.public($scope.file._id, $scope.file.public).success(function(data){
+          if(data.success){
+            var msg = 'Успешно променихте файла на ';
+            msg+= $scope.file.public === false ? 'частен.' : 'публичен.';
+            toastr.success(msg);
+          } else {
+            toastr.error(data.message);
+        }
+        });
+      }
+    });
 
     $scope.$watch('file.title', function(){
       $timeout(function(){
@@ -227,6 +244,11 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       }
     }
   });
+
+  $scope.scrollChatBox = function(){
+    var elem = document.getElementById('chat-content');
+    elem.scrollTop = elem.scrollHeight;
+  };
 
   $(document).on("mouseleave", ".selected", function() {
     $(this).popover('hide');

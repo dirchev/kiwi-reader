@@ -1,16 +1,37 @@
-<button ng-click="showContent = !showContent" type="button" data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-default pull-right hidden-sm hidden-xs" style="position:relative;">
-  Съдържание
-</button>
-<div class="row">
-  <div ng-class="showContent ? 'col-sm-offset-1 col-sm-7': 'col-sm-offset-2 col-sm-8'">
-      <button type="button" class="btn btn-default" ng-click="previousPage()">Предишна страница</button>
-      <button type="button" class="btn btn-default pull-right" ng-click="nextPage()">Следваща страница</button>
-    <div id="page-preview" class="page-preview" preview-box text-select content="page">
+<nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">{{book.title}}</a>
     </div>
-  </div>
-  <div ng-show="showContent" style="height: 700px;" class="col-sm-4">
-    <div class="page-preview text-center" style="height: 100%; overflow: scroll">
-      <div class="toc" preview-box content="toc">
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ng-click="showContent = !showContent; showChat = false;">Съдържание</a></li>
+        <li><a ng-click="showChat = !showChat; showContent = false;">Чат</a></li>
+        <li><a>Споделяне</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div ng-show="showContent" style="height: 700px;" class="col-sm-4">
+      <div class="page-preview text-center" style="height: 100%; overflow: scroll">
+        <div class="toc" preview-box content="toc">
+        </div>
+      </div>
+    </div>
+    <div ng-class="showContent ? 'col-sm-8': 'col-sm-offset-2 col-sm-8'">
+      <div id="page-preview" class="page-preview" preview-box text-select content="page">
+        <button type="button" class="btn btn-default" ng-click="previousPage()">Предишна страница</button>
+        <button type="button" class="btn btn-default pull-right" ng-click="nextPage()">Следваща страница</button>
       </div>
     </div>
   </div>

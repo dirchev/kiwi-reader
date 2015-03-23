@@ -17,6 +17,12 @@ app.factory('File', function($http){
     },
     getShared: function(file_id){
       return $http.get('/api/file/' + file_id + '/share');
+    },
+    rename: function(file_id, name){
+      return $http.post('/api/file/' + file_id + '/rename', {name:name});
+    },
+    public: function(file_id, public){
+      return $http.post('/api/file/' + file_id + '/public', {public:public});
     }
-  }
-})
+  };
+});

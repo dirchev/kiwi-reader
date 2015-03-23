@@ -13,6 +13,11 @@ var fileSchema = mongoose.Schema({
       type: String,
       default: '',
   },
+  public: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   users: [{type: ObjectId, ref: 'User'}],
   anotations: [{
     _id: String,

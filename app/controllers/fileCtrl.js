@@ -14,6 +14,7 @@ module.exports = function(){
       var file = new File();
       file.title = 'Неозаглавен файл';
       file.content = '';
+      file.public = false;
       file.users.push(req.user._id);
       file.save(function(err, file){
         if(err){
@@ -84,12 +85,12 @@ module.exports = function(){
                     }
                     res.json({success:true});
                   });
-                })
+                });
               } else {
-                res.json({success:false, message:'Този файл не е поддържан.'})
+                res.json({success:false, message:'Този файл не е поддържан.'});
               }
             }
-          }, 500)
+          }, 500);
         });
         req.pipe(req.busboy);
       }
@@ -101,7 +102,7 @@ module.exports = function(){
           res.json({success:false, message:'Възникна проблем при намирането на файла.'});
         }
         res.json(data);
-      })
+      });
     },
     readOne: function(req, res){
       var file_id = req.params.file_id;
@@ -124,7 +125,7 @@ module.exports = function(){
               console.log(err);
             console.log('Deleting file: '+ file);
             res.json({success:true});
-          })
+          });
         } else {
           File.update({_id: file_id, users: req.user._id}, {$pull:{users:req.user._id}}, {upsert:true}, function(err){
             if(err)
@@ -132,7 +133,7 @@ module.exports = function(){
             res.json({success:true});
           });
         }
-      })
+      });
     },
     share: function(req, res){
       // Put data in variables for easy access
@@ -158,9 +159,9 @@ module.exports = function(){
               } else {
                 res.json({success:true, file: file});
               }
-            })
+            });
           }
-        })
+        });
       }
     },
     getShared: function(req, res){
@@ -185,36 +186,36 @@ module.exports = function(){
             });
           }
         }
-      })
+      });
     },
     updateTitle: function(file_id, title, callback){
       File.findById(file_id).exec(function(err, file){
         if(err){
-          console.log(err)
+          console.log(err);
           callback(err);
         } else {
           file.title = title;
           file.save(function(err, data){
             if(err){
-              console.log(err)
+              console.log(err);
               callback(err);
             } else {
               callback(null, data);
             }
           });
         }
-      })
+      });
     },
     updateContent: function(file_id, content, callback){
       File.findById(file_id).exec(function(err, file){
         if(err){
-          console.log(err)
+          console.log(err);
           callback(err);
         } else {
           file.content = content;
           file.save(function(err, data){
             if(err){
-              console.log(err)
+              console.log(err);
               callback(err);
             } else {
               callback(null, data);
@@ -240,7 +241,7 @@ module.exports = function(){
               } else {
                 callback(null, file.anotations);
               }
-            })
+            });
           }
         }
       );
@@ -264,9 +265,9 @@ module.exports = function(){
             } else {
               callback();
             }
-          })
+          });
         }
-      })
+      });
     }, // end of addComment
 
     // deletes anotation from a file
@@ -284,13 +285,60 @@ module.exports = function(){
             } else {
               callback();
             }
-          })
+          });
         }
-      })
-    } // end of deleteAnotation
+      });
+    }, // end of deleteAnotation
+    rename: function(req, res){
+      var file_id = req.params.file_id;
+      var newName = req.body.name;
+      File.update({_id: file_id, "users": req.user._id}, {title:newName}, {upsert:false}, function(err, rows){
+        if(err){
+          console.log('Error while updating file name ' + err);
+          res.json({success:false, message: 'Грешка при преименуването на файла.'});
+        } else if(rows === 0){
+          res.json({success:false, message: 'Файлът не беше намерен'});
+        } else {
+          res.json({success:true});
+        }
+      });
+    }, // end of rename
 
-  } // end of return object
-} // end of module.exports
+    public: function(req, res){
+      //gets the id of the file
+      var file_id = req.params.file_id;
+      //gets user, who requested the change
+      var user = req.user;
+      // gets if public is changed to true or false;
+      var public = req.body.public;
+      // searches for the file
+      File.findOne({_id: file_id, "users": user._id}).exec(function(err, file){
+        // checks if there is an error
+        if(err){
+          console.log('Error while searching for file:' + err);
+          res.json({success:false, message:'Възникна грешка при търсенето на файла.'});
+        // checks if there is a file
+        } else if(file === null){
+          res.json({success:false, message:'Файлът не може да бъде намерен.'});
+        } else {
+          // changes public property of the file
+          file.public = public;
+          // updates information to database
+          file.save(function(err){
+            // checks for error while saving
+            if(err){
+              res.json({success:false, message:'Възникна грешка при обновяването на информацията.'});
+            } else {
+              // sends success message for client
+              res.json({success:true});
+            }
+          });
+        }
+      });
+    }
+
+  }; // end of return object
+}; // end of module.exports
 
 
 // save file to directory
@@ -313,10 +361,10 @@ var userEnteredEmail = function(data){
         return false;
       }
     }
-  })
-}
+  });
+};
 
 
 var ObjectId = function(string){
-  return mongoose.Types.ObjectId(string)
+  return mongoose.Types.ObjectId(string);
 };

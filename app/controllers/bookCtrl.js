@@ -217,7 +217,7 @@ module.exports = function(){
           res.json({success:true});
         }
       });
-    }
+    } // end of rename
   };
 };
 

@@ -16,16 +16,36 @@
 .page-preview{
   height: 700px;
   overflow: scroll;
-  text-align:center;
+  margin-top: 10px;
+  padding: 20px;
+  box-shadow: 3px 3px 10px #888888;
 }
+
 .page-preview::-webkit-scrollbar {
     display: none;
 }
 ::-webkit-scrollbar {
     display: none;
 }
-.page-preview{
-  margin-top: 10px;
-  padding: 20px;
-  box-shadow: 3px 3px 10px #888888;
+.modal-backdrop{
+  z-index:0!important;
+}
+.no-margin{
+  margin:0;
+}
+.chat-box{
+  overflow-x:hidden;
+  overflow-y:visible;
+  height:500px;
+  padding: 5%;
+}
+.muted{
+  color:#c3c3c3;
+  font-size: 11px;
+  margin:0;
+  padding:0;
+}
+.box p{
+  margin:0;
+  padding:0;
 }

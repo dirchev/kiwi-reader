@@ -1,81 +1,177 @@
-<div class="row">
-  <div ng-hide="editMode" class="col-md-3" style="position: relative; height: 100% overflow: hidden;">
-    <div class="hidden-sm hidden-xs well well-sm" style="position: fixed; width: inherit;">
-      <h3 class="text-center">Анотации</h3>
-      <div ng-hide="file.anotations.length">
-        <p>
-          Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
-        </p>
-      </div>
-      <accordion close-others="true">
-        <accordion-group ng-repeat="anotation in file.anotations" heading="{{anotation.user.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
-          <div class="well well-sm text-center">
-            <h4>{{anotation.user.name}}</h4>
-            <p>
-              {{anotation.title}}
-            </p>
+<nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">{{file.title}}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ng-click="showAnotations = !showAnotations; showChat = false;">Анотации</a></li>
+        <li><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
+        <li>
+          <a class="dropdown-toggle" data-toggle="dropdown">Споделяне <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="">
+            <li><a>Сподели с човек</a></li>
+            <li><a data-toggle="modal" data-target="#makePublicModal">Вземи публичен линк</a></li>
+          </ul>
           </div>
-          <hr>
-          <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
-            <h5>{{comment.user.name}}</h5>
-            <p>
-              {{comment.content}}
-            </p>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs" style="position: relative; height: 100% overflow: scroll;">
+        <h3 class="text-center">Анотации</h3>
+        <div ng-hide="file.anotations.length">
+          <p>
+            Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
+          </p>
+        </div>
+        <accordion close-others="true">
+          <accordion-group class="border-sharp" ng-repeat="anotation in file.anotations" heading="{{anotation.user.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
+            <div class="well well-sm text-center">
+              <h4>{{anotation.user.name}}</h4>
+              <p>
+                {{anotation.title}}
+              </p>
+            </div>
+            <hr>
+            <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
+              <h5>{{comment.user.name}}</h5>
+              <p>
+                {{comment.content}}
+              </p>
+            </div>
+            <div class="btn-group btn-group-sm bottom-buffer-sm">
+              <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
+              <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
+            </div>
+            <div id="commentBox{{$index}}" class="collapse well well-sm">
+              <form ng-submit="addComment($index, comment); comment = ''">
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="comment" placeholder="Напиши твоя коментар тук...">
+                </div>
+                <button type="submit" class="btn btn-success">
+                  Коментирай
+                </button>
+              </form>
+            </div>
+          </accordion-group>
+        </accordion>
+
+        <div ng-show="selectedText" class="panel panel-default">
+          <div class="panel-body text-center">
+            {{selectedText}}
           </div>
-          <div class="btn-group btn-group-sm bottom-buffer-sm">
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
-            <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
+          <div class="panel-footer" ng-hide="anotationBox">
+            <a class="btn btn-primary" ng-click="anotationBox = true">Създай анотация</a>
+            <a class="btn btn-danger" ng-click="cancelAnotation()">Отказ</a>
           </div>
-          <div id="commentBox{{$index}}" class="collapse well well-sm">
-            <form ng-submit="addComment($index, comment); comment = ''">
+          <div class="panel-footer" ng-show="anotationBox">
+            <form ng-submit="addAnotation()">
               <div class="form-group">
-                  <input type="text" class="form-control" ng-model="comment" placeholder="Напиши твоя коментар тук...">
+                <textarea class="form-control" ng-model="anotation" placeholder="Съдържание..." rows="5" ></textarea>
               </div>
-              <button type="submit" class="btn btn-success">
-                Коментирай
-              </button>
+              <button type="submit" class="btn btn-default">Създай</button>
             </form>
           </div>
-        </accordion-group>
-      </accordion>
+        </div>
+    </div>
 
-      <div ng-show="selectedText" class="panel panel-default">
-        <div class="panel-body text-center">
-          {{selectedText}}
+    <div ng-show="showChat" class="col-md-3 hidden-sm hidden-xs">
+      <h3 class="text-center">Чат</h3>
+      <div class="chat-box">
+        <div id="chat-content" style="height:300px; overflow:scroll;">
+          <div class="well well-sm" ng-repeat="a in [1,2,3,4,5,6,7,8,9,10]">
+            <p>
+              <b>Dimitar Mirchev</b> : Съобщение на Димитър Мирчев в чата.
+            </p>
+            <div class="muted">21:21:21 21.21.21</div>
+          </div>
         </div>
-        <div class="panel-footer" ng-hide="anotationBox">
-          <a class="btn btn-primary" ng-click="anotationBox = true">Създай анотация</a>
-          <a class="btn btn-danger" ng-click="cancelAnotation()">Отказ</a>
+        <div class="input-group" style="margin-top: 10px">
+          <input type="text" class="form-control" required ng-model="chatMessage" placeholder="Въведи съобщение">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit">Изпрати</button>
+          </span>
         </div>
-        <div class="panel-footer" ng-show="anotationBox">
-          <form ng-submit="addAnotation()">
-            <div class="form-group">
-              <textarea class="form-control" ng-model="anotation" placeholder="Съдържание..." rows="5" ></textarea>
-            </div>
-            <button type="submit" class="btn btn-default">Създай</button>
-          </form>
+      </div>
+    </div>
+
+    <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'">
+      <div style="border: solid 1px #cdcdcd;">
+        <div class="border-sharp btn-group">
+          <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">
+            <span ng-if="editMode">Преглед</span>
+            <span ng-if="!editMode">Редакция</span>
+          </a>
+        </div>
+        <div ng-show="editMode" style="margin-top: 10px">
+          <textarea
+            id="contentBox"
+            ckeditor="editorOptions"
+            ng-model="file.content"
+            class="form-control">
+          </textarea>
+        </div>
+        <div id="previewBox" preview-box text-select ng-hide="editMode" style="padding: 10px; height: 500px; overflow: auto" content="file.content">
         </div>
       </div>
     </div>
   </div>
-  <div ng-class="editMode ? 'col-md-offset-1 col-md-10' : 'col-md-offset-1 col-md-8'">
-    <input id="titleBox" type="text" class="form-control" ng-model="file.title"  style="padding: 10px; border: solid 1px #cdcdcd; border-radius: 0;">
-    <div style="border: solid 1px #cdcdcd; margin-top: 20px;">
-      <div class="border-sharp btn-group">
-        <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">
-          <span ng-if="editMode">Преглед</span>
-          <span ng-if="!editMode">Редакция</span>
-        </a>
+</div>
+
+<div class="modal fade" id="makePublicModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Направи файлът достъпен с линк</h4>
       </div>
-      <div ng-show="editMode" style="margin-top: 10px">
-        <textarea
-          id="contentBox"
-          ckeditor="editorOptions"
-          ng-model="file.content"
-          class="form-control">
-        </textarea>
+      <div class="modal-body">
+        <div class="btn-group bottom-buffer" data-toggle="buttons">
+          <label class="btn btn-primary" ng-class="file.public ? 'active' : ''" ng-click="file.public = true">
+            <input type="radio"
+                   ng-model="file.public"
+                   value="true"
+                   ng-change="file.public = true">Публичен
+          </label>
+          <label class="btn btn-primary" ng-class="file.public ? '' : 'active'" ng-click="file.public = false">
+            <input type="radio"
+                   ng-model="file.public"
+                   value="false"
+                   ng-change="file.public = false"> Частен
+          </label>
+        </div>
+        <div ng-show="file.public">
+          <div class="form-group">
+            <label for=""><b>Публичен линк</b></label>
+            <input class="form-control" type="text" ng-value="'http://kiwi-reader.herokuapp.com/shared/file/' + file._id">
+            <p class="help-block">Използвайте този линк за споделяне.</p>
+          </div>
+        </div>
+        <div class="alert alert-info">
+          <p>
+            <b>Публичен файл</b> е файл, който може да бъде видян от всеки, независимо дали има регистрация или не.
+          </p>
+        </div>
+        <div class="alert alert-info">
+          <p>
+            <b>Частен файл</b> е този, който е видим само за конкретни регистрирани потребители, с които сте го споделили.
+          </p>
+        </div>
       </div>
-      <div id="previewBox" preview-box text-select ng-hide="editMode" style="padding: 10px; height: 500px; overflow: auto" content="file.content">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
       </div>
     </div>
   </div>
