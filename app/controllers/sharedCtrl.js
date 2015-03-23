@@ -11,7 +11,11 @@ module.exports = function(){
         } else if(!file){
           // send some kind of 404
         } else {
-          res.render('file.ejs', { content: file.content });
+          var data = {
+            title: file.title,
+            content: file.content
+          };
+          res.render('file.ejs', data);
         }
       });
     } // end of file function

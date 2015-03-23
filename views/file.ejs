@@ -10,15 +10,22 @@
     <link rel="stylesheet" href="/style/bootstrap-themes/paper.css">
     <link rel="stylesheet" href="/style/style.css">
   </head>
-  <body>
-    <nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <body style="padding: 50px;">
+    <nav class="navbar navbar-inverse border-sharp navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Kiwi Reader</a>
         </div>
       </div><!-- /.container-fluid -->
     </nav>
-    <div class="container">
+    <div class="container-fluid">
+      <div class="jumbotron">
+        <h1><%= title%></h1>
+        <p>
+          Искаш и ти да създаваш и редактираш колеги, или пък да четеш книга заедно с приятел?
+          Всичко това е възможно с <a href="/" class="btn btn-lg btn-success">Kiwi Reader</a>
+        </p>
+      </div>
       <div class="page-preview">
         <%- content %>
       </div>

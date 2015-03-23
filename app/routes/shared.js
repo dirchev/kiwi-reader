@@ -9,7 +9,8 @@ module.exports = function(app, passport, busboy){
   var sharedCtrl = require('../controllers/sharedCtrl')(app);
 
   // get all files
-  app.get('/shared/file/:file_id', isLoggedIn, sharedCtrl.file);
+  // TODO defferent views based on authentication
+  app.get('/shared/file/:file_id', sharedCtrl.file);
 
 };
 
