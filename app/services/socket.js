@@ -3,9 +3,11 @@ var fileCtrl = require('../controllers/fileCtrl')();
 module.exports = function(io){
   io.on('connection', function(socket){
 
+    console.log('user connected');
     socket.on('open:file', function(file_id){
-      socket.join('file' + file_id);
+      // TODO check if user is logged, if he is not, check if file is public
       console.log('user joined room file' + file_id);
+      socket.join('file' + file_id);
     });
 
     socket.on('set:title', function(data){

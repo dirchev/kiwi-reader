@@ -12,6 +12,7 @@ module.exports = function(){
           // send some kind of 404
         } else {
           var data = {
+            id: file._id,
             title: file.title,
             content: file.content
           };

@@ -4,5 +4,5 @@ app.factory('FileSocket', function(){
     connect: function(file_id){
       FileSocket = io();
     }
-  }
-})
+  };
+});
