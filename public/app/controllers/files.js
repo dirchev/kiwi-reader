@@ -22,29 +22,6 @@ app.controller("FilesCtrl", function($scope, $http, File){
       });
     });
   };
-
-  $scope.shareFile = function(file, user, index){
-    File.share(file, user).success(function(data){
-        if(data.success){
-          File.get().success(function(data){
-            $scope.files = data;
-            toastr.success('Успешно споделяне.');
-          });
-        } else {
-          toastr.error(data.message.toString(), 'Неуспешно споделяне.');
-        }
-      });
-    $scope.getSharedUsers(file, index);
-  };
-
-  $scope.getSharedUsers = function(file_id, index){
-    File.getShared(file_id).success(function(data){
-      if(data.success){
-        $scope.files[index].sharedUsers = data.users;
-      }
-    });
-  };
-
   $scope.rename = function(file_id, name){
     File.rename(file_id, name).success(function(data){
       if(data.success){

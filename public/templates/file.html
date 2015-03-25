@@ -21,7 +21,7 @@
         <li>
           <a class="dropdown-toggle" data-toggle="dropdown">Споделяне <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="">
-            <li><a>Сподели с човек</a></li>
+            <li><a data-toggle="modal" data-target="#shareModal">Сподели с човек</a></li>
             <li><a data-toggle="modal" data-target="#makePublicModal">Вземи публичен линк</a></li>
           </ul>
           </div>
@@ -164,6 +164,39 @@
         <div class="alert alert-info">
           <p>
             <b>Частен файл</b> е този, който е видим само за конкретни регистрирани потребители, с които сте го споделили.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Сподели файла с...</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item active">Този файл е достъпен от:</li>
+          <li class="list-group-item" ng-repeat="user in file.sharedUsers">{{user.name}}</li>
+        </ul>
+        <form ng-submit="shareFile(userToShare, $index)" class="bottom-buffer">
+          <div class="input-group" style="margin-top: 10px">
+            <input type="email" class="form-control" required ng-model="userToShare" placeholder="Въведи email">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="submit">Сподели</button>
+            </span>
+          </div>
+        </form>
+        <div class="alert alert-info">
+          <p>
+            Когато <b>споделите файл</b> с някого, той ще може не само да го преглежда, но и да го редактира и коментира.
           </p>
         </div>
       </div>

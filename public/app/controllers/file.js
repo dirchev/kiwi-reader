@@ -10,6 +10,11 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
+    File.getShared(file_id).success(function(data){
+      if(data.success){
+        $scope.file.sharedUsers = data.users;
+      }
+    });
 
     for(var i in $scope.file.anotations){
       $scope.openedAnotations.push(false);
@@ -160,6 +165,21 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   $scope.toggleEditMode = function(){
     $scope.editMode = !$scope.editMode;
     $scope.checkForDeletedAnotations();
+  };
+
+  $scope.shareFile = function(user, index){
+    File.share(file_id, user).success(function(data){
+        if(data.success){
+          File.getShared(file_id).success(function(data){
+            if(data.success){
+              $scope.file.sharedUsers = data.users;
+            }
+          });
+          toastr.success('Успешно споделяне.');
+        } else {
+          toastr.error(data.message.toString(), 'Неуспешно споделяне.');
+        }
+      });
   };
 
   $scope.checkForDeletedAnotations = function(){
