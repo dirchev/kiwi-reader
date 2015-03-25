@@ -16,8 +16,7 @@
 .page-preview{
   height: 700px;
   overflow: scroll;
-  margin-top: 10px;
-  padding: 20px;
+  padding: 20px 10% 20px 10%;
   box-shadow: 3px 3px 10px #888888;
 }
 
@@ -48,4 +47,57 @@
 .box p{
   margin:0;
   padding:0;
+}
+
+#prevPageBtn:hover{
+  opacity:0.7;
+}
+#prevPageBtn:before{
+    top: 50%;
+    left: 10%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: #0492e3;
+    border-width: 15px;
+}
+#prevPageBtn{
+  position:absolute;
+  left:14px;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 7%;
+  background-color: #ededed;
+  opacity: 0;
+}
+
+
+#nextPageBtn:hover{
+  opacity:0.7;
+}
+#nextPageBtn:before{
+    top: 50%;
+    right: 10%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-left-color: #0492e3;
+    border-width: 15px;
+}
+#nextPageBtn{
+  position:absolute;
+  right:14px;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 7%;
+  background-color: #ededed;
+  opacity: 0;
 }

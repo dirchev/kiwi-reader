@@ -63,7 +63,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
 
   var renderPage = function(id){
-    var pageHref = $scope.book.opf['manifest'][id].href;
+    var pageHref = $scope.book.opf.manifest[id].href;
     var r = /[^\/]*$/;
     var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/'
     $http.get(pageHref).success(function(data){
@@ -73,7 +73,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $scope.page = $scope.page.replace(/href="/g, 'link-location="'+pageFolder);
       $scope.page = $scope.page.replace(/<style/g, '<div style="display:none">');
       $scope.page = $scope.page.replace(/<\/style>/g, '</div>');
-      $scope.page = $scope.page.replace(/<link/g, '<aaaa');
+      $scope.page = $scope.page.replace(/<link/g, '<br style="display:none;"');
     });
   };
 
@@ -139,7 +139,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   var scrolledToTop = function(){
     var elem = $('#page-preview');
-    return elem.scrollTop() == 0;
+    return elem.scrollTop() === 0;
   };
 
   var updateUserPosition = function(){

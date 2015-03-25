@@ -29,9 +29,10 @@
       </div>
     </div>
     <div ng-class="showContent ? 'col-sm-8': 'col-sm-offset-2 col-sm-8'">
-      <div id="page-preview" class="page-preview" preview-box text-select content="page">
-        <button type="button" class="btn btn-default" ng-click="previousPage()">Предишна страница</button>
-        <button type="button" class="btn btn-default pull-right" ng-click="nextPage()">Следваща страница</button>
+      <div>
+        <div id="prevPageBtn" ng-click="previousPage()"></div>
+        <div id="nextPageBtn" ng-click="nextPage()"></div>
+        <div id="page-preview" class="page-preview" preview-box text-select content="page"></div>
       </div>
     </div>
   </div>
