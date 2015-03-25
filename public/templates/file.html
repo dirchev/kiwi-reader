@@ -13,6 +13,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
+        <li><a ng-click="toggleEditMode()">
+            {{editMode === false ? 'Редакция' : 'Преглед'  }}
+        </a></li>
         <li><a ng-click="showAnotations = !showAnotations; showChat = false;">Анотации</a></li>
         <li><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
         <li>
@@ -108,23 +111,17 @@
     </div>
 
     <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'">
-      <div style="border: solid 1px #cdcdcd;">
-        <div class="border-sharp btn-group">
-          <a class="btn btn-primary border-sharp" ng-click="toggleEditMode()">
-            <span ng-if="editMode">Преглед</span>
-            <span ng-if="!editMode">Редакция</span>
-          </a>
+      <div ng-hide="editMode" style="border: solid 1px #cdcdcd;">
+        <div id="previewBox" preview-box text-select style="padding: 10px; height: 500px; overflow: auto" content="file.content">
         </div>
-        <div ng-show="editMode" style="margin-top: 10px">
-          <textarea
-            id="contentBox"
-            ckeditor="editorOptions"
-            ng-model="file.content"
-            class="form-control">
-          </textarea>
-        </div>
-        <div id="previewBox" preview-box text-select ng-hide="editMode" style="padding: 10px; height: 500px; overflow: auto" content="file.content">
-        </div>
+      </div>
+      <div ng-show="editMode" style="margin-top: 10px">
+        <textarea
+          id="contentBox"
+          ckeditor="editorOptions"
+          ng-model="file.content"
+          class="form-control">
+        </textarea>
       </div>
     </div>
   </div>
