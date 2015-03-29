@@ -1,18 +1,21 @@
-<div class="jumbotron">
-  <h1>Профил</h1>
-  <form ng-submit="updateUser(user)">
-    <div class="form-group">
-      <label for="displayName"><h3>Име и фамилия</h3></label>
-      <input type="text" class="form-control" id="displayName" ng-model="user.name">
-      <p class="help-block">Тези имена ще се появяват при поставянето на анотации и коментари.</p>
-    </div>
-    <div class="form-group">
-      <label for="displayName"><h3>Email</h3></label>
-      <input type="text" class="form-control" id="displayName" ng-model="user.email">
-      <p class="help-block">Помага при споделянето на файлове. Не може да споделяте файлове без да имате въведен email</p>
-    </div>
-    <button type="submit" class="btn btn-primary">
-      Обнови
-    </button>
-  </form>
+<div class="container-fluid">
+  <div class="jumbotron">
+    <h1>Профил</h1>
+    <form ng-submit="updateUser(user)">
+      <div class="form-group">
+        <label for="displayName"><h3>Име и фамилия</h3></label>
+        <input type="text" class="form-control" id="displayName" ng-model="user.name">
+        <p class="help-block">Тези имена ще се появяват при поставянето на анотации и коментари.</p>
+      </div>
+      <div class="form-group">
+        <label for="displayName"><h3>Email</h3></label>
+        <input type="text" class="form-control" id="displayName" ng-model="user.email">
+        <p class="help-block">Помага при споделянето на файлове. Не може да споделяте файлове без да имате въведен email</p>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        Обнови
+      </button>
+    </form>
+  </div>
+
 </div>

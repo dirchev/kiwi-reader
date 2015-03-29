@@ -6,6 +6,6 @@ app.controller('ProfileCtrl', function($rootScope, $scope, $http){
       } else {
         toastr.error(data.message);
       }
-    })
-  }
-})
+    });
+  };
+});

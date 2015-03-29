@@ -94,18 +94,19 @@
       <h3 class="text-center">Чат</h3>
       <div class="chat-box">
         <div id="chat-content" style="height:300px; overflow:scroll;">
-          <div class="well well-sm" ng-repeat="a in [1,2,3,4,5,6,7,8,9,10]">
+          <div class="well well-sm" ng-repeat="message in chat">
             <p>
-              <b>Dimitar Mirchev</b> : Съобщение на Димитър Мирчев в чата.
+              <b>{{message.user}}</b> : {{message.content}}
             </p>
-            <div class="muted">21:21:21 21.21.21</div>
           </div>
         </div>
         <div class="input-group" style="margin-top: 10px">
-          <input type="text" class="form-control" required ng-model="chatMessage" placeholder="Въведи съобщение">
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="submit">Изпрати</button>
-          </span>
+          <form ng-submit="addChatMessage(chatMessage)">
+            <input type="text" class="form-control" required ng-model="chatMessage" placeholder="Въведи съобщение">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="submit">Изпрати</button>
+            </span>
+          </form>
         </div>
       </div>
     </div>

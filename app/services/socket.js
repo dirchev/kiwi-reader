@@ -1,4 +1,7 @@
 var fileCtrl = require('../controllers/fileCtrl')();
+// var io               = require("socket.io")(server);
+// var sessionStore     = require('awesomeSessionStore'); // find a working session store (have a look at the readme)
+// var passportSocketIo = require("passport.socketio");
 
 module.exports = function(io){
   io.on('connection', function(socket){
@@ -66,6 +69,12 @@ module.exports = function(io){
           socket.to('file' + file_id).emit('error', err);
         }
       });
+    });
+
+    socket.on('add:chat', function(data){
+      message = data.message;
+      file_id = data.file_id;
+      socket.broadcast.to('file' + file_id).emit('update:chat', message);
     });
 
   });

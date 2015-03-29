@@ -8,7 +8,7 @@ module.exports = function(app, passport){
         email: data.data.email
       };
       res.json(user);
-    })
+    });
   });
   app.post('/api/user', isLoggedIn, function(req, res){
     User.findById(req.user._id).exec(function(err, user){
@@ -25,8 +25,8 @@ module.exports = function(app, passport){
         } else {
           res.json({success:true});
         }
-      })
-    })
+      });
+    });
   });
 };
 
@@ -41,7 +41,7 @@ var emailExists = function(email){
       return true;
     }
   });
-}
+};
 
 
 // route middleware to make sure a user is logged in

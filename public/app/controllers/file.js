@@ -3,6 +3,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   $scope.selectedText = '';
   $scope.comment = '';
   $scope.anotationBox = false;
+  $scope.chat = [];
 
   $scope.openedAnotations = [];
   var socket;
@@ -103,10 +104,28 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       });
     });
 
+    socket.on('update:chat', function(message){
+      $scope.$apply(function(){
+        $scope.chat.push(message);
+      });
+    });
+
     socket.on('error', function(error){
       toastr.error(error);
     });
   });
+
+  $scope.addChatMessage = function(message){
+    var data = {
+      file_id : file_id,
+      message: {
+        user : $rootScope.user.name,
+        content : message
+      }
+    };
+    socket.emit('add:chat', data);
+    $scope.chat.push(data.message);
+  };
 
   $scope.addAnotation = function(){
     var id;
