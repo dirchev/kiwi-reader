@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse border-sharp" role="navigation">
+<nav id="subNavbar" class="navbar navbar-inverse border-sharp" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
@@ -30,16 +30,16 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<div class="container-fluid">
-  <div class="row">
-    <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs" style="position: relative; height: 100% overflow: scroll;">
+<div id="contentWrapper" class="container-fluid" ng-style="contentStyle">
+  <div class="row fullheight">
+    <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
         <h3 class="text-center">Анотации</h3>
         <div ng-hide="file.anotations.length">
           <p>
             Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
           </p>
         </div>
-        <accordion close-others="true">
+        <accordion close-others="true" class="fullheight">
           <accordion-group class="border-sharp" ng-repeat="anotation in file.anotations" heading="{{anotation.user.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
             <div class="well well-sm text-center">
               <h4>{{anotation.user.name}}</h4>
@@ -90,38 +90,37 @@
         </div>
     </div>
 
-    <div ng-show="showChat" class="col-md-3 hidden-sm hidden-xs">
+    <div ng-show="showChat" class="col-md-3 hidden-sm hidden-xs fullheight">
       <h3 class="text-center">Чат</h3>
-      <div class="chat-box">
-        <div id="chat-content" style="height:300px; overflow:scroll;">
+      <div>
+        <div class="alert alert-warning text-center">Този чат не се запазва. Ако няма други онлайн, значи си пишеш сам.</div>
+      </div>
+      <div class="chat-box fullheight" style="overflow:hidden;">
+        <div id="chat-content" style="height:65%; overflow-y:auto;">
           <div class="well well-sm" ng-repeat="message in chat">
             <p>
               <b>{{message.user}}</b> : {{message.content}}
             </p>
           </div>
         </div>
-        <div class="input-group" style="margin-top: 10px">
+        <div class="input-group fullwidth">
           <form ng-submit="addChatMessage(chatMessage)">
             <input type="text" class="form-control" required ng-model="chatMessage" placeholder="Въведи съобщение">
-            <span class="input-group-btn">
-              <button class="btn btn-primary" type="submit">Изпрати</button>
-            </span>
           </form>
         </div>
       </div>
     </div>
 
-    <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'">
-      <div ng-hide="editMode" style="border: solid 1px #cdcdcd;">
-        <div id="previewBox" preview-box text-select style="padding: 10px; height: 500px; overflow: auto" content="file.content">
+    <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
+      <div ng-hide="editMode" style="border: solid 1px #cdcdcd; overflow: scroll;" class="fullheight">
+        <div id="previewBox" preview-box text-select style="padding: 10px; overflow: auto;" content="file.content">
         </div>
       </div>
-      <div ng-show="editMode" style="margin-top: 10px">
+      <div ng-show="editMode" style="margin-top: 10px" class="fullheight">
         <textarea
           id="contentBox"
           ckeditor="editorOptions"
-          ng-model="file.content"
-          class="form-control">
+          ng-model="file.content">
         </textarea>
       </div>
     </div>

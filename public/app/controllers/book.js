@@ -5,6 +5,9 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.scrolled = 0;
   $scope.selectedText = '';
 
+  // TODO calculate content-container height
+  // TODO connect to socket
+
   // set arrow keys rules
   $(document).keydown(function(e) {
     switch(e.which) {

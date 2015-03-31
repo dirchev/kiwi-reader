@@ -4,10 +4,17 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   $scope.comment = '';
   $scope.anotationBox = false;
   $scope.chat = [];
-
   $scope.openedAnotations = [];
   var socket;
   var file_id = $stateParams.id;
+
+  // calculate contentWrapper height
+  $scope.contentHeight = $(window).height() - 2*64 - 40;
+  $('#contentWrapper').height($scope.contentHeight);
+  $(window).resize(function(){
+    $scope.contentHeight = $(window).height() - 2*64 - 40;
+  $('#contentWrapper').height($scope.contentHeight);
+  });
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
@@ -36,15 +43,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
 
     socket = $window.io();
     socket.emit('open:file', file_id);
-
-
-    // When connection is not that fast, this is not working as it has to
-    // $scope.$watch('file.title', function(){
-    //   socket.emit('set:title', {file_id: file_id, title: $scope.file.title});
-    // });
-    // $scope.$watch('file.content', function(){
-    //   socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
-    // });
+    // TODO show all online users
 
     $scope.$watch('file.public', function(oldVal, newVal){
       if(oldVal !== newVal){
@@ -125,16 +124,22 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     };
     socket.emit('add:chat', data);
     $scope.chat.push(data.message);
+    $scope.chatMessage = '';
+    // TODO scroll chat to bottom
   };
 
+  // adds anotation
   $scope.addAnotation = function(){
     var id;
+    // find the best id for the anotation
     if($scope.file.anotations.length === 0){
       id = '0';
     } else {
       id = parseInt($scope.file.anotations[$scope.file.anotations.length - 1]._id);
       id = id + 1;
     }
+
+    // prepare the object
     var data = {
       anotation: {
         _id: id,
@@ -147,6 +152,8 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       file_id: file_id,
       comments: []
     };
+
+    // wraps anotation`s content with <span> with special id
     var selection = $scope.selection;
     var span = document.createElement("span");
     span.appendChild(selection.extractContents());
@@ -154,13 +161,19 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     span.setAttribute('class', 'selected');
     selection.insertNode(span);
     $scope.file.content = $('#previewBox').html();
-    socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
+
+    // resets all variables, linked with anotation
     $scope.cancelAnotation();
+    // pushes anotation to local object
     $scope.file.anotations.push(data.anotation);
+    // emits new anotation
     socket.emit('add:anotation', data);
+
+    // emits updated content
+    socket.emit('set:content', {file_id: file_id, content: $scope.file.content});
   };
 
-
+  // highlights anotation and opens its dialog
   var selectAnotation = function(index){
     var anotation = $scope.file.anotations[index];
     $('.selected').css('background-color', '#f7ff00');
@@ -171,6 +184,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     $('#selection' + anotation._id).css('background-color', '#ffab7b');
   };
 
+  // deselects anotation and closes its dialog
   var deSelectAnotation = function(index){
     var anotation = $scope.file.anotations[index];
     $('.selected').css('background-color', '#f7ff00');
@@ -186,6 +200,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     $scope.checkForDeletedAnotations();
   };
 
+  // share file to another user
   $scope.shareFile = function(user, index){
     File.share(file_id, user).success(function(data){
         if(data.success){
@@ -201,6 +216,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       });
   };
 
+  // checks if there is deleted anotation (from file contents) and removes its anotation object
   $scope.checkForDeletedAnotations = function(){
     if(typeof $scope.file !== 'undefined'){
       for(var i in $scope.file.anotations){
@@ -213,6 +229,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     }
   };
 
+  // delete anotation
   $scope.deleteAnotation = function(anotation_id){
     if(typeof $scope.file !== 'undefined'){
       for(var i in $scope.file.anotations){
@@ -227,10 +244,12 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     }
   };
 
+  // checks if the element has content
   var emptyElement =  function( el ){
       return !$.trim(el.html());
   };
 
+  // reserts all variables linked with anotation
   $scope.cancelAnotation = function(){
     $scope.anotation = '';
     $scope.selection = '';
@@ -238,7 +257,9 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     $scope.anotationBox = false;
   };
 
+  // add comment to anotation
   $scope.addComment = function(anotation_index, comment_content){
+    // prepare comment object
     var comment = {
       user: {
         _id: $rootScope.user._id,
@@ -246,18 +267,24 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
       },
       content: comment_content
     };
+    // check if comments is defined
     if( typeof $scope.file.anotations[anotation_index].comments  === 'undefined'){
+      // if not - define it
       $scope.file.anotations[anotation_index].comments = [];
     }
+    // push the comment in anotation`s comments
     $scope.file.anotations[anotation_index].comments.push(comment);
+    // prepare new object for socket
     var data = {
       file_id : file_id,
       anotation_index : anotation_index,
       comment : comment
     };
+    // emit the comment
     socket.emit('add:comment', data);
   };
 
+  // show anotations popups
   $(document).on("mouseover", ".selected", function() {
     var id = $(this).attr('id');
     if(typeof id === 'undefined'){
@@ -284,14 +311,11 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     }
   });
 
-  $scope.scrollChatBox = function(){
-    var elem = document.getElementById('chat-content');
-    elem.scrollTop = elem.scrollHeight;
-  };
-
+  // hide anotations popups
   $(document).on("mouseleave", ".selected", function() {
     $(this).popover('hide');
   });
+
 
 
 });

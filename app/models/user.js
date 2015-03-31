@@ -39,6 +39,7 @@ var userSchema = mongoose.Schema({
     },
     bookmarks: [String]
 });
+// TODO make firends object
 
 // methods ===========================
 //generating a hash

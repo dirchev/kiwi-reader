@@ -35,7 +35,6 @@
 .chat-box{
   overflow-x:hidden;
   overflow-y:visible;
-  height:500px;
   padding: 5%;
 }
 .muted{
@@ -101,3 +100,12 @@
   background-color: #ededed;
   opacity: 0;
 }
+.fullheight{
+  height:100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.fullwidth{
+  width: 100%;
+}
+.clear { width: 1%; display: table-cell; }

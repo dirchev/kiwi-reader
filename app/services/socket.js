@@ -3,15 +3,19 @@ var fileCtrl = require('../controllers/fileCtrl')();
 // var sessionStore     = require('awesomeSessionStore'); // find a working session store (have a look at the readme)
 // var passportSocketIo = require("passport.socketio");
 
+var roomUsers = {};
 module.exports = function(io){
   io.on('connection', function(socket){
-
     console.log('user connected');
     socket.on('open:file', function(file_id){
       // TODO check if user is logged, if he is not, check if file is public
-      console.log('user joined room file' + file_id);
       socket.join('file' + file_id);
+      var users = socket.clients('file' + file_id);
+      console.log(users);
+      socket.to('file' + file_id).emit('users:online', users);
     });
+
+    // TODO implement sockets for books
 
     socket.on('set:title', function(data){
       file_id = data.file_id;

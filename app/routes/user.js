@@ -1,4 +1,5 @@
 var User = require('../models/user');
+// TODO move logic to controller
 module.exports = function(app, passport){
   app.get('/api/user', isLoggedIn, function(req, res){
     User.findById(req.user._id).lean().exec(function(err, data){
