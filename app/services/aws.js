@@ -8,8 +8,8 @@ var client = s3.createClient({
   multipartUploadThreshold: 20971520, // this is the default (20 MB)
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
-    accessKeyId: "AKIAJQU3MHCTULZMUZKQ",
-    secretAccessKey: "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"
+    accessKeyId: process.env.AWS_ACCESSKEY_ID,
+    secretAccessKey: process.env.AWS_ACCESSKEY_SECRET
   },
 });
 module.exports = function(){
