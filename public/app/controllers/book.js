@@ -150,7 +150,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.nextPage = function(){
     if(!scrolledToBottom()){
       // if he does not, scroll down
-      $scope.scrolled = $("#page-preview").scrollTop() + ($("#page-preview").height() - 200);
+      $scope.scrolled = $("#page-preview").scrollTop() + ($("#page-preview").height() - 50);
       $("#page-preview").scrollTop($scope.scrolled);
     } else {
       // else, render next page
@@ -161,7 +161,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.previousPage = function(){
     if(!scrolledToTop()){
       // if he does not, scroll up
-      $scope.scrolled = $("#page-preview").scrollTop() - ($("#page-preview").height() - 200);
+      $scope.scrolled = $("#page-preview").scrollTop() - ($("#page-preview").height() - 50);
       $("#page-preview").scrollTop($scope.scrolled);
     } else {
       // else, render next page

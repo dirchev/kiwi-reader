@@ -10,9 +10,10 @@ app.directive('textSelect', function(){
         scope.$apply(function(){
           scope.selectedText = selectedText;
           scope.selection = selection;
+          scope.showAnotations = true;
         });
         e.stopPropagation();
       });
     }
-  }
-})
+  };
+});

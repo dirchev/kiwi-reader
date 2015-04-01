@@ -1,0 +1,26 @@
+<nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand">Цитати</a>
+    </div>
+
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="bookmark in bookmarks">
+      <div class="well">
+        <div class="dropdown">
+          <a class="dropdown-toggle pull-right" data-toggle="dropdown"><span class="caret muted"></span></a>
+          <ul class="dropdown-menu pull-right">
+            <li><a tabindex="-1" ng-click="deleteBookmark($index)">Изтрий {{$index}}</a></li>
+          </ul>
+        </div>
+        <div>
+          {{bookmark.content}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -38,6 +38,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "/templates/library.html",
       //controller: "SettingsCtrl"
     })
+    .state('bookmarks', {
+      url: "/bookmarks",
+      templateUrl: "/templates/bookmarks.html",
+      controller: "BookmarksCtrl"
+    })
     .state('profile', {
       url: "/profile",
       templateUrl: "/templates/profile.html",
@@ -48,5 +53,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.run(function($rootScope, $http){
   $http.get('/api/user').success(function(data){
     $rootScope.user = data;
-  })
+  });
 });

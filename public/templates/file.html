@@ -77,8 +77,9 @@
             {{selectedText}}
           </div>
           <div class="panel-footer" ng-hide="anotationBox">
-            <a class="btn btn-primary" ng-click="anotationBox = true">Създай анотация</a>
-            <a class="btn btn-danger" ng-click="cancelAnotation()">Отказ</a>
+            <a class="btn btn-primary btn-sm" ng-click="anotationBox = true">Създай анотация</a>
+            <a class="btn btn-success btn-sm" ng-click="addBookmark()">Добави към цитати</a>
+            <a class="btn btn-danger btn-sm" ng-click="cancelAnotation()">Отказ</a>
           </div>
           <div class="panel-footer" ng-show="anotationBox">
             <form ng-submit="addAnotation()">

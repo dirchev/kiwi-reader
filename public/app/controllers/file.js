@@ -1,4 +1,4 @@
-app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window, $timeout){
+app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window, $timeout, Bookmark){
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.comment = '';
@@ -289,6 +289,17 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     };
     // emit the comment
     socket.emit('add:comment', data);
+  };
+
+  $scope.addBookmark = function(){
+    var bookmark = $scope.selectedText;
+    Bookmark.add(bookmark).success(function(data){
+      if(data.success){
+        toastr.success('Цитатът е запазен успешно.');
+      } else {
+        toastr.error(data.message);
+      }
+    });
   };
 
   // show anotations popups

@@ -47,6 +47,7 @@ require('./app/routes/file.js')(app, passport, busboy);
 require('./app/routes/user.js')(app, passport);
 require('./app/routes/shared.js')(app, passport);
 require('./app/routes/uploads.js')(app, passport);
+require('./app/routes/bookmark.js')(app, passport);
 
 // socket ======================================================================
 require('./app/services/socket.js')(io);

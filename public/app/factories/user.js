@@ -3,5 +3,5 @@ app.factory('User', function($http){
     get: function(){
       return $http.get('/api/user');
     }
-  }
-})
+  };
+});

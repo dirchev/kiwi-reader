@@ -1,4 +1,3 @@
-// load the things we need
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
@@ -37,8 +36,18 @@ var userSchema = mongoose.Schema({
       },
       photo: String
     },
-    bookmarks: [String]
+    bookmarks: [{
+      datetime: {
+        type: Date,
+        default: Date.now
+      },
+      content: {
+        type: String,
+        required: true
+      }
+    }]
 });
+// TODO make bookmarks object
 // TODO make firends object
 
 // methods ===========================

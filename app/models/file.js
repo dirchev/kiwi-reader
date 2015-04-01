@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
-// defina the schema for our user model
+// define the schema for our user model
 var fileSchema = mongoose.Schema({
   title: {
       type: String,
