@@ -28,25 +28,9 @@
       <ul class="dropdown-menu" role="menu">
         <li><a ui-sref="book({id : book._id})">Отвори</a></li>
         <li><a data-toggle="collapse" data-target="#renameBook{{book._id}}" aria-expanded="false" aria-controls="renameBook{{book.id}}">Преименувай</a></li>
-        <li><a data-toggle="collapse" data-target="#shareBook{{book._id}}" aria-expanded="false" aria-controls="shareBook{{book.id}}" ng-click="getSharedUsers(book._id, $index)">Сподели</a></li>
         <li class="divider"></li>
         <li><a ng-click="deleteBook(book._id)">Изтрий</a></li>
       </ul>
-      <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="shareBook{{book._id}}">
-        <ul class="list-group">
-          <li class="list-group-item active">Този файл е достъпен от:</li>
-          <li class="list-group-item" ng-repeat="user in book.sharedUsers">{{user.name}}</li>
-        </ul>
-        <form ng-submit="shareBook(book._id, userToShare)">
-          <div class="input-group" style="margin-top: 10px">
-            <input type="email" class="form-control" required ng-model="userToShare" placeholder="Въведи email">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="submit">Сподели</button>
-            </span>
-          </div>
-        </form>
-        <a class="btn btn-danger btn-sm pull-right" style="margin-top: 10px;" data-toggle="collapse" data-target="#shareBook{{book._id}}" aria-label="Close">Затвори</a>
-      </div>
       <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="renameBook{{book._id}}">
         <form ng-submit="rename(book._id, newName)">
           <div class="input-group" style="margin-top: 10px">

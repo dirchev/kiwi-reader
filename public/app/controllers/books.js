@@ -34,26 +34,6 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book){
     });
   };
 
-  $scope.shareBook = function(book, user){
-    Book.share(book, user).success(function(data){
-      if(data.success){
-        toastr.success('Успешно споделяне.');
-        getBooks();
-        $('.collapse').hide();
-      } else {
-        toastr.error(data.message.toString(), 'Неуспешно споделяне.');
-      }
-    });
-  };
-
-  $scope.getSharedUsers = function(book_id, index){
-    Book.getShared(book_id).success(function(data){
-      if(data.success){
-        $scope.books[index].sharedUsers = data.users;
-      }
-    });
-  };
-
   $scope.deleteBook = function(id){
     Book.delete(id).success(function(data){
       if(data.success){

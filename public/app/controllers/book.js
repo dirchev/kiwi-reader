@@ -8,15 +8,17 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   // calculate contentWrapper height
   $scope.contentHeight = $(window).height() - 2*64 - 60;
   $('#contentWrapper').height($scope.contentHeight);
-  $('#page-preview').height($scope.contentHeight-40);
-  $('#prevPageBtn').height($scope.contentHeight-40);
-  $('#nextPageBtn').height($scope.contentHeight-40);
+  $('#contentBox').height($scope.contentHeight);
+  $('#page-preview').height($scope.contentHeight);
+  $('#prevPageBtn').height($scope.contentHeight);
+  $('#nextPageBtn').height($scope.contentHeight);
   $(window).resize(function(){
     $scope.contentHeight = $(window).height() - 2*64 - 60;
   $('#contentWrapper').height($scope.contentHeight);
-  $('#page-preview').height($scope.contentHeight-40);
-  $('#prevPageBtn').height($scope.contentHeight-40);
-  $('#nextPageBtn').height($scope.contentHeight-40);
+  $('#contentBox').height($scope.contentHeight);
+  $('#page-preview').height($scope.contentHeight);
+  $('#prevPageBtn').height($scope.contentHeight);
+  $('#nextPageBtn').height($scope.contentHeight);
   });
 
   // TODO connect to socket
@@ -44,6 +46,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $state.go('books');
     } else {
       $scope.book = data.book;
+      $scope.getSharedUsers();
       for(var i in $scope.book.users){
         if($scope.book.users[i]._id === $rootScope.user._id){
           userIndex = i;
@@ -62,6 +65,24 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     }
   });
 
+  $scope.shareBook = function(user){
+    Book.share(book_id, user).success(function(data){
+        if(data.success){
+          $scope.getSharedUsers();
+          toastr.success('Успешно споделяне.');
+        } else {
+          toastr.error(data.message.toString(), 'Неуспешно споделяне.');
+        }
+      });
+  };
+
+  $scope.getSharedUsers = function(){
+    Book.getShared(book_id).success(function(data){
+      if(data.success){
+        $scope.book.sharedUsers = data.users;
+      }
+    });
+  };
 
   $scope.updatePosition = function(a) {
     if(a === -1){

@@ -77,25 +77,27 @@
       </div><!-- /.container-fluid -->
     </nav>
     <div class="container-fluid">
-      <div class="well well-sm">
-        <h1><%= title%></h1>
+      <h1 class="text-center"><%= title%></h1>
+      <div id="alertBox" class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p>
           Искаш и ти да създаваш и редактираш документи с колеги, или пък да четеш книга заедно с приятел?
-          Всичко това е възможно с <a href="/" class="btn btn-sm btn-success">Kiwi Reader</a>
+          Всичко това е възможно с <a href="/" class="btn btn-sm btn-info">Kiwi Reader</a>
         </p>
       </div>
-      <div id="contentWrapper" class="page-preview">
+      <div id="contentWrapper" class="page-preview shadow" style="padding: 50px 30px 30px;">
         <%- content %>
       </div>
     </div>
     <script>
-      var contentHeight = $(window).height() - 64 - $('.well').height() - 130;
+      var contentHeight = $(window).outerHeight() - 64 - $('#alertBox').outerHeight() - $('h1').outerHeight() - 190;
       $('#contentWrapper').height(contentHeight);
       $(window).resize(function(){
-        contentHeight = $(window).height() - 64 - $('.well').height() - 130;
+        contentHeight = $(window).outerHeight() - 64 - $('#alertBox').outerHeight() - $('h1').outerHeight() - 190;
       $('#contentWrapper').height(contentHeight);
       });
       $(document).ready(function(){
+        console.log($('#alertBox').height());
         var file_id = '<%= id%>';
         var socket = io();
         socket.emit('open:file', file_id);

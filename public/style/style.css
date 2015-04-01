@@ -67,7 +67,7 @@
 #prevPageBtn{
   position:absolute;
   left:14px;
-  top: 0;
+  top: 10px;
   bottom: 0;
   height: 100%;
   width: 7%;
@@ -94,7 +94,7 @@
 #nextPageBtn{
   position:absolute;
   right:14px;
-  top: 0;
+  top: 10px;
   bottom: 0;
   height: 100%;
   width: 7%;

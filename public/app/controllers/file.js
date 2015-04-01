@@ -208,7 +208,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   };
 
   // share file to another user
-  $scope.shareFile = function(user, index){
+  $scope.shareFile = function(user){
     File.share(file_id, user).success(function(data){
         if(data.success){
           File.getShared(file_id).success(function(data){
