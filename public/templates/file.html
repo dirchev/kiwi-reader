@@ -30,6 +30,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
 <div id="contentWrapper" class="container-fluid" ng-style="contentStyle">
   <div class="row fullheight">
     <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
@@ -96,7 +97,7 @@
         <div class="alert alert-warning text-center">Този чат не се запазва. Ако няма други онлайн, значи си пишеш сам.</div>
       </div>
       <div class="chat-box fullheight" style="overflow:hidden;">
-        <div id="chat-content" style="height:65%; overflow-y:auto;">
+        <div id="chatBox" style="height:65%; overflow-y:auto;">
           <div class="well well-sm" ng-repeat="message in chat">
             <p>
               <b>{{message.user}}</b> : {{message.content}}
@@ -116,7 +117,7 @@
         <div id="previewBox" preview-box text-select style="padding: 10px; overflow: auto;" content="file.content">
         </div>
       </div>
-      <div ng-show="editMode" style="margin-top: 10px" class="fullheight">
+      <div ng-show="editMode" style="margin-top: 10px">
         <textarea
           id="contentBox"
           ckeditor="editorOptions"

@@ -20,20 +20,18 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<div class="container-fluid">
-  <div class="row">
-    <div ng-show="showContent" style="height: 700px;" class="col-sm-4">
-      <div class="page-preview text-center" style="height: 100%; overflow: scroll">
+<div id="contentWrapper" class="container-fluid">
+  <div class="row fullheight" >
+    <div ng-show="showContent" class="col-sm-4" style="padding-top: 10px;" >
+      <div class="shadow text-center" style="height: 91%; overflow: auto">
         <div class="toc" preview-box content="toc">
         </div>
       </div>
     </div>
-    <div ng-class="showContent ? 'col-sm-8': 'col-sm-offset-2 col-sm-8'">
-      <div>
-        <div id="prevPageBtn" ng-click="previousPage()"></div>
-        <div id="nextPageBtn" ng-click="nextPage()"></div>
-        <div id="page-preview" class="page-preview" preview-box text-select content="page"></div>
-      </div>
+    <div class="fullheight" style="padding-top: 10px;" ng-class="showContent ? 'col-sm-8': 'col-sm-offset-2 col-sm-8'">
+      <div id="prevPageBtn" class="fullheight" ng-click="previousPage()" class="fullheight"></div>
+      <div id="nextPageBtn" class="fullheight" ng-click="nextPage()" class="fullheight"></div>
+      <div id="page-preview" class="page-preview shadow" preview-box text-select content="page"></div>
     </div>
   </div>
 </div>

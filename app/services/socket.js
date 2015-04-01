@@ -10,9 +10,6 @@ module.exports = function(io){
     socket.on('open:file', function(file_id){
       // TODO check if user is logged, if he is not, check if file is public
       socket.join('file' + file_id);
-      var users = socket.clients('file' + file_id);
-      console.log(users);
-      socket.to('file' + file_id).emit('users:online', users);
     });
 
     // TODO implement sockets for books

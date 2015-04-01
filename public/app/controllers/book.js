@@ -5,7 +5,20 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.scrolled = 0;
   $scope.selectedText = '';
 
-  // TODO calculate content-container height
+  // calculate contentWrapper height
+  $scope.contentHeight = $(window).height() - 2*64 - 60;
+  $('#contentWrapper').height($scope.contentHeight);
+  $('#page-preview').height($scope.contentHeight-40);
+  $('#prevPageBtn').height($scope.contentHeight-40);
+  $('#nextPageBtn').height($scope.contentHeight-40);
+  $(window).resize(function(){
+    $scope.contentHeight = $(window).height() - 2*64 - 60;
+  $('#contentWrapper').height($scope.contentHeight);
+  $('#page-preview').height($scope.contentHeight-40);
+  $('#prevPageBtn').height($scope.contentHeight-40);
+  $('#nextPageBtn').height($scope.contentHeight-40);
+  });
+
   // TODO connect to socket
 
   // set arrow keys rules

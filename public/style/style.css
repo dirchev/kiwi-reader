@@ -13,11 +13,12 @@
 .fullwidth{
   width: 100%;
 }
+.shadow{
+  box-shadow: 0 0 10px #888888;
+}
 .page-preview{
-  height: 700px;
-  overflow: scroll;
-  padding: 20px 10% 20px 10%;
-  box-shadow: 3px 3px 10px #888888;
+  overflow: auto;
+  padding: 0 10% 0 10%;
 }
 
 .page-preview::-webkit-scrollbar {

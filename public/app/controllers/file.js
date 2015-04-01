@@ -9,10 +9,10 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
   var file_id = $stateParams.id;
 
   // calculate contentWrapper height
-  $scope.contentHeight = $(window).height() - 2*64 - 40;
+  $scope.contentHeight = $(window).height() - 2*64 - 100;
   $('#contentWrapper').height($scope.contentHeight);
   $(window).resize(function(){
-    $scope.contentHeight = $(window).height() - 2*64 - 40;
+    $scope.contentHeight = $(window).height() - 2*64 - 100;
   $('#contentWrapper').height($scope.contentHeight);
   });
 
@@ -106,6 +106,10 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     socket.on('update:chat', function(message){
       $scope.$apply(function(){
         $scope.chat.push(message);
+        // TODO fix this quickfix
+        $timeout(function(){
+          $("#chatBox").scrollTop($("#chatBox").height());
+        }, 200);
       });
     });
 
@@ -125,7 +129,10 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     socket.emit('add:chat', data);
     $scope.chat.push(data.message);
     $scope.chatMessage = '';
-    // TODO scroll chat to bottom
+    // TODO fix this quickfix
+    $timeout(function(){
+      $("#chatBox").scrollTop($("#chatBox").height());
+    }, 200);
   };
 
   // adds anotation
