@@ -4,14 +4,14 @@
 module.exports = {
 
     'facebookAuth' : {
-        'clientID'      : process.env.FACEBOOK_CLIENT_ID, // your App ID
-        'clientSecret'  : process.env.FACEBOOK_CLIENT_SECRET, // your App Secret
+        'clientID'      : process.env.FACEBOOK_CLIENT_ID || 'some fake one', // your App ID
+        'clientSecret'  : process.env.FACEBOOK_CLIENT_SECRET || 'some fake one', // your App Secret
         'callbackURL'   : 'https://kiwi-reader.herokuapp.com/auth/facebook/callback'
     },
 
     'twitterAuth' : {
-        'consumerKey'       : process.env.TWITTER_CONSUMER_KEY,
-        'consumerSecret'    : process.env.TWITTER_CONSUMER_SECRET,
+        'consumerKey'       : process.env.TWITTER_CONSUMER_KEY || 'some fake one',
+        'consumerSecret'    : process.env.TWITTER_CONSUMER_SECRET || 'some fake one',
         'callbackURL'       : 'https://kiwi-reader.herokuapp.com/auth/twitter/callback'
     },
 
