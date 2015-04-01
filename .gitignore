@@ -1,4 +1,5 @@
 node_modules
 public/bower_components/*
+notes.md
 
 !public/bower_components/angular-ui-tinymce/*

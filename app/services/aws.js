@@ -34,9 +34,9 @@ module.exports = function(){
     },
     getFile: function(filePath, req, res){
       var url = s3.getPublicUrlHttp('kiwi-reader', filePath);
-      var x = request(url)
-       req.pipe(x)
-       x.pipe(res)
+      var x = request(url);
+       req.pipe(x);
+       x.pipe(res);
     },
     deleteDir: function(remoteDir, cb){
       var s3Params =  {
@@ -51,5 +51,5 @@ module.exports = function(){
         cb(null);
       });
     }
-  }
-}
+  };
+};
