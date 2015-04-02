@@ -45,10 +45,13 @@ var userSchema = mongoose.Schema({
         type: String,
         required: true
       }
+    }],
+    friends: [{
+      _id: String,
+      name: String,
+      email: String
     }]
 });
-// TODO make bookmarks object
-// TODO make firends object
 
 // methods ===========================
 //generating a hash

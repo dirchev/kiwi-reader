@@ -43,8 +43,10 @@
     <script src="/app/controllers/settings.js"></script>
     <script src="/app/controllers/profile.js"></script>
     <script src="/app/controllers/bookmarks.js"></script>
+    <script src="/app/controllers/friends.js"></script>
 
     <script src="/app/factories/bookmark.js"></script>
+    <script src="/app/factories/friend.js"></script>
     <script src="/app/factories/file.js"></script>
     <script src="/app/factories/book.js"></script>
 
@@ -69,6 +71,7 @@
             <li><a ui-sref="books">Книги</a></li>
             <li><a ui-sref="files">Файлове</a></li>
             <li><a ui-sref="bookmarks">Цитати</a></li>
+            <li><a ui-sref="friends">Приятели</a></li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{user.name}} <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">

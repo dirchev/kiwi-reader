@@ -1,4 +1,6 @@
-app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope, $location, $anchorScroll, $window, $timeout, Bookmark){
+app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope,
+$location, $anchorScroll, $window, $timeout, Bookmark){
+  
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.comment = '';
@@ -296,6 +298,7 @@ app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope
     Bookmark.add(bookmark).success(function(data){
       if(data.success){
         toastr.success('Цитатът е запазен успешно.');
+        $scope.cancelAnotation();
       } else {
         toastr.error(data.message);
       }

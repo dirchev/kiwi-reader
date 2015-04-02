@@ -43,6 +43,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "/templates/bookmarks.html",
       controller: "BookmarksCtrl"
     })
+    .state('friends', {
+      url: "/friends",
+      templateUrl: "/templates/friends.html",
+      controller: "FriendsCtrl"
+    })
     .state('profile', {
       url: "/profile",
       templateUrl: "/templates/profile.html",
