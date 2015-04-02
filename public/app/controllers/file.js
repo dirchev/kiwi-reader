@@ -1,6 +1,6 @@
 app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope,
-$location, $anchorScroll, $window, $timeout, Bookmark){
-  
+$location, $anchorScroll, $window, $timeout, Bookmark, Friend){
+
   $scope.editMode = false;
   $scope.selectedText = '';
   $scope.comment = '';
@@ -9,6 +9,15 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
   $scope.openedAnotations = [];
   var socket;
   var file_id = $stateParams.id;
+  $scope.friends = [];
+
+  // share typehead
+  $scope.getFriends = function(val) {
+    Friend.get().success(function(data){
+      $scope.friends = data.friends;
+      console.log('got friends');
+    });
+  };
 
   // calculate contentWrapper height
   $scope.contentHeight = $(window).height() - 2*64 - 100;

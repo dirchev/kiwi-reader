@@ -47,12 +47,16 @@
           <li class="list-group-item" ng-repeat="user in book.sharedUsers">{{user.name}}</li>
         </ul>
         <form ng-submit="shareBook(userToShare)" class="bottom-buffer">
-          <div class="input-group" style="margin-top: 10px">
-            <input type="email" class="form-control" required ng-model="userToShare" placeholder="Въведи email">
-            <span class="input-group-btn">
-              <button class="btn btn-primary" type="submit">Сподели</button>
-            </span>
+          <div class="form-group" style="margin-top: 10px">
+            <input class="form-control" type="email" ng-model="userToShare" ng-focus="getFriends()" placeholder="Въведи email"
+             typeahead="friend as friend.name for friend in friends | filter : $viewValue" typeahead-loading="loadingLocations"
+             typeahead-template-url="/particials/friendsTypehead.html">
+             <p class="help-block">
+               Ако търсин някой от приятелите си, може да търсиш и по име.
+             </p>
+            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
           </div>
+          <button class="btn btn-primary" type="submit">Сподели</button>
         </form>
         <div class="alert alert-info">
           <p>

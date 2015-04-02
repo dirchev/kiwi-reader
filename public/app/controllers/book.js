@@ -1,9 +1,17 @@
-app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope){
+app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend){
   var book_id = $stateParams.id;
   var userIndex;
   var scrolled = 0;
   $scope.scrolled = 0;
   $scope.selectedText = '';
+
+  // share typehead
+  $scope.getFriends = function(val) {
+    Friend.get().success(function(data){
+      $scope.friends = data.friends;
+      console.log('got friends');
+    });
+  };
 
   // calculate contentWrapper height
   $scope.contentHeight = $(window).height() - 2*64 - 60;

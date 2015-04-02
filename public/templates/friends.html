@@ -34,7 +34,7 @@
                 {{friend.email}}
               </div>
               <div class="btn-group btn-group-sm pull-right">
-                <a class="btn btn-warning">Преименувай</a>
+                <a class="btn btn-warning" ng-click="asd = 'Не може'">{{asd}}</a>
                 <a ng-click="removeFriend($index)" class="btn btn-danger">Изтрий</a>
               </div>
             </div>
@@ -56,7 +56,7 @@
         <form ng-submit="addFriend(newFriendEmail); newFriendEmail = '';">
           <div class="form-group">
             <label for="newFriendEmail">Email на потребител</label>
-            <input type="text" class="form-control" id="newFriendEmail" ng-model="newFriendEmail" placeholder="Въведете email...">
+            <input type="email" required class="form-control" id="newFriendEmail" ng-model="newFriendEmail" placeholder="Въведете email...">
           </div>
           <button type="submit" class="btn btn-success">Добави</button>
         </form>
