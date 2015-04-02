@@ -1,5 +1,6 @@
 node_modules
 public/bower_components/*
+app/services/aws_config.js
 notes.md
 
 !public/bower_components/angular-ui-tinymce/*

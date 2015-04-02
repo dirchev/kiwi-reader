@@ -1,5 +1,17 @@
 var s3 = require('s3');
 var request = require('request');
+var aws_config;
+// check if you have env variables
+if(typeof process.env.AWS_ACCESSKEY_ID === 'undefined'){
+  // if not, try to reach ignored file
+   aws_config = require('./aws_config');
+} else {
+  // if you do, use them
+  aws_config = {
+    accessKeyId : process.env.AWS_ACCESSKEY_ID,
+    secretAccessKey : process.env.AWS_ACCESSKEY_SECRET
+  };
+}
 
 var client = s3.createClient({
   maxAsyncS3: 20,     // this is the default
