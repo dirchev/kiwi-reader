@@ -122,6 +122,7 @@
         <textarea
           id="contentBox"
           ckeditor="editorOptions"
+          ng-keyup="updateContent()"
           ng-model="file.content">
         </textarea>
       </div>

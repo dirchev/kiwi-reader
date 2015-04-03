@@ -217,7 +217,29 @@ module.exports = function(){
           res.json({success:true});
         }
       });
-    } // end of rename
+    }, // end of rename
+    addAnotation: function(book_id, anotation, cb){
+      Book.update(
+        {_id : book_id},
+        {$push: {'anotations':anotation}},
+        {upsert: false},
+        function(err, data){
+          if(err){
+            console.log(err);
+            callback('Грешка при запазването на анотацията.');
+          } else {
+            Book.findById(book_id, function(err, book){
+              if(err){
+                console.log(err);
+              } else {
+                callback(null, book.anotations);
+              }
+            });
+          }
+        }
+      );
+    }
+
   };
 };
 

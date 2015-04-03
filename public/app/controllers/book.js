@@ -1,9 +1,10 @@
-app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend){
+app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window){
   var book_id = $stateParams.id;
   var userIndex;
   var scrolled = 0;
   $scope.scrolled = 0;
   $scope.selectedText = '';
+  $scope.chat = [];
 
   // share typehead
   $scope.getFriends = function(val) {
@@ -70,8 +71,39 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       });
       var pageId = $scope.book.opf.spines[$scope.book.users[userIndex].position];
       renderPage(pageId);
+
+      socket = $window.io();
+      socket.emit('open:book', book_id);
+      // TODO show all online users
+
+      socket.on('book:update:chat', function(message){
+        $scope.$apply(function(){
+          $scope.chat.push(message);
+          // TODO fix this quickfix
+          $timeout(function(){
+            $("#chatBox").scrollTop($("#chatBox").height());
+          }, 200);
+        });
+      });
     }
   });
+
+  $scope.addChatMessage = function(message){
+    var data = {
+      book_id : book_id,
+      message: {
+        user : $rootScope.user.name,
+        content : message
+      }
+    };
+    socket.emit('book:add:chat', data);
+    $scope.chat.push(data.message);
+    $scope.chatMessage = '';
+    // TODO fix this quickfix
+    $timeout(function(){
+      $("#chatBox").scrollTop($("#chatBox").height());
+    }, 200);
+  };
 
   $scope.shareBook = function(user){
     Book.share(book_id, user).success(function(data){
