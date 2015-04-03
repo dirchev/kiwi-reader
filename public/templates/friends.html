@@ -29,12 +29,26 @@
               <img class="img-responsive img-rounded" src="https://denislavapetrovaunwe.files.wordpress.com/2014/11/396911_251388774932399_562645727_n.jpg" alt="Профилна снимка" />
             </div>
             <div class="col-xs-8">
-              <h5>{{friend.name}}</h5>
+              <h5 ng-show="!renameFriendCollapse[$index]">
+                {{ friend.name | limitTo: 15 }}{{friend.name.length > 15 ? '...' : ''}}
+                </h5>
+              <div ng-show="renameFriendCollapse[$index]">
+                <form ng-submit="renameFriend($index, friend.name); renameFriendCollapse[$index] = false;">
+                  <div class="input-group">
+                    <input type="text" required class="form-control" ng-model="friend.name">
+                    <span class="input-group-btn">
+                      <button type="submit" class="btn btn-success btn-sm">
+                        Запази
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </div>
               <div class="bottom-buffer">
                 {{friend.email}}
               </div>
               <div class="btn-group btn-group-sm pull-right">
-                <a class="btn btn-warning" ng-click="asd = 'Не може'">{{asd}}</a>
+                <a class="btn btn-warning" ng-click="renameFriendCollapse[$index] = !renameFriendCollapse[$index]">Преименувай</a>
                 <a ng-click="removeFriend($index)" class="btn btn-danger">Изтрий</a>
               </div>
             </div>

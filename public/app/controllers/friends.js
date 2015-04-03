@@ -36,6 +36,18 @@ app.controller('FriendsCtrl', function($scope, Friend){
     });
   };
 
+  // rename friend
+  $scope.renameFriend = function(friend_index, friend_name){
+    Friend.rename(friend_index, friend_name).success(function(data){
+      if(data.success){
+        toastr.success('Успешно преименувахте приятел.');
+        getFriends();
+      } else {
+        toasrt.success(data.message);
+      }
+    });
+  };
+
   // initial function
   getFriends();
 });
