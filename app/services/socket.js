@@ -75,7 +75,6 @@ module.exports = function(io){
     socket.on('open:book', function(book_id){
       // TODO check if user is logged, if he is not, check if file is public
       socket.join('book' + book_id);
-      console.log('some entered a book');
     });
 
     socket.on('book:add:chat', function(data){

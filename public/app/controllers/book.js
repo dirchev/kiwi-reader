@@ -18,6 +18,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.contentHeight = $(window).height() - 2*64 - 60;
   $('#contentWrapper').height($scope.contentHeight);
   $('#contentBox').height($scope.contentHeight);
+  $('#chatBox').height($scope.contentHeight);
   $('#page-preview').height($scope.contentHeight);
   $('#prevPageBtn').height($scope.contentHeight);
   $('#nextPageBtn').height($scope.contentHeight);
@@ -25,6 +26,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     $scope.contentHeight = $(window).height() - 2*64 - 60;
   $('#contentWrapper').height($scope.contentHeight);
   $('#contentBox').height($scope.contentHeight);
+  $('#chatBox').height($scope.contentHeight);
   $('#page-preview').height($scope.contentHeight);
   $('#prevPageBtn').height($scope.contentHeight);
   $('#nextPageBtn').height($scope.contentHeight);

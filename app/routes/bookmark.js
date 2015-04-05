@@ -1,5 +1,3 @@
-var fs = require('fs');
-
 module.exports = function(app, passport){
 var bookmarkCtrl = require('../controllers/bookmarkCtrl')(app);
 

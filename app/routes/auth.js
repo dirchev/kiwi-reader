@@ -41,7 +41,8 @@ module.exports = function(app, passport){
     passport.authenticate('facebook', {
       successRedirect : '/app',
       failureRedirect : '/'
-    }));
+    })
+  );
 
   // ====================================
   // TWITTER ROUTES =====================

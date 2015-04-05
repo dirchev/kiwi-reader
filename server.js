@@ -6,7 +6,6 @@ var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
-var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var session      = require('express-session');
 var bodyParser = require('body-parser');
@@ -24,13 +23,12 @@ mongoose.connect(configDB.url, {}, function(){
 require('./config/passport')(passport); // passport for configuration
 
 // set up our express application
-app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({ extended: true, limit: '7mb' }));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(busboy());
 
-
+// serve static files in public dir
 app.use("/", express.static(__dirname + '/public'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
@@ -52,7 +50,6 @@ require('./app/routes/friend.js')(app, passport);
 
 // socket ======================================================================
 require('./app/services/socket.js')(io);
-
 
 // launch ======================================================================
 http.listen(port);

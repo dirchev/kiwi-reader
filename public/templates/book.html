@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a ng-click="showContent = !showContent; showChat = false;">Съдържание</a></li>
-        <li><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
+        <li><a ng-click="showChat = !showChat; showContent = false; scrollChatBox();">Чат</a></li>
         <li><a data-toggle="modal" data-target="#shareModal">Споделяне</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -26,7 +26,7 @@
       <div class="toc" preview-box content="toc">
       </div>
     </div>
-    <div ng-show="showChat" class="col-sm-4">
+    <div id="chatBox" ng-show="showChat" class="col-sm-4">
       <h3 class="text-center">Чат</h3>
       <div>
         <div class="alert alert-warning text-center">Този чат не се запазва. Ако няма други онлайн, значи си пишеш сам.</div>
