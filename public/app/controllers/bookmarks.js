@@ -1,4 +1,5 @@
 app.controller('BookmarksCtrl', function($scope, $rootScope, Bookmark){
+  
   var getBookmarks = function(){
     Bookmark.get().success(function(data){
       if(data.success){

@@ -1,5 +1,4 @@
 app.controller('BooksCtrl', function($scope, $http, $sce, Book){
-  $scope.selectedText = '';
 
   var getBooks = function(){
     Book.get().success(function(data){

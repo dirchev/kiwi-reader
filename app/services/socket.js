@@ -1,7 +1,6 @@
 var fileCtrl = require('../controllers/fileCtrl')();
-// var io               = require("socket.io")(server);
-// var sessionStore     = require('awesomeSessionStore'); // find a working session store (have a look at the readme)
-// var passportSocketIo = require("passport.socketio");
+
+// TODO make different files for files and books
 
 var roomUsers = {};
 module.exports = function(io){

@@ -16,10 +16,10 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
   $scope.getFriends = function(val) {
     Friend.get().success(function(data){
       $scope.friends = data.friends;
-      console.log('got friends');
     });
   };
 
+  // TODO move this to directives
   // calculate contentWrapper height
   $scope.contentHeight = $(window).height() - 2*64 - 100;
   $('#contentWrapper').height($scope.contentHeight);
@@ -30,6 +30,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
+    // TODO move this operation in backend
     File.getShared(file_id).success(function(data){
       if(data.success){
         $scope.file.sharedUsers = data.users;
@@ -81,6 +82,8 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
       }
     });
 
+
+    // TODO move login from sockets in factory or sevice
     socket.on('file:update:content', function(content){
       lastEmittedContent = content;
       $scope.$apply(function(){
@@ -228,6 +231,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
       });
   };
 
+  // TODO this can be fixed
   // checks if there is deleted anotation (from file contents) and removes its anotation object
   $scope.checkForDeletedAnotations = function(){
     if(typeof $scope.file !== 'undefined'){

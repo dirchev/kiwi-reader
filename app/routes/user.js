@@ -1,7 +1,7 @@
 module.exports = function(app, passport){
   var userCtrl = require('../controllers/userCtrl')(app);
-  app.get('/api/user', isLoggedIn, userCtrl.getUserInfo);
 
+  app.get('/api/user', isLoggedIn, userCtrl.getUserInfo);
   app.post('/api/user', isLoggedIn, userCtrl.updateUserInfo);
 };
 

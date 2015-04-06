@@ -21,7 +21,7 @@ module.exports = {
       .pipe(writeStream)
       .on('close', function(){
         var localDir = outputPath;
-        var arr = localDir.split('/')
+        var arr = localDir.split('/');
         var remoteDir = arr[arr.length-2] + '/' + arr[arr.length-1];
         console.log(remoteDir);
         awsService().uploadDir(localDir, remoteDir, cb);
@@ -63,14 +63,14 @@ var getContentPath = function(rootFilePath){
     console.log(a);
     a = a.split('/');
     if(typeof a[0] === 'undefined'){
-      contentPath =  '.'
+      contentPath =  '.';
       return;
     } else {
       contentPath =  a[0];
       return;
     }
   }
-}
+};
 
 var parseOpf = function(opfFile, cb){
   var opf = {
@@ -85,14 +85,14 @@ var parseOpf = function(opfFile, cb){
     opf.contentPath = contentPath;
     cb(opf);
   });
-}
+};
 
 var getContents = function(opfFile, cb){
   xml_json.parseString(opfFile, function(err, data){
     // GETTING METADATA ============================
     var metadata = {};
     var metadata_content = data.package.metadata;
-    for (i in metadata_content[0]){
+    for (var i in metadata_content[0]){
       if(i !== '$' & i !== 'meta'){
         metadata[i] = metadata_content[0][i][0]._;
       }
@@ -105,7 +105,7 @@ var getContents = function(opfFile, cb){
       var id = obj.id.replace(/\./g, 'U+FF0E');
       manifest[id] = {
         'media-type' : obj['media-type'],
-        'href'       : '/uploads/extracted/' + bookId + '/' + contentPath + '/' + obj['href']
+        'href'       : '/uploads/extracted/' + bookId + '/' + contentPath + '/' + obj.href
       };
     }
     // GETTING SPINE ===============================

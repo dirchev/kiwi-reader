@@ -22,6 +22,7 @@ app.controller("FilesCtrl", function($scope, $http, File){
       });
     });
   };
+  
   $scope.rename = function(file_id, name){
     File.rename(file_id, name).success(function(data){
       if(data.success){

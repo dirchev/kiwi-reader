@@ -6,6 +6,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.selectedText = '';
   $scope.chat = [];
 
+  // TODO get friends and bind them to rootScope
   // share typehead
   $scope.getFriends = function(val) {
     Friend.get().success(function(data){
@@ -46,8 +47,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   });
   setElementsHeight();
 
-  // TODO connect to socket
-
   // set arrow keys rules
   $(document).keydown(function(e) {
     switch(e.which) {
@@ -71,6 +70,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $state.go('books');
     } else {
       $scope.book = data.book;
+      // TODO move this to backend
       $scope.getSharedUsers();
       for(var i in $scope.book.users){
         if($scope.book.users[i]._id === $rootScope.user._id){
@@ -158,7 +158,8 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   var renderPage = function(id){
     var pageHref = $scope.book.opf.manifest[id].href;
     var r = /[^\/]*$/;
-    var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/'
+    var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/';
+    // TODO make service, that parses the book
     $http.get(pageHref).success(function(data){
       $scope.page = data.replace(/src="/g, 'style="max-width:100%" src="'+pageFolder);
       $scope.page = $scope.page.replace(/href="http/g, 'link-location="http');

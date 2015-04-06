@@ -1,5 +1,5 @@
 app.controller('FriendsCtrl', function($scope, Friend){
-  $scope.asd = 'Преименувай';
+
   // get all friends
   var getFriends = function(){
     Friend.get().success(function(data){
