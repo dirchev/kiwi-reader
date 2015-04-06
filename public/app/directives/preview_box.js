@@ -7,5 +7,5 @@ app.directive('previewBox', function($compile, $parse) {
         $compile(element.contents())(scope);
       }, true);
     }
-  }
-})
+  };
+});

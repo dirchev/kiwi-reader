@@ -8,5 +8,5 @@ app.directive('linkLocation', function(){
         scope.renderPageLink(attrs.linkLocation);
       });
     }
-  }
-})
+  };
+});

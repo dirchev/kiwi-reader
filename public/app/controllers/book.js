@@ -1,4 +1,4 @@
-app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window){
+app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window, Bookmark){
   var book_id = $stateParams.id;
   var userIndex;
   var scrolled = 0;
@@ -14,23 +14,37 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     });
   };
 
-  // calculate contentWrapper height
-  $scope.contentHeight = $(window).height() - 2*64 - 60;
-  $('#contentWrapper').height($scope.contentHeight);
-  $('#contentBox').height($scope.contentHeight);
-  $('#chatBox').height($scope.contentHeight);
-  $('#page-preview').height($scope.contentHeight);
-  $('#prevPageBtn').height($scope.contentHeight);
-  $('#nextPageBtn').height($scope.contentHeight);
-  $(window).resize(function(){
+  $scope.addBookmark = function(){
+    var bookmark = $scope.selectedText;
+    Bookmark.add(bookmark).success(function(data){
+      if(data.success){
+        toastr.success('Цитатът е запазен успешно.');
+        $scope.cancelAnotation();
+      } else {
+        toastr.error(data.message);
+      }
+    });
+  };
+
+  $scope.onTextSelect = function(){
+    if($scope.selectedText.length >0 ){
+      $('#selectionModal').modal('show');
+    }
+  };
+
+  var setElementsHeight = function(){
     $scope.contentHeight = $(window).height() - 2*64 - 60;
-  $('#contentWrapper').height($scope.contentHeight);
-  $('#contentBox').height($scope.contentHeight);
-  $('#chatBox').height($scope.contentHeight);
-  $('#page-preview').height($scope.contentHeight);
-  $('#prevPageBtn').height($scope.contentHeight);
-  $('#nextPageBtn').height($scope.contentHeight);
+    $('#contentWrapper').height($scope.contentHeight);
+    $('#contentBox').height($scope.contentHeight);
+    $('#chatBox').height($scope.contentHeight);
+    $('#page-preview').height($scope.contentHeight);
+    $('#prevPageBtn').height($scope.contentHeight);
+    $('#nextPageBtn').height($scope.contentHeight);
+  };
+  $(window).resize(function(){
+    setElementsHeight();
   });
+  setElementsHeight();
 
   // TODO connect to socket
 

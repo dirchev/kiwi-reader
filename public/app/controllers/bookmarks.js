@@ -13,7 +13,7 @@ app.controller('BookmarksCtrl', function($scope, $rootScope, Bookmark){
     Bookmark.delete(bookmark_index).success(function(data){
       if(data.success){
         getBookmarks();
-        toastr.success('Цитатът е изтрит!');
+        toastr.success('Цитатът е изтрит успешно!');
       } else {
         toastr.error(data.message);
       }
