@@ -3,14 +3,17 @@ var User = require('../models/user');
 module.exports = function(){
   return {
     getUserInfo: function(req, res){
-      User.findById(req.user._id).lean().exec(function(err, data){
-        var user = {
-          _id: data._id,
-          name: data.data.name,
-          email: data.data.email
-        };
-        res.json(user);
-      });
+      User
+        .findById(req.user._id)
+        .select('_id data.name data.email friends bookmarks')
+        .populate('friends', 'data.name data.email')
+        .exec(function(err, user){
+          if(err){
+            // TODO make this
+          } else {
+            res.json(user);
+          }
+        });
     }, // end of getUserInfo
     updateUserInfo: function(req, res){
       User.findById(req.user._id).exec(function(err, user){

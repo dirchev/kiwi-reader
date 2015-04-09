@@ -1,5 +1,5 @@
 app.controller("FileCtrl", function($scope, $stateParams, $sce, File, $rootScope,
-$location, $anchorScroll, $window, $timeout, Bookmark, Friend){
+$location, $anchorScroll, $window, $timeout, Bookmark){
 
   $scope.editMode = false;
   $scope.selectedText = '';
@@ -9,15 +9,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
   $scope.openedAnotations = [];
   var socket;
   var file_id = $stateParams.id;
-  $scope.friends = [];
-  var lastEmittedContent = '';
-
-  // share typehead
-  $scope.getFriends = function(val) {
-    Friend.get().success(function(data){
-      $scope.friends = data.friends;
-    });
-  };
 
   // TODO move this to directives
   // calculate contentWrapper height
@@ -30,12 +21,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
-    // TODO move this operation in backend
-    File.getShared(file_id).success(function(data){
-      if(data.success){
-        $scope.file.sharedUsers = data.users;
-      }
-    });
 
     for(var i in $scope.file.anotations){
       $scope.openedAnotations.push(false);
@@ -49,10 +34,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
         }
       }
     },true);
-
-    if($scope.file.content === ''){
-      $scope.editMode = true;
-    }
 
     socket = $window.io();
     socket.emit('open:file', file_id);
@@ -119,10 +100,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
         }, 200);
       });
     });
-
-    socket.on('error', function(error){
-      toastr.error(error);
-    });
   });
 
   // SCOPE FUNCTIONS -----------------------------------------------------------
@@ -130,13 +107,14 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
     var data = {
       file_id : file_id,
       message: {
-        user : $rootScope.user.name,
+        user : $rootScope.user.data.name,
         content : message
       }
     };
     socket.emit('file:add:chat', data);
     $scope.chat.push(data.message);
     $scope.chatMessage = '';
+    
     // TODO fix this quickfix
     $timeout(function(){
       $("#chatBox").scrollTop($("#chatBox").height());
@@ -156,16 +134,21 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
 
     // prepare the object
     var data = {
-      anotation: {
+      anotation : {
         _id: id,
-        user: {
-          _id: $rootScope.user._id,
-          name: $rootScope.user.name
-        },
+        user: $rootScope.user._id,
         title: $scope.anotation
       },
-      file_id: file_id,
-      comments: []
+      populatedAnotation : {
+        _id: id,
+        user: {
+          _id : $rootScope.user._id,
+          data : {name : $rootScope.user.data.name}
+        },
+        title : $scope.anotation
+      },
+      file_id : file_id,
+      comments : []
     };
 
     // wraps anotation`s content with <span> with special id
@@ -180,7 +163,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
     // resets all variables, linked with anotation
     $scope.cancelAnotation();
     // pushes anotation to local object
-    $scope.file.anotations.push(data.anotation);
+    $scope.file.anotations.push(data.populatedAnotation);
     // emits new anotation
     socket.emit('file:add:anotation', data);
 
@@ -219,12 +202,10 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
   $scope.shareFile = function(user){
     File.share(file_id, user).success(function(data){
         if(data.success){
-          File.getShared(file_id).success(function(data){
-            if(data.success){
-              $scope.file.sharedUsers = data.users;
-            }
+          File.getOne(file_id).success(function(data){
+            $scope.file = data;
+            toastr.success('Успешно споделяне.');
           });
-          toastr.success('Успешно споделяне.');
         } else {
           toastr.error(data.message.toString(), 'Неуспешно споделяне.');
         }
@@ -237,9 +218,8 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
     if(typeof $scope.file !== 'undefined'){
       for(var i in $scope.file.anotations){
         if(!$('#selection' + $scope.file.anotations[i]._id).length || emptyElement($('#selection' + $scope.file.anotations[i]._id))){
-          var anotation = $scope.file.anotations[i]._id;
-          socket.emit('file:delete:anotation', {file_id: file_id, anotation_index: i});
-          $scope.file.anotations.splice(i,1);
+          var anotation_id = $scope.file.anotations[i]._id;
+          $scope.deleteAnotation(anotation_id);
         }
       }
     }
@@ -276,11 +256,23 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
   // add comment to anotation
   $scope.addComment = function(anotation_index, comment_content){
     // prepare comment object
-    var comment = {
-      user: {
-        _id: $rootScope.user._id,
-        name: $rootScope.user.name
+    var data = {
+      file_id : file_id,
+      anotation_index : anotation_index,
+      comment : {
+        user: $rootScope.user._id,
+        content: comment_content
       },
+      populatedComment: {
+        user: {
+          _id: $rootScope.user._id,
+          data:{name:$rootScope.user.data.name}
+        },
+        content: comment_content
+      }
+    };
+    var comment = {
+      user: $rootScope.user._id,
       content: comment_content
     };
     // check if comments is defined
@@ -289,13 +281,8 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
       $scope.file.anotations[anotation_index].comments = [];
     }
     // push the comment in anotation`s comments
-    $scope.file.anotations[anotation_index].comments.push(comment);
+    $scope.file.anotations[anotation_index].comments.push(data.populatedComment);
     // prepare new object for socket
-    var data = {
-      file_id : file_id,
-      anotation_index : anotation_index,
-      comment : comment
-    };
     // emit the comment
     socket.emit('file:add:comment', data);
   };
@@ -315,27 +302,22 @@ $location, $anchorScroll, $window, $timeout, Bookmark, Friend){
   // show anotations popups
   $(document).on("mouseover", ".selected", function() {
     var id = $(this).attr('id');
-    if(typeof id === 'undefined'){
+    var anotation_id = id.substr(9);
+    var found = false;
+    for(var i in $scope.file.anotations){
+      if($scope.file.anotations[i]._id === anotation_id){
+        found = true;
+        $(this).popover({
+          content: $scope.file.anotations[i].title,
+          placement: 'top'
+        });
+        $(this).popover('show');
+        break;
+      }
+    }
+    if(!found){
       $(this).contents().unwrap();
       $scope.file.content = $('#previewBox').html();
-    } else {
-      var anotation_id = id.substr(9);
-      var found = false;
-      for(var i in $scope.file.anotations){
-        if($scope.file.anotations[i]._id === anotation_id){
-          found = true;
-          $(this).popover({
-            content: $scope.file.anotations[i].title,
-            placement: 'top'
-          });
-          $(this).popover('show');
-          break;
-        }
-      }
-      if(!found){
-        $(this).contents().unwrap();
-        $scope.file.content = $('#previewBox').html();
-      }
     }
   });
 

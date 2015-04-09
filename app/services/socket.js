@@ -5,7 +5,6 @@ var fileCtrl = require('../controllers/fileCtrl')();
 var roomUsers = {};
 module.exports = function(io){
   io.on('connection', function(socket){
-    console.log('user connected');
 
     // =========================================================================
     // ====================== FILES ============================================
@@ -28,8 +27,9 @@ module.exports = function(io){
 
     socket.on('file:add:anotation', function(data){
       anotation = data.anotation;
+      populatedAnotation = data.populatedAnotation;
       file_id = data.file_id;
-      socket.to('file' + file_id).emit('file:update:anotations', anotation);
+      socket.broadcast.to('file' + file_id).emit('file:update:anotations', populatedAnotation);
       fileCtrl.addAnotation(file_id, anotation, function(err, anotations){
         if(err){
           console.log(err);
@@ -53,8 +53,12 @@ module.exports = function(io){
       file_id = data.file_id;
       anotation_index = data.anotation_index;
       comment = data.comment;
+      populatedComment = data.populatedComment;
       console.log('adding comment');
-      socket.to('file' + file_id).emit('file:update:comment', {anotation_index: anotation_index, comment: comment});
+      socket.broadcast
+        .to('file' + file_id)
+        .emit('file:update:comment', {anotation_index: anotation_index, comment: populatedComment});
+
       fileCtrl.addComment(file_id, anotation_index, comment, function(err){
         if(err){
           socket.to('file' + file_id).emit('file:error', err);

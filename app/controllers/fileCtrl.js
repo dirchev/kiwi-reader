@@ -11,18 +11,8 @@ var docParser = require('../services/doc-parser');
 module.exports = function(){
   return {
     create: function(req, res){
-      var file = new File();
-      file.title = 'Неозаглавен файл';
-      file.content = '';
-      file.public = false;
-      file.users.push(req.user._id);
-      file.save(function(err, file){
-        if(err){
-            console.log(err);
-            res.json({success: false, message: "Грешка при създаването на файл."});
-          } else {
-            res.json({success: true});
-          }
+      createFile(req.user, null, null, function(response){
+        res.json(response);
       });
     },
     createFromFile: function(req, res){
@@ -60,30 +50,17 @@ module.exports = function(){
                   if(err){
                     res.json({success:false, message:'Грешка при запазването на файла.'});
                   } else {
-                    var file = new File();
-                    file.title = 'Неозаглавен файл';
-                    file.content = fileContent.replace(/\r?\n/g, '<br />');
-                    file.users.push(req.user._id);
-                    file.save(function(err){
-                      if(err){
-                        res.json({success:false, message:'Грешка при запазването на файла.'});
-                      }
-                      res.json({success:true});
+                    fileContent = fileContent.replace(/\r?\n/g, '<br />');
+                    createFile(req.user, null, fileContent, function(response){
+                      res.json(response);
                     });
                   }
                 });
               } else if (fileType === 'docx'){
                 docParser.docxToHTML(filePath).then(function(result){
-                  var html = result.value;
-                  var file = new File();
-                  file.title = fileName;
-                  file.content = html;
-                  file.users.push(req.user._id);
-                  file.save(function(err){
-                    if(err){
-                      res.json({success:false, message:'Грешка при запазването на файла.'});
-                    }
-                    res.json({success:true});
+                  var fileContent = result.value;
+                  createFile(req.user, fileName, fileContent, function(response){
+                    res.json(response);
                   });
                 });
               } else {
@@ -106,7 +83,10 @@ module.exports = function(){
     },
     readOne: function(req, res){
       var file_id = req.params.file_id;
-      File.findOne({_id : file_id , users: req.user._id}).lean().exec(function(err, data){
+      File
+        .findOne({_id : file_id , users: req.user._id})
+        .populate('users anotations.user anotations.comments.user', 'data.name data.email')
+        .exec(function(err, data){
         var file = data;
         if(err){
           console.log(err);
@@ -152,7 +132,17 @@ module.exports = function(){
           } else {
             // update file, that is with mentioned id, if the user who wants
             //to share it is its owner and if it is not shared to the samo user before
-            File.update({$and:[{_id: file_id, users: req.user._id}, {users: {$ne: user._id}}]},{$push: {'users':user._id}},{upsert:true}, function(err, file){
+            File
+            .update(
+              // select the file with id = file_id and one of his users is req.user
+              {$and:[{_id: file_id, users: req.user._id},
+              // check if file is not already shared with that user
+              {users: {$ne: user._id}}]},
+              // push the user to file.users array
+              {$push: {'users':user._id}},
+              // options
+              {upsert:false})
+            .exec(function(err, file){
               if(err){
                 console.log('Error while updating file: ' + err);
                 res.json({success:false, message: 'Този файл вече е споделен с този потребител.'});
@@ -163,30 +153,6 @@ module.exports = function(){
           }
         });
       }
-    },
-    getShared: function(req, res){
-      var file_id = req.params.file_id;
-      File.findOne({_id:req.params.file_id, users: req.user._id}, function(err,file){
-        if(err){
-          console.log(err);
-          res.json({success:false, message: 'Взимането на тази информация не е успешно.'});
-        } else if(!file){
-          res.json({success:false, message: 'Взимането на тази информация не е успешно.'});
-        } else {
-          var sharedUsers = [];
-          for(var i = 0; i < file.users.length; i++){
-            User.findById(file.users[i], function(err, user){
-              if(err){
-                console.log(err);
-              }
-              sharedUsers.push({_id: user._id, name: user.data.name, email: user.data.email });
-              if(file.users.length === sharedUsers.length){
-                res.json({success:true, users: sharedUsers});
-              }
-            });
-          }
-        }
-      });
     },
     updateTitle: function(file_id, title, callback){
       File.findById(file_id).exec(function(err, file){
@@ -226,11 +192,12 @@ module.exports = function(){
     },
     // adds anotation to file
     addAnotation: function(file_id, anotation, callback){
-      File.update(
-        {_id : file_id},
-        {$push: {'anotations':anotation}},
-        {upsert: true},
-        function(err, data){
+      File
+        .update(
+          {_id : file_id},
+          {$push: {'anotations':anotation}},
+          {upsert: false})
+        .exec(function(err, data){
           if(err){
             console.log(err);
             callback('Грешка при запазването на коментара.');
@@ -243,8 +210,7 @@ module.exports = function(){
               }
             });
           }
-        }
-      );
+        });
     }, // end of addAnotation
     // adds comment to a specific anotation in file
     addComment: function(file_id, anotation_index, comment, callback){
@@ -340,6 +306,22 @@ module.exports = function(){
   }; // end of return object
 }; // end of module.exports
 
+
+var createFile = function(creator, fileTitle, fileContent, cb){
+  var file = new File();
+  file.title = fileTitle || 'Неозаглавен файл';
+  file.content = fileContent || '';
+  file.public = false;
+  file.users.push(creator._id);
+  file.save(function(err, file){
+    if(err){
+        console.log(err);
+        cb({success: false, message: "Грешка при създаването на файл."});
+      } else {
+        cb({success: true});
+      }
+  });
+};
 
 // save file to directory
 var saveFile = function(file, path, cb){

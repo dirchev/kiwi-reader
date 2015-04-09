@@ -6,14 +6,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.selectedText = '';
   $scope.chat = [];
 
-  // TODO get friends and bind them to rootScope
-  // share typehead
-  $scope.getFriends = function(val) {
-    Friend.get().success(function(data){
-      $scope.friends = data.friends;
-      console.log('got friends');
-    });
-  };
 
   $scope.addBookmark = function(){
     var bookmark = $scope.selectedText;
@@ -70,10 +62,8 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $state.go('books');
     } else {
       $scope.book = data.book;
-      // TODO move this to backend
-      $scope.getSharedUsers();
       for(var i in $scope.book.users){
-        if($scope.book.users[i]._id === $rootScope.user._id){
+        if($scope.book.users[i].user._id === $rootScope.user._id){
           userIndex = i;
         }
       }
@@ -86,7 +76,9 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
         $scope.toc = $scope.toc.replace(/href="/g, 'link-location="'+tocFolder);
       });
       var pageId = $scope.book.opf.spines[$scope.book.users[userIndex].position];
+      console.log(pageId);
       renderPage(pageId);
+
 
       socket = $window.io();
       socket.emit('open:book', book_id);
@@ -101,6 +93,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
           }, 200);
         });
       });
+
     }
   });
 
@@ -124,20 +117,11 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.shareBook = function(user){
     Book.share(book_id, user).success(function(data){
         if(data.success){
-          $scope.getSharedUsers();
           toastr.success('Успешно споделяне.');
         } else {
           toastr.error(data.message.toString(), 'Неуспешно споделяне.');
         }
       });
-  };
-
-  $scope.getSharedUsers = function(){
-    Book.getShared(book_id).success(function(data){
-      if(data.success){
-        $scope.book.sharedUsers = data.users;
-      }
-    });
   };
 
   $scope.updatePosition = function(a) {
@@ -157,8 +141,10 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   var renderPage = function(id){
     var pageHref = $scope.book.opf.manifest[id].href;
+    console.log(pageHref);
     var r = /[^\/]*$/;
     var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/';
+    console.log('getting page content');
     // TODO make service, that parses the book
     $http.get(pageHref).success(function(data){
       $scope.page = data.replace(/src="/g, 'style="max-width:100%" src="'+pageFolder);

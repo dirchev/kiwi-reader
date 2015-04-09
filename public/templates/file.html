@@ -41,16 +41,16 @@
           </p>
         </div>
         <accordion close-others="true" class="fullheight">
-          <accordion-group class="border-sharp" ng-repeat="anotation in file.anotations" heading="{{anotation.user.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
+          <accordion-group class="border-sharp" ng-repeat="anotation in file.anotations" heading="{{anotation.user.data.name}} {{anotation.title}}" is-open="openedAnotations[$index]">
             <div class="well well-sm text-center">
-              <h4>{{anotation.user.name}}</h4>
+              <h4>{{anotation.user.data.name}}</h4>
               <p>
                 {{anotation.title}}
               </p>
             </div>
             <hr>
             <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
-              <h5>{{comment.user.name}}</h5>
+              <h5>{{comment.user.data.name}}</h5>
               <p>
                 {{comment.content}}
               </p>
@@ -187,12 +187,12 @@
       <div class="modal-body">
         <ul class="list-group">
           <li class="list-group-item active">Този файл е достъпен от:</li>
-          <li class="list-group-item" ng-repeat="user in file.sharedUsers">{{user.name}}</li>
+          <li class="list-group-item" ng-repeat="user in file.users">{{user.data.name}}</li>
         </ul>
         <form ng-submit="shareFile(userToShare)" class="bottom-buffer">
           <div class="form-group" style="margin-top: 10px">
             <input class="form-control" type="email" ng-model="userToShare" ng-focus="getFriends()" placeholder="Въведи email"
-             typeahead="friend.email as friend.name for friend in friends | filter : $viewValue" typeahead-loading="loadingLocations"
+             typeahead="friend.email as friend.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
              typeahead-template-url="/particials/friendsTypehead.html">
              <p class="help-block">
                Ако търсин някой от приятелите си, може да търсиш и по име.

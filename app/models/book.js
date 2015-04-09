@@ -6,33 +6,22 @@ var ObjectId = Schema.ObjectId;
 var bookSchema = mongoose.Schema({
   title: String,
   users: [{
-    _id: {type: ObjectId, ref: 'User'},
-    position: Number
+    user: {type: ObjectId, ref: 'User'},
+    position: {
+      type: Number,
+      default: null
+    }
   }],
   opf: Object,
   anotations: [{
     _id: String,
-    user: {
-      _id: {
-        type: ObjectId,
-        ref: 'User',
-        required: true
-      },
-      name: String
-    },
+    user: {type: ObjectId, ref: 'User'},
     title: {
       type :String,
       required: true
     },
     comments: [{
-      user: {
-        _id: {
-          type: ObjectId,
-          ref: 'User',
-          required: true
-        },
-        name: String
-      },
+      user: {type: ObjectId, ref: 'User'},
       content: {
         type: String,
         required: true

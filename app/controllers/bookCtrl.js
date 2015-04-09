@@ -27,7 +27,7 @@ module.exports = function(){
         req.busboy.on('finish', function(){
           var book = new Book();
           book.title = fileName;
-          book.users.push({_id: req.user._id, position: '0'});
+          book.users.push({user: req.user._id, position: '0'});
           book.save(function(err, book){
             if(err){
               console.log(err);
@@ -57,7 +57,8 @@ module.exports = function(){
     },
     read: function(req, res){
       var user = req.user;
-      Book.find({'users._id': user.id})
+      Book
+        .find({'users.user': user.id})
         .exec(function(err, books){
           if(err){
             console.log(err);
@@ -70,7 +71,9 @@ module.exports = function(){
     readOne: function(req, res){
       var user = req.user;
       var book_id = req.params.book_id;
-      Book.findOne({_id: book_id, 'users._id': user._id}).lean()
+      Book
+        .findOne({_id: book_id, 'users.user': user._id})
+        .populate('users.user', 'data.name data.email')
         .exec(function(err, book){
           if(err){
             console.log(err);
@@ -85,7 +88,7 @@ module.exports = function(){
     delete: function(req, res){
       var book_id = req.params.book_id;
       var user = req.user;
-      Book.findOne({_id: book_id, 'users._id': user._id}).exec(function(err, book){
+      Book.findOne({_id: book_id, 'users.user': user._id}).exec(function(err, book){
         if(err){
           console.log(err);
           res.json({success:false, message: 'Грешка при изтриването на книгата.'});
@@ -144,44 +147,23 @@ module.exports = function(){
           } else {
             // update file, that is with mentioned id, if the user who wants
             //to share it is its owner and if it is not shared to the samo user before
-            Book.update(
-                {$and:[{_id: book_id, "users._id": req.user._id}, {"users._id": {$ne: user._id}}]},
-                {$push: {'users':{_id: user._id, position: 0}}},{upsert:true},
-              function(err, book){
-              if(err){
-                console.log('Error while updating book: ' + err);
-                res.json({success:false, message: 'Тази книга вече е споделена с този потребител.'});
-              } else {
-                res.json({success:true});
-              }
-            });
+            Book
+              .update(
+                {$and:[{_id: book_id, "users.user": req.user._id},
+                {"users.user": {$ne: user._id}}]},
+                {$push: {'users':{_id: user._id, position: 0}}},
+                {upsert:false})
+              .exec(function(err, book){
+                if(err){
+                  console.log('Error while updating book: ' + err);
+                  res.json({success:false, message: 'Тази книга вече е споделена с този потребител.'});
+                } else {
+                  res.json({success:true});
+                }
+              });
           }
         });
       }
-    },
-    getShared: function(req, res){
-      var book_id = req.params.book_id;
-      Book.findOne({_id:book_id, "users._id": req.user._id}, function(err,book){
-        if(err){
-          console.log(err);
-          res.json({success:false, message: 'Взимането на тази информация не е успешно.'});
-        } else if(!book){
-          res.json({success:false, message: 'Взимането на тази информация не е успешно.'});
-        } else {
-          var sharedUsers = [];
-          for(var i = 0; i < book.users.length; i++){
-            User.findById(book.users[i]._id, function(err, user){
-              if(err){
-                console.log(err);
-              }
-              sharedUsers.push({_id: user._id, name: user.data.name, email: user.data.email });
-              if(book.users.length === sharedUsers.length){
-                res.json({success:true, users: sharedUsers});
-              }
-            });
-          }
-        }
-      });
     },
     setUserPosition: function(req, res){
       var book_id = req.params.book_id;
@@ -207,7 +189,7 @@ module.exports = function(){
     rename: function(req, res){
       var book_id = req.params.book_id;
       var newName = req.body.name;
-      Book.update({_id: book_id, "users._id": req.user._id}, {title:newName}, {upsert:false}, function(err, rows){
+      Book.update({_id: book_id, "users.user": req.user._id}, {title:newName}, {upsert:false}, function(err, rows){
         if(err){
           console.log('Error while updating book name ' + err);
           res.json({success:false, message: 'Грешка при преименуването на книгата.'});

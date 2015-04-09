@@ -21,7 +21,7 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="friend in friends">
+    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="friend in user.friends">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -30,7 +30,7 @@
             </div>
             <div class="col-xs-8">
               <h5 ng-show="!renameFriendCollapse[$index]">
-                {{ friend.name | limitTo: 15 }}{{friend.name.length > 15 ? '...' : ''}}
+                {{ friend.data.name | limitTo: 15 }}{{friend.data.name.length > 15 ? '...' : ''}}
                 </h5>
               <div ng-show="renameFriendCollapse[$index]">
                 <form ng-submit="renameFriend($index, friend.name); renameFriendCollapse[$index] = false;">
@@ -45,7 +45,7 @@
                 </form>
               </div>
               <div class="bottom-buffer">
-                {{friend.email}}
+                {{friend.data.email}}
               </div>
               <div class="btn-group btn-group-sm pull-right">
                 <a class="btn btn-warning" ng-click="renameFriendCollapse[$index] = !renameFriendCollapse[$index]">Преименувай</a>

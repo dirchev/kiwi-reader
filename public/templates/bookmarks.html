@@ -7,7 +7,7 @@
 </nav>
 
 <div class="container-fluid">
-  <div ng-hide="bookmarks.length" class="alert alert-info col-sm-offset-3 col-sm-6">
+  <div ng-hide="user.bookmarks.length" class="alert alert-info col-sm-offset-3 col-sm-6">
     <p class="text-center">
       Все още нямате запазени цитати. Може да добавите такива, като селектирате текст от книга или файл и изберете
       <a class="btn btn-success btn-sm">Добави към цитати</a>.
@@ -15,7 +15,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="bookmark in bookmarks">
+    <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="bookmark in user.bookmarks">
       <div class="well">
         <div class="dropdown">
           <a class="dropdown-toggle pull-right" data-toggle="dropdown"><span class="caret muted"></span></a>
@@ -29,5 +29,5 @@
       </div>
     </div>
   </div>
-  
+
 </div>

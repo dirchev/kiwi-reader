@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
+var UserSchema = require('./user');
 
 // define the schema for our user model
 var fileSchema = mongoose.Schema({
@@ -21,27 +22,13 @@ var fileSchema = mongoose.Schema({
   users: [{type: ObjectId, ref: 'User'}],
   anotations: [{
     _id: String,
-    user: {
-      _id: {
-        type: ObjectId,
-        ref: 'User',
-        required: true
-      },
-      name: String
-    },
+    user: {type: ObjectId, ref: 'User'},
     title: {
       type :String,
       required: true
     },
     comments: [{
-      user: {
-        _id: {
-          type: ObjectId,
-          ref: 'User',
-          required: true
-        },
-        name: String
-      },
+      user: {type: ObjectId, ref: 'User'},
       content: {
         type: String,
         required: true

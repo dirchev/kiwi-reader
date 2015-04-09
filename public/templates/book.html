@@ -20,7 +20,9 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<div  class="container-fluid">
+{{book}}
+<div class="container-fluid">
+
   <div class="row">
     <div id="contentBox" ng-show="showContent" class="shadow text-center col-sm-4" style="margin-top: 10px; overflow:auto">
       <div class="toc" preview-box content="toc">
@@ -68,11 +70,11 @@
         </ul>
         <form ng-submit="shareBook(userToShare)" class="bottom-buffer">
           <div class="form-group" style="margin-top: 10px">
-            <input class="form-control" type="email" ng-model="userToShare" ng-focus="getFriends()" placeholder="Въведи email"
-             typeahead="friend as friend.name for friend in friends | filter : $viewValue" typeahead-loading="loadingLocations"
+            <input class="form-control" type="email" ng-model="userToShare" placeholder="Въведи email"
+             typeahead="friend as friend.data.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
              typeahead-template-url="/particials/friendsTypehead.html">
              <p class="help-block">
-               Ако търсин някой от приятелите си, може да търсиш и по име.
+               Ако търсиш някой от приятелите си, може да търсиш и по име.
              </p>
             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
           </div>

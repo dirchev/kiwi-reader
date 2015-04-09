@@ -23,10 +23,8 @@ module.exports = function(app, passport, busboy){
 
   // share file
   app.post('/api/file/:file_id/share', isLoggedIn, fileCtrl.share);
-  // get file shares
-  app.get('/api/file/:file_id/share', isLoggedIn, fileCtrl.getShared);
 
-  // get file shares
+  // make public
   app.post('/api/file/:file_id/public', isLoggedIn, fileCtrl.public);
 
   // rename file

@@ -18,9 +18,6 @@ module.exports = function(app, passport){
   // remove user from book or delete book
   app.delete('/api/book/:book_id', isLoggedIn, bookCtrl.delete);
 
-  // get book`s users
-  app.get('/api/book/:book_id/share', isLoggedIn, bookCtrl.getShared);
-
   // set last page readed position
   app.post('/api/book/:book_id/position', isLoggedIn, bookCtrl.setUserPosition);
 

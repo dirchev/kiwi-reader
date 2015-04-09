@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var Schema = mongoose.Schema;
 
 // defina the schema for our user model
 var userSchema = mongoose.Schema({
@@ -46,11 +47,9 @@ var userSchema = mongoose.Schema({
         required: true
       }
     }],
-    friends: [{
-      _id: String,
-      name: String,
-      email: String
-    }]
+    friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    files : [{ type: Schema.Types.ObjectId, ref: 'File' }],
+    books : [{ type: Schema.Types.ObjectId, ref: 'Book' }]
 });
 
 // methods ===========================
