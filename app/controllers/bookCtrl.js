@@ -39,7 +39,6 @@ module.exports = function(){
                 var folderPath = path.join(__dirname + '/../../uploads/extracted/', book.id);
                 epubParser.getContent(folderPath, book._id.toString(), function(opf){
                   book.opf = opf;
-                  //book.title = opf['metadata']['dc:title'] + ' ' + opf['metadata']['dc:creator'];
                   book.save(function(err, book){
                     if(err){
                       console.log(err);

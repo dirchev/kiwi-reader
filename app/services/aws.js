@@ -14,11 +14,6 @@ if(typeof process.env.AWS_ACCESSKEY_ID === 'undefined'){
 }
 
 var client = s3.createClient({
-  maxAsyncS3: 20,     // this is the default
-  s3RetryCount: 3,    // this is the default
-  s3RetryDelay: 1000, // this is the default
-  multipartUploadThreshold: 20971520, // this is the default (20 MB)
-  multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
     accessKeyId: aws_config.accessKeyId,
     secretAccessKey: aws_config.secretAccessKey
@@ -27,11 +22,12 @@ var client = s3.createClient({
 module.exports = function(){
   return {
     uploadDir: function(localDir, remoteDir, cb){
+      console.log(remoteDir);
       var params = {
         localDir: localDir,
         deleteRemoved: true,
         s3Params: {
-          Bucket  : "kiwi-reader",
+          Bucket  : "kiwi-reader-app",
           Prefix  : remoteDir,
           ACL     : "public-read"
         },
@@ -45,14 +41,14 @@ module.exports = function(){
       });
     },
     getFile: function(filePath, req, res){
-      var url = s3.getPublicUrlHttp('kiwi-reader', filePath);
+      var url = s3.getPublicUrlHttp('kiwi-reader-app', filePath);
       var x = request(url);
        req.pipe(x);
        x.pipe(res);
     },
     deleteDir: function(remoteDir, cb){
       var s3Params =  {
-        Bucket  : "kiwi-reader",
+        Bucket  : "kiwi-reader-app",
         Prefix  : remoteDir
       };
       var deleter = client.deleteDir(s3Params);
