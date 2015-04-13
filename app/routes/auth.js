@@ -70,6 +70,15 @@ module.exports = function(app, passport){
     res.render('app.ejs');
   });
 
+  // API AUTH
+
+  app.get('/api/isLoggedIn', function(req, res){
+    if (req.isAuthenticated())
+      res.json({loggedIn : true});
+    else
+      res.json({loggedIn : false});
+  });
+
 };
 function redirectIfLogged(req, res, next){
   // if user is authenticated in the session, carry on

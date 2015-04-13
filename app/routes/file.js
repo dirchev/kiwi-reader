@@ -1,9 +1,3 @@
-var File = require('../models/file');
-var User = require('../models/user');
-var path = require('path');
-var fs = require('fs');
-var cheerio = require('cheerio');
-
 
 module.exports = function(app, passport, busboy){
   var fileCtrl = require('../controllers/fileCtrl')(app);
