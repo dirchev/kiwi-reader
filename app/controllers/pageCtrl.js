@@ -2,6 +2,7 @@ var User = require('../models/user');
 var Page = require('../models/page');
 var unfluff = require('unfluff');
 var request = require('request');
+var cheerio = require('cheerio');
 
 module.exports = function(){
   return {
@@ -31,29 +32,30 @@ module.exports = function(){
     },
     create: function(req, res){
       var page_link = req.body.page_link;
-      var page_data = getPageData(page_link);
-      var page = new Page();
-      page.title = page_data.title;
-      page.image = page_data.image;
-      page.content = textToHTML(page_data.text);
-      page.link = page_data.canonicalLink;
-      page.users = [];
-      page.users.push(req.user._id);
-      page.save(function(err){
-        if(err){
-          console.log(err);
-          res.json({success:false, message:"Грешка при записването на страницата."});
-        } else {
-          res.json({success:true});
-        }
+      var page_content = req.body.page_content;
+      getPageData(page_link, function(page_data){
+        var page = new Page();
+        page.title = page_data.title;
+        page.image = page_data.image || 'http://kiwi-reader.herokuapp.com/img/kiwi-article.png';
+        page.content = page_content;
+        page.link = page_data.canonicalLink;
+        page.users = [];
+        page.users.push(req.user._id);
+        page.save(function(err){
+          if(err){
+            console.log(err);
+            res.json({success:false, message:"Грешка при записването на страницата. Байтче се изгуби по пътя. Опитай пак по-късно."});
+          } else {
+            res.json({success:true});
+          }
+        });
       });
-
     },
     delete: function(req, res){
       var page_id = req.params.page_id;
       Page.findOne({_id: page_id, users: req.user._id}, function(err, page){
         if(page.users.length === 1){
-          Page.remove({_id: file_id, users: req.user._id}, function(err, page){
+          Page.remove({_id: page_id, users: req.user._id}, function(err, page){
             if(err)
               console.log(err);
             console.log('Deleting page: '+ page);
@@ -112,16 +114,37 @@ module.exports = function(){
         });
       }
     },
+    getPageHtml: function(req, res){
+      var url = req.param('url');
+      request(url, function(err, resp, body){
+        if(err){
+          res.json({success:false, message: 'Проблем при намирането на страницата ' + err});
+        } else {
+          prepareHTML(body, function(page){
+            res.send(page);
+          });
+        }
+      });
+    }
   }; // end of return object
 }; // end of module.exports
 var textToHTML = function(text){
   return text.replace(/\r?\n/g, '<br />');
 };
 
-var getPageData = function(link){
+var prepareHTML = function(html, callback){
+  var $ = cheerio.load(html);
+  // remove all script taggs
+  $('script').each(function(){
+    $(this).replaceWith('');
+  });
+  callback($.html());
+};
+
+var getPageData = function(link, callback){
   request(link, function(err, res, body){
     var data = unfluff(body);
-    return data;
+    callback(data);
   });
 };
 

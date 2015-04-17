@@ -1,0 +1,87 @@
+<nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">{{page.title}}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ng-click="showAnotations = !showAnotations">Анотации</a></li>
+        <li><a data-toggle="modal" data-target="#shareModal">Сподели</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+  <div class="row fullheight">
+    <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
+        <h3 class="text-center">Анотации</h3>
+        <div ng-hide="page.anotations.length">
+          <p>
+            Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
+          </p>
+        </div>
+        <accordion close-others="true" class="fullheight">
+          <accordion-group class="border-sharp" ng-repeat="anotation in page.anotations" heading="{{anotation.user.data.name}}: {{anotation.title}}" is-open="openedAnotations[$index]">
+            <div class="well well-sm text-center">
+              <h4>{{anotation.user.data.name}}</h4>
+              <p>
+                {{anotation.title}}
+              </p>
+            </div>
+            <hr>
+            <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
+              <h5>{{comment.user.data.name}}</h5>
+              <p>
+                {{comment.content}}
+              </p>
+            </div>
+            <div class="btn-group btn-group-sm bottom-buffer-sm">
+              <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
+              <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
+            </div>
+            <div id="commentBox{{$index}}" class="collapse well well-sm">
+              <form ng-submit="addComment($index, comment); comment = '';">
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="comment" placeholder="Напиши твоя коментар тук...">
+                </div>
+                <button type="submit" class="btn btn-success">
+                  Коментирай
+                </button>
+              </form>
+            </div>
+          </accordion-group>
+        </accordion>
+
+        <div ng-show="selectedText" class="panel panel-default">
+          <div class="panel-body text-center">
+            {{selectedText}}
+          </div>
+          <div class="panel-footer" ng-hide="anotationBox">
+            <a class="btn btn-primary btn-sm" ng-click="anotationBox = true">Създай анотация</a>
+            <a class="btn btn-success btn-sm" ng-click="addBookmark()">Добави към цитати</a>
+            <a class="btn btn-danger btn-sm" ng-click="cancelAnotation()">Отказ</a>
+          </div>
+          <div class="panel-footer" ng-show="anotationBox">
+            <form ng-submit="addAnotation(anotation); anotation = '';">
+              <div class="form-group">
+                <textarea class="form-control" ng-model="anotation" placeholder="Съдържание..." rows="5" ></textarea>
+              </div>
+              <button type="submit" class="btn btn-default">Създай</button>
+            </form>
+          </div>
+        </div>
+    </div>
+    <div ng-class="showAnotations ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
+      <div id="previewBox" preview-box text-select style="padding: 50px 30px 30px; overflow: auto;" content="page.content">
+      </div>
+    </div>
+</div>

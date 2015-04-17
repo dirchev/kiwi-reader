@@ -23,6 +23,7 @@
     <script src="/bower_components/ui-router/release/angular-ui-router.min.js"></script>
     <script src="/bower_components/ngUpload/ng-upload.js"></script>
     <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/scripts/jquery.selection.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
@@ -36,6 +37,7 @@
     <script src="/app/directives/text_select.js"></script>
     <script src="/app/directives/link_location.js"></script>
     <script src="/app/directives/preview_box.js"></script>
+
     <script src="/app/controllers/books.js"></script>
     <script src="/app/controllers/book.js"></script>
     <script src="/app/controllers/files.js"></script>
@@ -44,12 +46,15 @@
     <script src="/app/controllers/profile.js"></script>
     <script src="/app/controllers/bookmarks.js"></script>
     <script src="/app/controllers/friends.js"></script>
+    <script src="/app/controllers/page.js"></script>
+    <script src="/app/controllers/pages.js"></script>
 
     <script src="/app/factories/bookmark.js"></script>
     <script src="/app/factories/friend.js"></script>
     <script src="/app/factories/file.js"></script>
     <script src="/app/factories/book.js"></script>
     <script src="/app/factories/user.js"></script>
+    <script src="/app/factories/page.js"></script>
 
   </head>
   <body ng-app="kiwiReader">
@@ -71,6 +76,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a ui-sref="books">Книги</a></li>
             <li><a ui-sref="files">Файлове</a></li>
+            <li><a ui-sref="pages">Статии <span class="label label-warning">бета</span></a></li>
             <li><a ui-sref="bookmarks">Цитати</a></li>
             <li><a ui-sref="friends">Приятели</a></li>
             <li class="dropdown">

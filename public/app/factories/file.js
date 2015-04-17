@@ -15,9 +15,6 @@ app.factory('File', function($http){
     share: function(file_id, user_email){
       return $http.post('/api/file/' + file_id + '/share', {user_email:user_email});
     },
-    getShared: function(file_id){
-      return $http.get('/api/file/' + file_id + '/share');
-    },
     rename: function(file_id, name){
       return $http.post('/api/file/' + file_id + '/rename', {name:name});
     },

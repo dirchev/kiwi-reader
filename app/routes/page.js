@@ -5,6 +5,9 @@ module.exports = function(app, passport, busboy){
   // get all files
   app.get('/api/page', isLoggedIn, pageCtrl.get);
 
+  // get Page HTML
+  app.get('/api/page/html', pageCtrl.getPageHtml);
+
   // get page with id = page_id
   app.get('/api/page/:page_id', isLoggedIn, pageCtrl.getOne);
 
@@ -12,10 +15,10 @@ module.exports = function(app, passport, busboy){
   app.post('/api/page', isLoggedIn, pageCtrl.create);
 
   //delete page
-  app.delete('/api/file/:page_id', isLoggedIn, pageCtrl.delete);
+  app.delete('/api/page/:page_id', isLoggedIn, pageCtrl.delete);
 
   // share page
-  app.post('/api/file/:page_id/share', isLoggedIn, pageCtrl.share);
+  app.post('/api/page/:page_id/share', isLoggedIn, pageCtrl.share);
 };
 
 // route middleware to make sure a user is logged in

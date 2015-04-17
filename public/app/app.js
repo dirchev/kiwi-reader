@@ -24,7 +24,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: "FilesCtrl"
     })
     .state('file', {
-      url: "/file/:id/:anotation",
+      url: "/file/:id",
       templateUrl: "/templates/file.html",
       controller: "FileCtrl"
     })
@@ -52,8 +52,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/profile",
       templateUrl: "/templates/profile.html",
       controller: "ProfileCtrl"
+    })
+    .state('pages', {
+      url: "/pages",
+      templateUrl: "/templates/pages.html",
+      controller: "PagesCtrl"
+    })
+    .state('page', {
+      url: "/page/:id",
+      templateUrl: "/templates/page.html",
+      controller: "PageCtrl"
     });
 });
+
+app.filter('trustAsResourceUrl', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsResourceUrl(val);
+    };
+}]);
 
 app.run(function($rootScope, $http){
   $http.get('/api/user').success(function(data){

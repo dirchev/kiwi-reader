@@ -1,0 +1,93 @@
+<nav class="navbar navbar-inverse border-sharp" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">
+        Статии
+        <span class="label label-warning">бета</span>
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a data-toggle="modal" data-target="#newPageModal">Добави статия</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+  <div class="row clearfix">
+    <div ng-repeat="page in pages | orderBy:'image':true track by $index " class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 10px;">
+      <div class="btn-group fullwidth" data-toggle="dropdown" aria-expanded="false">
+        <div style="height:150px; overflow:hidden;">
+          <img class="img-responsive fullheight" style="width:auto; margin: 0 auto;" ng-show="page.image" ng-src="{{page.image}}" alt="heading image"/>
+        </div>
+        <button type="button" class="btn btn-warning dropdown-toggle text-center fullwidth border-sharp" >
+          {{ page.title | limitTo: 35 }}{{page.title.length > 35 ? '...' : ''}} <span class="caret"></span>
+        </button>
+      </div>
+      <ul class="dropdown-menu" role="menu">
+        <li><a ui-sref="page({id : page._id})">Отвори</a></li>
+        <li class="divider"></li>
+        <li><a ng-click="delete(page._id)">Изтрий</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" style="width:90%;" id="newPageModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="">Добави статия</h4>
+      </div>
+      <div class="modal-body">
+          <!-- Step 1 (choose link with article) -->
+          <div ng-if="step === 1" class="well well-sm">
+            <h4>Стъпка 1: Поставете линк</h4>
+            <div class="form-group">
+              <input class="form-control" type="text" ng-model="link" placeholder="http://example.com/articles/cool-article.html">
+              <p class="help-block">Поставете линк от статията</p>
+            </div>
+            <button type="button" ng-click="getPagePreview(link)" class="btn btn-success">
+              Виж страницата
+            </button>
+          </div>
+          <!-- Step 2 (choose content) -->
+          <div ng-if="step === 2" class="well well-sm">
+            <h4>Стъпка 2: Селектирайте съдържание</h4>
+            <iframe id="pagePreview" ng-src="{{framelink}}" width="100%" height="300"></iframe>
+            <button type="button" ng-click="stepBack();" class="btn btn-default">
+              Назад
+            </button>
+            <button type="button" ng-click="getSelection()" class="btn btn-success">
+              Вземи селекцията
+            </button>
+
+          </div>
+
+          <!-- Step 3 (selected content preview) -->
+          <div ng-if="step === 3" class="well well-sm">
+            <h4>Стъпка 3: Предварителен преглед</h4>
+            <div preview-box content="contentPreview" style="width:100%; height: 300px; overflow: auto;">
+
+            </div>
+            <button type="button" ng-click="stepBack()" class="btn btn-default">
+              Назад
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="create()">
+              Добави
+            </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

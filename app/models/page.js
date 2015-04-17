@@ -39,4 +39,4 @@ var pageSchema = mongoose.Schema({
   }]
 });
 
-module.exports = mongoose.model('File', fileSchema);
+module.exports = mongoose.model('Page', pageSchema);
