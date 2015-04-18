@@ -29,8 +29,8 @@
         <div style="height:150px; overflow:hidden;">
           <img class="img-responsive fullheight" style="width:auto; margin: 0 auto;" ng-show="page.image" ng-src="{{page.image}}" alt="heading image"/>
         </div>
-        <button type="button" class="btn btn-warning dropdown-toggle text-center fullwidth border-sharp" >
-          {{ page.title | limitTo: 35 }}{{page.title.length > 35 ? '...' : ''}} <span class="caret"></span>
+        <button type="button" class="btn btn-default dropdown-toggle text-center fullwidth border-sharp" >
+          {{ page.title | limitTo: 30 }}{{page.title.length > 30 ? '...' : ''}} <span class="caret"></span>
         </button>
       </div>
       <ul class="dropdown-menu" role="menu">

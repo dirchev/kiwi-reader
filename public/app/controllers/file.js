@@ -55,18 +55,15 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
     });
 
     $scope.$watch('file.content', function(oldVal, newVal){
-      if(newVal !== lastEmittedContent){
-        $timeout(function(){
-          socket.emit('file:set:content', {file_id: file_id, content: $scope.file.content});
-          $timeout.cancel();
-        }, 1000);
-      }
+      $timeout(function(){
+        socket.emit('file:set:content', {file_id: file_id, content: $scope.file.content});
+        $timeout.cancel();
+      }, 1000);
     });
 
 
     // TODO move login from sockets in factory or sevice
     socket.on('file:update:content', function(content){
-      lastEmittedContent = content;
       $scope.$apply(function(){
         $scope.file.content = content;
         $scope.checkForDeletedAnotations();
@@ -114,7 +111,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
     socket.emit('file:add:chat', data);
     $scope.chat.push(data.message);
     $scope.chatMessage = '';
-    
+
     // TODO fix this quickfix
     $timeout(function(){
       $("#chatBox").scrollTop($("#chatBox").height());

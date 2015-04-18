@@ -11,7 +11,6 @@ app.directive('textSelect', function(){
           scope.selectedText = selectedText;
           scope.selection = selection;
           scope.showAnotations = true;
-          scope.onTextSelect();
         });
         e.stopPropagation();
       });

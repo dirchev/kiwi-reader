@@ -33,6 +33,7 @@
 
 <div id="contentWrapper" class="container-fluid" ng-style="contentStyle">
   <div class="row fullheight">
+    <!-- Anotations -->
     <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
         <h3 class="text-center">Анотации</h3>
         <div ng-hide="file.anotations.length">
@@ -92,6 +93,7 @@
         </div>
     </div>
 
+    <!-- Chat -->
     <div ng-show="showChat" class="col-md-3 hidden-sm hidden-xs fullheight">
       <h3 class="text-center">Чат</h3>
       <div>
@@ -113,6 +115,7 @@
       </div>
     </div>
 
+    <!-- Content -->
     <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
       <div ng-hide="editMode" style="border: solid 1px #cdcdcd; overflow: auto;" class="fullheight">
         <div id="previewBox" preview-box text-select style="padding: 50px 30px 30px; overflow: auto;" content="file.content">
@@ -192,7 +195,7 @@
         <form ng-submit="shareFile(userToShare)" class="bottom-buffer">
           <div class="form-group" style="margin-top: 10px">
             <input class="form-control" type="email" ng-model="userToShare" ng-focus="getFriends()" placeholder="Въведи email"
-             typeahead="friend.email as friend.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
+             typeahead="friend.data.email as friend.data.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
              typeahead-template-url="/particials/friendsTypehead.html">
              <p class="help-block">
                Ако търсин някой от приятелите си, може да търсиш и по име.

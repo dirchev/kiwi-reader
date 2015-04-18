@@ -1,8 +1,8 @@
 var fileCtrl = require('../controllers/fileCtrl')();
+var pageCtrl = require('../controllers/pageCtrl')();
 
 // TODO make different files for files and books
 
-var roomUsers = {};
 module.exports = function(io){
   io.on('connection', function(socket){
 
@@ -97,5 +97,52 @@ module.exports = function(io){
         }
       });
     });
+
+    // =========================================================================
+    // ====================== PAGES ============================================
+    // =========================================================================
+    socket.on('open:page', function(page_id){
+      // TODO check if user is logged, if he is not, check if file is public
+      socket.join('page' + page_id);
+    });
+
+    socket.on('page:add:anotation', function(data){
+      anotation = data.anotation;
+      populatedAnotation = data.populatedAnotation;
+      page_id = data.page_id;
+      socket.broadcast.to('page' + page_id).emit('page:update:anotations', populatedAnotation);
+      pageCtrl.addAnotation(page_id, anotation, function(err, anotations){
+        if(err){
+          console.log(err);
+          socket.to('page' + page_id).emit('page:error', err);
+        }
+      });
+    });
+
+    socket.on('page:set:content', function(data){
+      page_id = data.page_id;
+      content = data.content;
+      socket.to('page' + page_id).emit('page:update:content', content);
+      pageCtrl.updateContent(page_id, content, function(err){
+        if(err){
+          socket.to('page' + page_id).emit('page:error', err);
+        }
+      });
+    });
+
+    socket.on('page:delete:anotation', function(data){
+      anotation_index = data.anotation_index;
+      page_id = data.page_id;
+      socket.to('page' + page_id).emit('page:delete:anotation', data.anotation_index);
+      pageCtrl.deleteAnotation(page_id, anotation_index, function(err){
+        if(err){
+          socket.to('page' + page_id).emit('page:error', err);
+        }
+      });
+    });
+
+
+
+
   });
 };

@@ -70,7 +70,7 @@
         <form ng-submit="shareBook(userToShare)" class="bottom-buffer">
           <div class="form-group" style="margin-top: 10px">
             <input class="form-control" type="email" ng-model="userToShare" placeholder="Въведи email"
-             typeahead="friend as friend.data.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
+             typeahead="friend.data.email as friend.data.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
              typeahead-template-url="/particials/friendsTypehead.html">
              <p class="help-block">
                Ако търсиш някой от приятелите си, може да търсиш и по име.

@@ -38,13 +38,13 @@ module.exports = function(){
         page.title = page_data.title;
         page.image = page_data.image || 'http://kiwi-reader.herokuapp.com/img/kiwi-article.png';
         page.content = page_content;
-        page.link = page_data.canonicalLink;
+        page.link = page_link;
         page.users = [];
         page.users.push(req.user._id);
         page.save(function(err){
           if(err){
             console.log(err);
-            res.json({success:false, message:"Грешка при записването на страницата. Байтче се изгуби по пътя. Опитай пак по-късно."});
+            res.json({success:false, message:"Грешка при записването на страницата. "});
           } else {
             res.json({success:true});
           }
@@ -125,7 +125,64 @@ module.exports = function(){
           });
         }
       });
-    }
+    }, // end of getPageHtml
+    updateContent: function(page_id, content, callback){
+      Page.findById(page_id).exec(function(err, page){
+        if(err){
+          console.log(err);
+          callback(err);
+        } else {
+          page.content = content;
+          page.save(function(err, data){
+            if(err){
+              console.log(err);
+              callback(err);
+            } else {
+              callback(null, data);
+            }
+          });
+        }
+      });
+    }, // end of updateContent
+    addAnotation: function(page_id, anotation, callback){
+      Page
+        .update(
+          {_id : page_id},
+          {$push: {'anotations':anotation}},
+          {upsert: false})
+        .exec(function(err, data){
+          if(err){
+            console.log(err);
+            callback('Грешка при запазването на анотацията.');
+          } else {
+            Page.findById(page_id, function(err, page){
+              if(err){
+                console.log(err);
+              } else {
+                callback(null, page.anotations);
+              }
+            });
+          }
+        });
+    }, // end of addAnotation
+    deleteAnotation: function(page_id, anotation_index, callback){
+      Page.findOne({_id: page_id}).exec(function(err, page){
+        if(err){
+          console.log(err);
+          callback(err);
+        } else {
+          page.anotations.splice(anotation_index, 1);
+          page.save(function(err, page){
+            if(err){
+              console.log(err);
+              callback(err);
+            } else {
+              callback();
+            }
+          });
+        }
+      });
+    }, // end of deleteAnotation
   }; // end of return object
 }; // end of module.exports
 var textToHTML = function(text){

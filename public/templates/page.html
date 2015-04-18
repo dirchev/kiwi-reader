@@ -20,8 +20,9 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container-fluid">
+<div id="contentWrapper" class="container-fluid">
   <div class="row fullheight">
+    <!-- Anotations -->
     <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
         <h3 class="text-center">Анотации</h3>
         <div ng-hide="page.anotations.length">
@@ -80,8 +81,47 @@
           </div>
         </div>
     </div>
+    <!-- Content -->
     <div ng-class="showAnotations ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
-      <div id="previewBox" preview-box text-select style="padding: 50px 30px 30px; overflow: auto;" content="page.content">
+      <div id="previewBox" class="fullheight" preview-box text-select style="padding: 50px 30px 30px; overflow: auto; border: solid 1px #b6b6b6;" content="page.content">
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Сподели файла с...</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item active">Този файл е достъпен от:</li>
+          <li class="list-group-item" ng-repeat="user in page.users">{{user.data.name}}</li>
+        </ul>
+        <form ng-submit="share(userToShare)" class="bottom-buffer">
+          <div class="form-group" style="margin-top: 10px">
+            <input class="form-control" type="email" ng-model="userToShare" ng-focus="getFriends()" placeholder="Въведи email"
+             typeahead="friend.data.email as friend.data.name for friend in user.friends | filter : $viewValue" typeahead-loading="loadingLocations"
+             typeahead-template-url="/particials/friendsTypehead.html">
+             <p class="help-block">
+               Ако търсин някой от приятелите си, може да търсиш и по име.
+             </p>
+            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+          </div>
+          <button class="btn btn-primary" type="submit">Сподели</button>
+        </form>
+        <div class="alert alert-info">
+          <p>
+            Когато <b>споделите файл</b> с някого, той ще може не само да го преглежда, но и да го редактира и коментира.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Затвори</button>
+      </div>
+    </div>
+  </div>
 </div>
