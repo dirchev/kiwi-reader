@@ -1,13 +1,15 @@
 var awsService = require('../services/aws');
-var fileStorageType = 'aws';
-//var fileStorageType = 'local';
+var express = require('express');
+var path = require('path');
+var fileStorageType = require('../../config/file_storage');
+
 module.exports = function(app){
-    if(fileStorageType === 'aws'){
-      app.get('/uploads/*', function(req, res){
+    app.get('/uploads/*', function(req, res){
+      if(fileStorageType.get() === 'aws'){
         var reqUrl = req.url.replace('/uploads/', '');
         awsService().getFile(reqUrl, req, res);
-      });
-    } else {
-      app.use("/uploads", express.static(__dirname + '/uploads'));
-    }
+      } else {
+        res.sendfile(req.url, {root:path.join(__dirname,'../../')});
+      }
+    });
 };

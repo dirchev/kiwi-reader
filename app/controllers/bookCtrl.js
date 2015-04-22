@@ -5,6 +5,7 @@ var fs = require('fs');
 var rmdir = require('rimraf');
 var epubParser = require('../services/epub-parser');
 var awsService = require('../services/aws');
+var fileStorageType = require('../../config/file_storage');
 
 module.exports = function(){
   return {
@@ -101,14 +102,17 @@ module.exports = function(){
                 res.json({success:false, message: 'Грешка при изтриването на книгата.'});
               } else {
                 var remoteDir = 'extracted/' + book.id;
-                awsService().deleteDir(remoteDir, function(err){
-                  if(err){
-                    console.log('Folder was not deleted successfully');
-                    console.log(err);
-                    res.json({success:false, message: 'Грешка при изтриването на книгата.'});
-                  }
-                  res.json({success:true});
-                });
+                if(fileStorageType.get() === 'aws'){
+                  // delete folder from aws s3 bucket
+                  awsService().deleteDir(remoteDir, function(err){
+                    if(err){
+                      console.log('Folder was not deleted successfully');
+                      console.log(err);
+                      res.json({success:false, message: 'Грешка при изтриването на книгата.'});
+                    }
+                    res.json({success:true});
+                  });
+                }
               }
             });
           } else {

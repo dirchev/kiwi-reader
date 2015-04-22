@@ -1,24 +1,32 @@
 var s3 = require('s3');
 var request = require('request');
+var fileStorageType = require('../../config/file_storage');
 var aws_config;
 // check if you have env variables
-if(typeof process.env.AWS_ACCESSKEY_ID === 'undefined'){
-  // if not, try to reach ignored file
-   aws_config = require('./aws_config');
-} else {
+if(typeof process.env.AWS_ACCESSKEY_ID !== 'undefined'){
   // if you do, use them
   aws_config = {
     accessKeyId : process.env.AWS_ACCESSKEY_ID,
     secretAccessKey : process.env.AWS_ACCESSKEY_SECRET
   };
+} else {
+  // if not, try to reach ignored file
+   try{
+     aws_config = require('./aws_config');
+   } catch(e){
+     console.log('\n***\nNo AWS S3 keys found. Changing file storage to local. (files are saved in uploads folder).\n***\n');
+     fileStorageType.set('local');
+   }
 }
 
-var client = s3.createClient({
-  s3Options: {
-    accessKeyId: aws_config.accessKeyId,
-    secretAccessKey: aws_config.secretAccessKey
-  },
-});
+if(fileStorageType.get() === 'aws'){
+  var client = s3.createClient({
+    s3Options: {
+      accessKeyId: aws_config.accessKeyId,
+      secretAccessKey: aws_config.secretAccessKey
+    },
+  });
+}
 module.exports = function(){
   return {
     uploadDir: function(localDir, remoteDir, cb){
