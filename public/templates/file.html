@@ -17,7 +17,7 @@
             {{editMode === false ? 'Редакция' : 'Преглед'  }}
         </a></li>
         <li><a ng-click="showAnotations = !showAnotations; showChat = false;">Анотации</a></li>
-        <li><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
+        <li ng-show="file.users.length > 1"><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
         <li>
           <a class="dropdown-toggle" data-toggle="dropdown">Споделяне <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="">
@@ -117,11 +117,11 @@
 
     <!-- Content -->
     <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
-      <div ng-hide="editMode" style="border: solid 1px #cdcdcd; overflow: auto;" class="fullheight">
+      <div ng-if="!editMode" style="border: solid 1px #cdcdcd; overflow: auto;" class="fullheight">
         <div id="previewBox" preview-box text-select style="padding: 50px 30px 30px; overflow: auto;" content="file.content">
         </div>
       </div>
-      <div ng-show="editMode" style="margin-top: 10px">
+      <div ng-if="editMode" style="margin-top: 10px">
         <textarea
           id="contentBox"
           ckeditor="editorOptions"

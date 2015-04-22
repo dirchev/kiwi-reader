@@ -21,7 +21,9 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
 
   File.getOne(file_id).success(function(data){
     $scope.file = data;
-
+    if(!$scope.file.conten || $scope.file.content.length === 0){
+      $scope.editMode = true;
+    }
     for(var i in $scope.file.anotations){
       $scope.openedAnotations.push(false);
     }

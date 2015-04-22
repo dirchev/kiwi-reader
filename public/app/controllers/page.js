@@ -1,6 +1,7 @@
 app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope){
 
   var page_id = $stateParams.id;
+  $scope.chat = [];
 
   var getPage = function(socket){
     Page.getOne(page_id).success(function(data){
@@ -31,6 +32,15 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     });
   });
 
+  socket.on('page:update:chat', function(message){
+    $scope.$apply(function(){
+      $scope.chat.push(message);
+      $timeout(function(){
+        $("#chatBox").scrollTop($("#chatBox").height());
+      }, 200);
+    });
+  });
+
   socket.on('page:delete:anotation', function(anotation_index){
     $scope.$apply(function(){
       $scope.page.anotations.splice(anotation_index, 1);
@@ -52,6 +62,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     // TODO socket listener
   };
 
+
   $scope.share = function(page_id, user_email){
     Page.share(page_id, user_email).success(function(data){
       if(data.success){
@@ -61,6 +72,24 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
         toastr.error(data.message);
       }
     });
+  };
+
+  $scope.addChatMessage = function(message){
+    var data = {
+      page_id : page_id,
+      message: {
+        user : $rootScope.user.data.name,
+        content : message
+      }
+    };
+    socket.emit('page:add:chat', data);
+    $scope.chat.push(data.message);
+    $scope.chatMessage = '';
+
+    // TODO fix this quickfix
+    $timeout(function(){
+      $("#chatBox").scrollTop($("#chatBox").height());
+    }, 200);
   };
 
   $scope.addAnotation = function(anotation_content){
