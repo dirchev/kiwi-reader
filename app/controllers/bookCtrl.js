@@ -112,6 +112,8 @@ module.exports = function(){
                     }
                     res.json({success:true});
                   });
+                } else {
+                  res.json({success:true});
                 }
               }
             });

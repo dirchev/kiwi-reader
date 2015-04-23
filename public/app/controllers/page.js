@@ -1,4 +1,4 @@
-app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope){
+app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope, $timeout){
 
   var page_id = $stateParams.id;
   $scope.chat = [];
@@ -36,7 +36,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     $scope.$apply(function(){
       $scope.chat.push(message);
       $timeout(function(){
-        $("#chatBox").scrollTop($("#chatBox").height());
+        $("#chatBox").scrollTop($scope.chat.length*66);
       }, 200);
     });
   });
@@ -52,15 +52,12 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
   // calculate contentWrapper height
   $scope.contentHeight = $(window).height() - 2*64 - 70;
   $('#contentWrapper').height($scope.contentHeight);
+  $('#chatContainer').height($scope.contentHeight);
   $(window).resize(function(){
     $scope.contentHeight = $(window).height() - 2*64 - 70;
   $('#contentWrapper').height($scope.contentHeight);
+  $('#chatContainer').height($scope.contentHeight);
   });
-
-
-  var startSocket = function(){
-    // TODO socket listener
-  };
 
 
   $scope.share = function(page_id, user_email){
@@ -88,7 +85,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
 
     // TODO fix this quickfix
     $timeout(function(){
-      $("#chatBox").scrollTop($("#chatBox").height());
+      $("#chatBox").scrollTop($scope.chat.length*66);
     }, 200);
   };
 

@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a ng-click="showAnotations = !showAnotations">Анотации</a></li>
-        <li ng-show="file.users.length > 1"><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
+        <li ng-show="page.users.length > 1"><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
         <li><a data-toggle="modal" data-target="#shareModal">Сподели</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -22,7 +22,7 @@
 </nav>
 
 <div id="contentWrapper" class="container-fluid">
-  <div class="row fullheight">
+  <div class="row" style="height:100%; overflow: hidden;">
     <!-- Anotations -->
     <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
         <h3 class="text-center">Анотации</h3>
@@ -84,11 +84,8 @@
     </div>
 
     <!-- Chat -->
-    <div ng-show="showChat" class="col-md-3 hidden-sm hidden-xs fullheight">
+    <div  id="chatContainer" ng-show="showChat" class="col-md-3 hidden-sm hidden-xs fullheight">
       <h3 class="text-center">Чат</h3>
-      <div>
-        <div class="alert alert-warning text-center">Този чат не се запазва. Ако няма други онлайн, значи си пишеш сам.</div>
-      </div>
       <div class="chat-box fullheight" style="overflow:hidden;">
         <div id="chatBox" style="height:65%; overflow-y:auto;">
           <div class="well well-sm" ng-repeat="message in chat">
@@ -106,7 +103,7 @@
     </div>
 
     <!-- Content -->
-    <div ng-class="showAnotations ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
+    <div ng-class="showAnotations || showChat ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
       <div id="previewBox" class="fullheight" preview-box text-select style="padding: 50px 30px 30px; overflow: auto; border: solid 1px #b6b6b6;" content="page.content">
       </div>
     </div>

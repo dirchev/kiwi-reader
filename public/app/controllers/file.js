@@ -12,11 +12,13 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
 
   // TODO move this to directives
   // calculate contentWrapper height
-  $scope.contentHeight = $(window).height() - 2*64 - 100;
+  $scope.contentHeight = $(window).height() - 2*64 - 70;
   $('#contentWrapper').height($scope.contentHeight);
+  $('#chatContainer').height($scope.contentHeight);
   $(window).resize(function(){
-    $scope.contentHeight = $(window).height() - 2*64 - 100;
+    $scope.contentHeight = $(window).height() - 2*64 - 70;
   $('#contentWrapper').height($scope.contentHeight);
+  $('#chatContainer').height($scope.contentHeight);
   });
 
   File.getOne(file_id).success(function(data){
@@ -95,7 +97,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
         $scope.chat.push(message);
         // TODO fix this quickfix
         $timeout(function(){
-          $("#chatBox").scrollTop($("#chatBox").height());
+          $("#chatBox").scrollTop($scope.chat.length*66);
         }, 200);
       });
     });
@@ -116,7 +118,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
 
     // TODO fix this quickfix
     $timeout(function(){
-      $("#chatBox").scrollTop($("#chatBox").height());
+      $("#chatBox").scrollTop($scope.chat.length*66);
     }, 200);
   };
 

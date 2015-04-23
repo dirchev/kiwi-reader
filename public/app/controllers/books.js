@@ -11,13 +11,13 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book){
   };
 
   $scope.newBook = function(data){
-    $('#newBookModal').hide();
     if(data.success){
       getBooks();
       toastr.success('Успешно добавихте нова книга.');
     } else {
       toastr.error(data.message);
     }
+    $('#newBookModal').modal('hide');
   };
 
 
