@@ -1,6 +1,7 @@
 app.directive('textSelect', function(){
   return {
     restrict: 'A',
+    scope: false,
     link: function(scope, element, attrs, controller) {
       element.css({ cursor: 'pointer' });
       element.on('mouseup', function(e) {
@@ -11,6 +12,7 @@ app.directive('textSelect', function(){
           scope.selectedText = selectedText;
           scope.selection = selection;
           scope.showAnotations = true;
+          console.log(scope);
         });
         e.stopPropagation();
         if(typeof scope.onTextSelect !== 'undefined'){

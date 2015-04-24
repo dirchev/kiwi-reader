@@ -1,4 +1,4 @@
-app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope, $timeout){
+app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope, $timeout, $anchorScroll, $location){
 
   var page_id = $stateParams.id;
   $scope.chat = [];
@@ -7,9 +7,6 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     Page.getOne(page_id).success(function(data){
       if(data.success){
         $scope.page = data.page;
-        if(socket){
-          startSocket();
-        }
       } else {
         toastr.error(data.message);
       }

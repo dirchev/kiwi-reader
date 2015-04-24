@@ -114,11 +114,11 @@
 
     <!-- Content -->
     <div ng-class="(showAnotations || showChat) ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
-      <div ng-if="!editMode" style="border: solid 1px #cdcdcd; overflow: auto;" class="fullheight">
+      <div ng-hide="editMode" style="border: solid 1px #cdcdcd; overflow: auto;" class="fullheight">
         <div id="previewBox" preview-box text-select style="padding: 50px 30px 30px; overflow: auto;" content="file.content">
         </div>
       </div>
-      <div ng-if="editMode" style="margin-top: 10px">
+      <div ng-show="editMode" style="margin-top: 10px">
         <textarea
           id="contentBox"
           ckeditor="editorOptions"
