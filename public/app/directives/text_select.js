@@ -13,6 +13,9 @@ app.directive('textSelect', function(){
           scope.showAnotations = true;
         });
         e.stopPropagation();
+        if(typeof scope.onTextSelect !== 'undefined'){
+          scope.onTextSelect();
+        }
       });
     }
   };

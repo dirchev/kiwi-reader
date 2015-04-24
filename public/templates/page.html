@@ -13,6 +13,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
+        <li><a ng-href="{{page.link}}" target="_blank">Отвори линк</a></li>
         <li><a ng-click="showAnotations = !showAnotations">Анотации</a></li>
         <li ng-show="page.users.length > 1"><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
         <li><a data-toggle="modal" data-target="#shareModal">Сподели</a></li>

@@ -1,4 +1,4 @@
-app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window, Bookmark){
+app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window, Bookmark, User){
   var book_id = $stateParams.id;
   var userIndex;
   var scrolled = 0;
@@ -12,6 +12,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     Bookmark.add(bookmark).success(function(data){
       if(data.success){
         toastr.success('Цитатът е запазен успешно.');
+        User.update();
         $scope.cancelAnotation();
       } else {
         toastr.error(data.message);
@@ -89,7 +90,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
           $scope.chat.push(message);
           // TODO fix this quickfix
           $timeout(function(){
-            $("#chatBox").scrollTop($("#chatBox").height());
+            $("#chatBox").scrollTop($scope.chat.length*66);
           }, 200);
         });
       });
@@ -101,7 +102,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     var data = {
       book_id : book_id,
       message: {
-        user : $rootScope.user.name,
+        user : $rootScope.user.data.name,
         content : message
       }
     };
@@ -110,7 +111,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
     $scope.chatMessage = '';
     // TODO fix this quickfix
     $timeout(function(){
-      $("#chatBox").scrollTop($("#chatBox").height());
+      $("#chatBox").scrollTop($scope.chat.length*66);
     }, 200);
   };
 

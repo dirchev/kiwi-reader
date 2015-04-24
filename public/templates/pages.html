@@ -25,19 +25,34 @@
 <div class="container-fluid">
   <div class="row clearfix">
     <div ng-repeat="page in pages | orderBy:'image':true track by $index " class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 10px;">
-      <div class="btn-group fullwidth" data-toggle="dropdown" aria-expanded="false">
-        <div style="height:150px; overflow:hidden;">
-          <img class="img-responsive fullheight" style="width:auto; margin: 0 auto;" ng-show="page.image" ng-src="{{page.image}}" alt="heading image"/>
+      <div class="thumbnail">
+        <div style="overflow:hidden; height: 230px; width:auto;">
+          <img ng-src="{{page.image}}" alt="снимка" style="max-width:100%; max-height:100%; display:block; margin:auto;">
         </div>
-        <button type="button" class="btn btn-default dropdown-toggle text-center fullwidth border-sharp" >
-          {{ page.title | limitTo: 30 }}{{page.title.length > 30 ? '...' : ''}} <span class="caret"></span>
-        </button>
+        <div class="caption">
+          <a class="btn btn-warning dropdown-toggle text-center fullwidth border-sharp" data-toggle="dropdown" aria-expanded="false">
+            {{ page.title | limitTo: 35 }}{{page.title.length > 35 ? '...' : ''}}
+           <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a ui-sref="page({id : page._id})">Отвори</a></li>
+            <!-- <li><a data-toggle="collapse" data-target="#renameBook{{page._id}}" aria-expanded="false" aria-controls="renameBook{{page.id}}">Преименувай</a></li> -->
+            <li class="divider"></li>
+            <li><a ng-click="deleteBook(page._id)">Изтрий</a></li>
+          </ul>
+          <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="renameBook{{page._id}}">
+            <form ng-submit="rename(page._id, newName)">
+              <div class="input-group" style="margin-top: 10px">
+                <input type="text" class="form-control" required ng-model="newName" placeholder="Въведи ново име">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">Преименувай</button>
+                </span>
+              </div>
+            </form>
+            <a class="btn btn-danger btn-sm pull-right" style="margin-top: 10px;" data-toggle="collapse" data-target="#renameBook{{page._id}}" aria-label="Close">Затвори</a>
+          </div>
+        </div>
       </div>
-      <ul class="dropdown-menu" role="menu">
-        <li><a ui-sref="page({id : page._id})">Отвори</a></li>
-        <li class="divider"></li>
-        <li><a ng-click="delete(page._id)">Изтрий</a></li>
-      </ul>
     </div>
   </div>
 </div>

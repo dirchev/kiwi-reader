@@ -1,4 +1,4 @@
-app.factory('Bookmark', function($http){
+app.factory('Bookmark', function($http, User){
   return {
     get: function(){
       return $http.get('/api/bookmark');
