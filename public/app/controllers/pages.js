@@ -52,7 +52,7 @@ app.controller('PagesCtrl', function($scope, $sce, Page, $window, $http){
     Page.delete(page_id).success(function(data){
       if(data.success){
         getPages();
-        toastr.success('Успешно изтрихте книга.');
+        toastr.success('Успешно изтрихте страница.');
       } else {
         toastr.error(data.message);
       }
