@@ -164,9 +164,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
     // resets all variables, linked with anotation
     $scope.cancelAnotation();
     // pushes anotation to local object
-    $scope.$apply(function(){
-      $scope.file.anotations.push(data.populatedAnotation);
-    });
+    $scope.file.anotations.push(data.populatedAnotation);
     // emits new anotation
     socket.emit('file:add:anotation', data);
 
@@ -307,8 +305,8 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
     var id = $(this).attr('id');
     var anotation_id = id.substr(9);
     var found = false;
-    for(var i in $scope.file.anotations){
-      if($scope.file.anotations[i]._id === anotation_id){
+    for(var i = 0; i < $scope.file.anotations.length; i++){
+      if($scope.file.anotations[i]._id == anotation_id){
         found = true;
         $(this).popover({
           content: $scope.file.anotations[i].title,
