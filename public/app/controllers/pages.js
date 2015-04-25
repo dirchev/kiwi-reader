@@ -37,6 +37,8 @@ app.controller('PagesCtrl', function($scope, $sce, Page, $window, $http){
     Page.create($scope.contentPreview, selectedLink).success(function(data){
       if(data.success){
         toastr.success('Успешно добавихте статия.');
+        $('#newPageModal').modal('hide');
+        $scope.step = 1;
         getPages();
       } else {
         toastr.error(data.message);

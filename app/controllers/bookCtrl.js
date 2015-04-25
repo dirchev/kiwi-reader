@@ -73,7 +73,7 @@ module.exports = function(){
       var book_id = req.params.book_id;
       Book
         .findOne({_id: book_id, 'users.user': user._id})
-        .populate('users.user', 'data.name data.email')
+        .populate('users.user', '_id data.name data.email')
         .exec(function(err, book){
           if(err){
             console.log(err);

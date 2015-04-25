@@ -65,7 +65,7 @@
       <div class="modal-body">
         <ul class="list-group">
           <li class="list-group-item active">Тази книга е достъпна от:</li>
-          <li class="list-group-item" ng-repeat="user in book.sharedUsers">{{user.name}}</li>
+          <li class="list-group-item" ng-repeat="user in book.users">{{user.user.data.name}}</li>
         </ul>
         <form ng-submit="shareBook(userToShare)" class="bottom-buffer">
           <div class="form-group" style="margin-top: 10px">

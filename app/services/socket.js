@@ -41,7 +41,7 @@ module.exports = function(io){
     socket.on('file:delete:anotation', function(data){
       anotation_index = data.anotation_index;
       file_id = data.file_id;
-      socket.to('file' + file_id).emit('file:delete:anotation', data.anotation_index);
+      socket.broadcast.to('file' + file_id).emit('file:delete:anotation', data.anotation_index);
       fileCtrl.deleteAnotation(file_id, anotation_index, function(err){
         if(err){
           socket.to('file' + file_id).emit('file:error', err);

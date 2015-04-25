@@ -63,6 +63,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $state.go('books');
     } else {
       $scope.book = data.book;
+      console.log($scope.book.users);
       for(var i in $scope.book.users){
         if($scope.book.users[i].user._id === $rootScope.user._id){
           userIndex = i;

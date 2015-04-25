@@ -92,7 +92,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     if($scope.page.anotations.length === 0){
       id = '0';
     } else {
-      id = parseInt($scope.file.anotations[$scope.file.anotations.length - 1]._id);
+      id = parseInt($scope.page.anotations[$scope.page.anotations.length - 1]._id);
       id = id + 1;
     }
     var data = {
@@ -210,10 +210,6 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
         $(this).popover('show');
         break;
       }
-    }
-    if(!found){
-      $(this).contents().unwrap();
-      $scope.file.content = $('#previewBox').html();
     }
   });
 

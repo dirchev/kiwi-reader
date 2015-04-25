@@ -164,7 +164,9 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
     // resets all variables, linked with anotation
     $scope.cancelAnotation();
     // pushes anotation to local object
-    $scope.file.anotations.push(data.populatedAnotation);
+    $scope.$apply(function(){
+      $scope.file.anotations.push(data.populatedAnotation);
+    });
     // emits new anotation
     socket.emit('file:add:anotation', data);
 
@@ -317,9 +319,16 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
       }
     }
     if(!found){
-      $(this).contents().unwrap();
-      $scope.file.content = $('#previewBox').html();
+      $(this).popover({
+        content: 'Възникна грешка. F5 и всичко е ОК.',
+        placement: 'top'
+      });
+      $(this).popover('show');
     }
+    // if(!found){
+    //   $(this).contents().unwrap();
+    //   $scope.file.content = $('#previewBox').html();
+    // }
   });
 
   // hide anotations popups
