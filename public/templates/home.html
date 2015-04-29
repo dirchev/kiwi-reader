@@ -2,19 +2,42 @@
   <div class="well well-sm">
     <h4>Здравей, {{user.data.name}}!</h4>
   </div>
-
   <div class="row">
-    <div class="col-sm-4 col-md-4 col-lg-4">
-      <!-- Last Files -->
-      <div ng-show="user.lastFiles.length" class="panel panel-primary">
-        <div class="panel-heading">
-        Последни файлове
+    <div class="col-sm-4 col-md-4 col-lg-3">
+
+      <!-- Last Books  -->
+      <div ng-show="user.lastBooks.length" class="panel panel-primary">
+        <div class="panel-heading" style="color: white;">
+        Последно прочетени книги
         </div>
         <div class="list-group">
-          <a class="list-group-item" ng-repeat="file in user.lastFiles" ui-sref="file({file_id : file._id})">{{file.title}}</a>
+          <a class="list-group-item" ng-repeat="book in user.lastBooks" ui-sref="book({id : book._id})">{{book.title}}</a>
+          <a class="list-group-item" ui-sref="books">Всички книги...</a>
+        </div>
+      </div>
+
+      <!-- Last Files -->
+      <div ng-show="user.lastFiles.length" class="panel panel-success">
+        <div class="panel-heading" style="color: white;">
+        Последно отворени файлове
+        </div>
+        <div class="list-group">
+          <a class="list-group-item" ng-repeat="file in user.lastFiles" ui-sref="file({id : file._id})">{{file.title}}</a>
           <a class="list-group-item" ui-sref="files()">Всички файлове...</a>
         </div>
       </div>
+
+      <!-- Last Pages -->
+      <div ng-show="user.lastPages.length" class="panel panel-warning">
+        <div class="panel-heading" style="color: white;">
+        Последно разгледани статии
+        </div>
+        <div class="list-group">
+          <a class="list-group-item" ng-repeat="page in user.lastPages" ui-sref="page({id : page._id})">{{page.title}}</a>
+          <a class="list-group-item" ui-sref="pages">Всички статии...</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

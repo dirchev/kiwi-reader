@@ -3,6 +3,7 @@ var Page = require('../models/page');
 var unfluff = require('unfluff');
 var request = require('request');
 var cheerio = require('cheerio');
+var lastService = require('../services/last');
 
 module.exports = function(){
   return {
@@ -26,7 +27,13 @@ module.exports = function(){
             console.log('Error while searching for user: ' + err);
             res.json({success:false, message:'Възникна грешка при взимането на информацията.'});
           } else {
-            res.json({success:true, page: page});
+            lastService.addLastPage(req.user._id, page_id, function(err){
+              if(err){
+                res.json({success:false, message: err});
+              } else {
+                res.json({success:true, page: page});
+              }
+            });
           }
         });
     },

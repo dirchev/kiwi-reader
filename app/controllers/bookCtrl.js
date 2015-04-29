@@ -5,6 +5,7 @@ var fs = require('fs');
 var epubParser = require('../services/epub-parser');
 var awsService = require('../services/aws');
 var fileStorageType = require('../../config/file_storage');
+var lastService = require('../services/last');
 
 module.exports = function(){
   return {
@@ -80,7 +81,14 @@ module.exports = function(){
           } else if (!book) {
             res.json({success:false, message: 'Книгата не беше намерена.'});
           } else {
-            res.json({success:true, book:book});
+            lastService.addLastBook(user._id, book_id, function(err){
+              if(err){
+                console.log(err);
+                res.json({success:false, message:err});
+              } else {    
+                res.json({success:true, book:book});
+              }
+            });
           }
         });
     },

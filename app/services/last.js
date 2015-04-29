@@ -40,17 +40,81 @@ module.exports = {
         }
       });
   },
-  getLastFiles: function(user_id){
+  addLastPage: function(user_id, page_id, callback){
     User
       .findById(user_id)
-      .select('lastFiles')
-      .populate('lastFiles', '_id title')
-      .exec(function(err, files){
+      .select('lastPages')
+      .exec(function(err, user){
         if(err){
-          console.log("Error while getting last files: " + err);
-          callback("Възникна грешка при взимането на последно отворените файлове.");
+          console.log("Error while getting user: " + err);
+          callback(err);
+        } else if(!user){
+          callback("User not found.");
         } else {
-          callback(null, files);
+          // if lastPages is undefined, declare it as array
+          if(typeof user.lastPages === 'undefined'){
+            user.lastPages = [];
+          }
+
+          // check if page is already in list
+          for(var i in user.lastPages){
+            if(user.lastPages[i] == page_id){
+              // if page is already in list, remove it
+              user.lastPages.splice(i, 1);
+              break;
+            }
+          }
+
+          // add page to array
+          user.lastPages.unshift(page_id);
+
+          //save user data
+          user.save(function(err){
+            if(err){
+              callback(err);
+            } else {
+              callback();
+            }
+          });
+        }
+      });
+  },
+  addLastBook: function(user_id, book_id, callback){
+    User
+      .findById(user_id)
+      .select('lastBooks')
+      .exec(function(err, user){
+        if(err){
+          console.log("Error while getting user: " + err);
+          callback(err);
+        } else if(!user){
+          callback("User not found.");
+        } else {
+          // if lastBooks is undefined, declare it as array
+          if(typeof user.lastBooks === 'undefined'){
+            user.lastBooks = [];
+          }
+
+          // check if book is already in list
+          for(var i in user.lastBooks){
+            if(user.lastBooks[i] == book_id){
+              // if book is already in list, remove it
+              user.lastBooks.splice(i, 1);
+              break;
+            }
+          }
+
+          // add book to array
+          user.lastBooks.unshift(book_id);
+
+          //save user data
+          user.save(function(err){
+            if(err){
+              callback(err);
+            } else {
+              callback();
+            }
+          });
         }
       });
   }
