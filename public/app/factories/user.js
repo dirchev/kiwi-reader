@@ -7,6 +7,9 @@ app.factory('User', function($http, $rootScope){
       $http.get('/api/user').success(function(data){
         $rootScope.user = data;
       });
+    },
+    getLastFiles: function(){
+      return $http.get('/api/user/' + $rootScope.user._id + '/lastFiles');
     }
   };
 });

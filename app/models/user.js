@@ -48,8 +48,9 @@ var userSchema = mongoose.Schema({
       }
     }],
     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    files : [{ type: Schema.Types.ObjectId, ref: 'File' }],
-    books : [{ type: Schema.Types.ObjectId, ref: 'Book' }]
+    lastFiles : [{ type:Schema.Types.ObjectId, ref: 'File'}],
+    lastPages : [{ type:Schema.Types.ObjectId, ref: 'Page'}],
+    lastBooks : [{ type:Schema.Types.ObjectId, ref: 'Book'}]
 });
 
 // methods ===========================

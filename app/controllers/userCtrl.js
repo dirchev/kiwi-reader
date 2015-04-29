@@ -5,8 +5,9 @@ module.exports = function(){
     getUserInfo: function(req, res){
       User
         .findById(req.user._id)
-        .select('_id data.name data.email friends bookmarks')
+        .select('_id data.name data.email friends bookmarks lastFiles')
         .populate('friends', 'data.name data.email')
+        .populate('lastFiles', '_id title')
         .exec(function(err, user){
           if(err){
             // TODO make this

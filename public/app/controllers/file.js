@@ -1,5 +1,5 @@
 app.controller("FileCtrl", function($scope, $stateParams, File, $rootScope,
-$location, $anchorScroll, $window, $timeout, Bookmark){
+$location, $anchorScroll, $window, $timeout, Bookmark, $state){
 
   // $scope.editMode = false;
   // $scope.selectedText = '';
@@ -22,7 +22,11 @@ $location, $anchorScroll, $window, $timeout, Bookmark){
   });
 
   File.getOne(file_id).success(function(data){
-    $scope.file = data;
+    if(!data.success){
+      toastr.error(data.message);
+      $state.go('files');
+    }
+    $scope.file = data.file;
     if(!$scope.file.content || $scope.file.content.length === 0){
       $scope.editMode = true;
     }

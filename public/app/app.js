@@ -2,11 +2,12 @@ var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload',
 
 //routes
 app.config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise("/files");
+  $urlRouterProvider.otherwise("/home");
   $stateProvider
     .state('home', {
       url: "/home",
-      templateUrl: "/templates/home.html"
+      templateUrl: "/templates/home.html",
+      controller: "HomeCtrl"
     })
     .state('books', {
       url: "/books",

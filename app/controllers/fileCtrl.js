@@ -7,6 +7,7 @@ var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 var awsService = require('../services/aws');
 var docParser = require('../services/doc-parser');
+var lastService = require('../services/last');
 
 module.exports = function(){
   return {
@@ -92,7 +93,13 @@ module.exports = function(){
           console.log(err);
           res.json({success:false, message:'Възникна проблем при намирането на файла.'});
         } else {
-          res.json(file);
+          lastService.addLastFile(req.user._id, file_id, function(err){
+            if(err){
+              res.json({success:false, message:err});
+            } else {
+              res.json({success:true, file:file});
+            }
+          });
         }
       });
     },
