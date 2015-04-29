@@ -2,7 +2,6 @@ var Book = require('../models/book');
 var User = require('../models/user');
 var path = require('path');
 var fs = require('fs');
-var rmdir = require('rimraf');
 var epubParser = require('../services/epub-parser');
 var awsService = require('../services/aws');
 var fileStorageType = require('../../config/file_storage');
@@ -136,7 +135,7 @@ module.exports = function(){
       });
     },
     share: function(req, res){
-      // Put data in variables for easy access
+      // check if user has entered email
       if(userEnteredEmail(req.user) === false){
         res.json({success:false, message: 'Не може да споделяте книги без да сте въвели email. Въведете Вашият email от меню "Профил".'});
       } else {
