@@ -101,6 +101,7 @@ module.exports = function(io){
     // =========================================================================
     // ====================== PAGES ============================================
     // =========================================================================
+    
     socket.on('open:page', function(page_id){
       // TODO check if user is logged, if he is not, check if file is public
       socket.join('page' + page_id);
@@ -140,9 +141,18 @@ module.exports = function(io){
         }
       });
     });
-
-
-
-
+    
+    socket.on('page:add:comment', function(data){
+      var anotation_index = data.anotation_index;
+      var page_id = data.page_id;
+      var comment = data.comment;
+      var populatedComment = data.populatedComment;
+      socket.broadcast.to('page' + page_id).emit('page:add:comment',  {anotation_index : anotation_index, comment:populatedComment});
+      pageCtrl.addComment(page_id, anotation_index, comment, function(err){
+        if(err){
+          socket.to('page' + page_id).emit('page:error', err);
+        }
+      });
+    });
   });
 };

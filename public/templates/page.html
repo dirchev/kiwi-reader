@@ -33,7 +33,9 @@
           </p>
         </div>
         <accordion close-others="true" class="fullheight">
-          <accordion-group class="border-sharp" ng-repeat="anotation in page.anotations" heading="{{anotation.user.data.name}}: {{anotation.title}}" is-open="openedAnotations[$index]">
+          <accordion-group 
+            class="border-sharp" ng-repeat="anotation in page.anotations"
+            heading="{{anotation.user.data.name}}:  {{ anotation.title | limitTo: 15 }}{{anotation.title.length > 15 ? '...' : ''}}" is-open="openedAnotations[$index]">
             <div class="well well-sm text-center">
               <h4>{{anotation.user.data.name}}</h4>
               <p>
@@ -41,14 +43,14 @@
               </p>
             </div>
             <hr>
-            <div ng-repeat="comment in file.anotations[$index].comments" class="well well-sm">
+            <div ng-repeat="comment in page.anotations[$index].comments" class="well well-sm">
               <h5>{{comment.user.data.name}}</h5>
               <p>
                 {{comment.content}}
               </p>
             </div>
             <div class="btn-group btn-group-sm bottom-buffer-sm">
-              <!-- <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button> -->
+              <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#commentBox{{$index}}">Напиши коментар</button>
               <button type="button" class="btn btn-danger" ng-if="anotation.user._id === user._id" ng-click="deleteAnotation(anotation._id)">Затвори анотацията</button>
             </div>
             <div id="commentBox{{$index}}" class="collapse well well-sm">

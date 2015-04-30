@@ -43,6 +43,15 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
       $scope.page.anotations.splice(anotation_index, 1);
     });
   });
+  
+  socket.on('page:add:comment', function(data){
+    $scope.$apply(function(){
+      if( typeof $scope.page.anotations[data.anotation_index].comments === 'undefined' ){
+        $scope.page.anotations[data.anotation_index].comments = [];
+      }
+      $scope.page.anotations[data.anotation_index].comments.push(data.comment);
+    });
+  });
 
 
   // TODO move this to directives
@@ -156,7 +165,34 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
   };
 
   $scope.addComment = function(anotation_index, comment_content){
-    // TODO add comment
+    // prepare comment object
+    var data = {
+      page_id : page_id,
+      anotation_index : anotation_index,
+      comment: {
+        user : $rootScope.user._id,
+        content : comment_content
+      },
+      populatedComment: {
+        user: {
+          _id: $rootScope.user._id,
+          data: { name: $rootScope.user.data.name }
+        },
+        content: comment_content
+      }
+    };
+    // check if comments var is defined
+    if( typeof $scope.page.anotations[anotation_index].comments === 'undefined'){
+      // if not - define it as array
+      $scope.page.anotations[anotation_index].comments = [];
+    }
+    
+    // push the commetn on local anotation`s comments
+    $scope.page.anotations[anotation_index].comments.push(data.populatedComment);
+    
+    //emit comment to socket
+    socket.emit('page:add:comment', data);
+    
   };
 
   $scope.addBookmark = function(){

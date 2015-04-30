@@ -190,6 +190,35 @@ module.exports = function(){
         }
       });
     }, // end of deleteAnotation
+    addComment: function(page_id, anotation_index, comment, callback){
+      Page
+        .findById(page_id)
+        .exec(function(err, page){
+          if(err){
+            console.log("Error while getting page: " + err);
+            callback(err);
+          } else {
+            // if comments are undefined
+            if(typeof page.anotations[anotation_index].comments === 'undefined'){
+              // define them as array
+              page.anotations[anotation_index].comments = [];
+            }
+            
+            // push comment to comments array
+            page.anotations[anotation_index].comments.push(comment);
+            
+            //save the page
+            page.save(function(err){
+              if(err){
+                console.log("Error while saving page: " + err);
+                callback(err);
+              } else {
+                callback();
+              }
+            });
+          }
+        });
+    }
   }; // end of return object
 }; // end of module.exports
 var textToHTML = function(text){
