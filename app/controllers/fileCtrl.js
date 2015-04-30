@@ -16,10 +16,13 @@ module.exports = function(){
         res.json(response);
       });
     },
+    // import file
     createFromFile: function(req, res){
       var filePath, fileType, fileName;
       var fileReady = false;
+      // check if there is a file uploaded
       if (req.busboy) {
+        // get info about the file
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
           if(mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
             fileType = 'docx';
@@ -40,6 +43,7 @@ module.exports = function(){
             res.json({success:false, message:'Този файл не се поддържа!'});
           }
         });
+        // when uploading finishes
         req.busboy.on('finish', function() {
           var interval = setInterval(function(){
             if(fileReady){
@@ -73,8 +77,10 @@ module.exports = function(){
         req.pipe(req.busboy);
       }
     },
+    // get all files from user
     read: function(req, res){
-      File.find({users: req.user._id}, function(err, data){
+      var user_id = req.user._id;
+      File.find({users: user_id}, function(err, data){
         if(err){
           console.log(err);
           res.json({success:false, message:'Възникна проблем при намирането на файла.'});
@@ -82,6 +88,7 @@ module.exports = function(){
         res.json(data);
       });
     },
+    // get file
     readOne: function(req, res){
       var file_id = req.params.file_id;
       File
@@ -93,6 +100,7 @@ module.exports = function(){
           console.log(err);
           res.json({success:false, message:'Възникна проблем при намирането на файла.'});
         } else {
+          // add file do last files
           lastService.addLastFile(req.user._id, file_id, function(err){
             if(err){
               res.json({success:false, message:err});
