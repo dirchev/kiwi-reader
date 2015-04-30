@@ -67,11 +67,15 @@ module.exports = function(){
                   }
                 });
               } else if (fileType === 'docx'){
-                docParser.docxToHTML(filePath).then(function(result){
-                  var fileContent = result.value;
-                  createFile(req.user, fileName, fileContent, function(response){
-                    res.json(response);
-                  });
+                docParser.docxToHTML(filePath, function(err, fileContent){
+                  if(err){
+                    console.log("Error while parsing: " + err);
+                    res.json({success:false, message: 'Възникна грешка при обработването на файла.'});
+                  } else {
+                    createFile(req.user, fileName, fileContent, function(response){
+                      res.json(response);
+                    });
+                  }
                 });
               } else {
                 res.json({success:false, message:'Този файл не е поддържан.'});
@@ -81,6 +85,19 @@ module.exports = function(){
         });
         req.pipe(req.busboy);
       }
+    },
+    createDropboxFile : function(req, res){
+      var user = req.user;
+      var fileData = req.body.file;
+      docParser.dropboxToHTML(fileData, function(err, fileContent){
+        if(err){
+          res.json({success:false, message:err});
+        } else {
+          createFile(req.user, fileData.name, fileContent, function(response){
+            res.json(response);
+          });
+        }
+      });
     },
     // get all files from user
     read: function(req, res){

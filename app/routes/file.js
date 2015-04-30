@@ -9,6 +9,10 @@ module.exports = function(app, passport, busboy){
 
   // create new blank file
   app.post('/api/file', isLoggedIn, fileCtrl.create);
+  
+  // create file from dropbox
+  app.post('/api/file/dropbox', isLoggedIn, fileCtrl.createDropboxFile);
+  
   // import file
   app.post('/api/file/txt', isLoggedIn, fileCtrl.createFromFile);
 

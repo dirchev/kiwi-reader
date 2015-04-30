@@ -9,6 +9,9 @@ app.factory('File', function($http){
     create: function(){
       return $http.post('/api/file/');
     },
+    createDropboxFile : function(file){
+      return $http.post('/api/file/dropbox', {file:file});
+    },
     delete: function(id){
       return $http.delete('/api/file/' + id);
     },

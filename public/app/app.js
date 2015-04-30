@@ -1,4 +1,4 @@
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'btford.socket-io']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule']);
 
 //routes
 app.config(function($stateProvider, $urlRouterProvider) {

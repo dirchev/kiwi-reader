@@ -1,15 +1,35 @@
-app.controller("FilesCtrl", function($scope, $http, File){
-  File.get().success(function(data){
-    $scope.files = data;
-  });
-
+app.controller("FilesCtrl", function($scope, $http, File, dropboxChooserService){
+  var getFiles = function(){
+    File.get().success(function(data){
+      $scope.files = data;
+    });
+  }
+  
+  getFiles();
+  
+  $scope.dropboxOptions = {
+    success: function(files){
+      var dropboxFile = files[0][0];
+      File.createDropboxFile(dropboxFile).success(function(data){
+        if(data.success){
+          getFiles();
+          toastr.success('Успешно създадохте файл.');
+        } else {
+          toastr.error(data.message);
+        }
+      });
+    },
+    linkType: "direct",
+    multiselect: false,
+    extensions: ['.txt', '.docx']
+  };
+  
+  
   $scope.newFile = function(){
     File.create().success(function(data){
       if(data.success){
-        File.get().success(function(data){
-          $scope.files = data;
-          toastr.success('Успешно създадохте файл.');
-        });
+        getFiles();
+        toastr.success('Успешно създадохте файл.');
       }
     });
   };
