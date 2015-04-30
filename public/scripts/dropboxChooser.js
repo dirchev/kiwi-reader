@@ -187,31 +187,5 @@ dropboxChooserModule.run( function(dropboxChooserService, DROPBOX_CONFIG) {
     document.getElementsByTagName("body")[0].appendChild(ieframe);
     dropboxChooserService._ieframe = ieframe;
   });
-})
-
- /**
-  * dropboxChooserModule directive
-  *
-  * a dropboxchooser element to use in your markup
-  * Use this markup: <dropbox-chooser local-model="yourLocalModel"></dropbox-chooser>
-  * @author Kevin Kirchner
-  **/
-  // <dropbox-chooser dropbox-options="options"></dropbox-chooser>
-dropboxChooserModule.directive('dropboxChooser', function (dropboxChooserService) {
-  return {
-    priority: 1,
-    restrict:'E',
-    transclude:true,
-    scope: { dropboxOptions: '='},
-    template:'<div class="dropbox-chooser"><input type="dropbox-chooser" name="selected-file" style="visibility: hidden;" ng-show="false" /></div>',
-    link: function postLink($scope, $element, $attrs) {
-      $scope.inputEl = $element.find('input')[0];
-      $scope.btnEl = $element[0];
-
-      $element.bind("click", function(){
-        dropboxChooserService.choose($scope.dropboxOptions);
-      });
-    },
-    replace:true
-  };
 });
+

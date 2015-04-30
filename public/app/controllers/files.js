@@ -7,6 +7,10 @@ app.controller("FilesCtrl", function($scope, $http, File, dropboxChooserService)
   
   getFiles();
   
+  $scope.chooseFromDropbox = function(){
+    dropboxChooserService.choose($scope.dropboxOptions);
+  }
+  
   $scope.dropboxOptions = {
     success: function(files){
       var dropboxFile = files[0][0];
