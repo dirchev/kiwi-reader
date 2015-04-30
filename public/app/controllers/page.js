@@ -200,6 +200,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     Bookmark.add(bookmark).success(function(data){
       if(data.success){
         toastr.success('Цитатът е запазен успешно.');
+        User.update();
         $scope.cancelAnotation();
       } else {
         toastr.error(data.message);
