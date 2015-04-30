@@ -132,7 +132,7 @@ module.exports = function(){
     },
     share: function(req, res){
       // Put data in variables for easy access
-      if(userEnteredEmail(req.user) === false){
+      if(userEnteredEmail(req.user) == false){
         res.json({success:false, message: 'Не може да споделяте файлове без да сте въвели email. Въведете Вашият email от меню "Профил".'});
       } else {
         var file_id = req.params.file_id;
@@ -227,6 +227,7 @@ module.exports = function(){
           }
         });
     }, // end of addAnotation
+    
     // adds comment to a specific anotation in file
     addComment: function(file_id, anotation_index, comment, callback){
       // search for file with specific id, where the user is from the file users
@@ -270,6 +271,8 @@ module.exports = function(){
         }
       });
     }, // end of deleteAnotation
+    
+    // rename file
     rename: function(req, res){
       var file_id = req.params.file_id;
       var newName = req.body.name;
@@ -284,7 +287,8 @@ module.exports = function(){
         }
       });
     }, // end of rename
-
+    
+    // make file public
     public: function(req, res){
       //gets the id of the file
       var file_id = req.params.file_id;
@@ -316,7 +320,7 @@ module.exports = function(){
           });
         }
       });
-    }
+    } // end of public
 
   }; // end of return object
 }; // end of module.exports
@@ -347,6 +351,7 @@ var saveFile = function(file, path, cb){
   });
 };
 
+// check if  user has entered his email
 var userEnteredEmail = function(data){
   User.findById(data._id).exec(function(err, user){
     if(err || !user){
