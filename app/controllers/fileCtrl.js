@@ -55,9 +55,14 @@ module.exports = function(){
                   if(err){
                     res.json({success:false, message:'Грешка при запазването на файла.'});
                   } else {
-                    fileContent = fileContent.replace(/\r?\n/g, '<br />');
-                    createFile(req.user, null, fileContent, function(response){
-                      res.json(response);
+                    docParser.txtToHTML(filePath, function(err, fileContent){
+                      if(err){
+                        res.json({success:false, message:err});
+                      } else {
+                        createFile(req.user, fileName, fileContent, function(response){
+                          res.json(response);
+                        });
+                      }
                     });
                   }
                 });

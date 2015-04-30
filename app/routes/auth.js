@@ -80,6 +80,8 @@ module.exports = function(app, passport){
   });
 
 };
+
+
 function redirectIfLogged(req, res, next){
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated())
