@@ -127,5 +127,15 @@ module.exports = {
         callback(err);
       }
     );
+  },
+  removeLastBook: function(user_id, book_id, callback){
+    User.update(
+      {_id: user_id},
+      { $pull: {'lastBooks' : book_id}},
+      {},
+      function(err){
+        callback(err);
+      }
+    );
   }
 };

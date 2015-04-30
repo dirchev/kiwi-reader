@@ -117,11 +117,16 @@ module.exports = function(){
                       console.log(err);
                       res.json({success:false, message: 'Грешка при изтриването на книгата.'});
                     }
-                    res.json({success:true});
                   });
-                } else {
-                  res.json({success:true});
                 }
+                lastService.removeLastBook(user._id, book_id, function(err){
+                  if(err){
+                    console.log("Error while removing book from lastBooks: " + err);
+                    res.json({success:false, message:"Възникна грешка при обновяването на информацията."});
+                  } else {
+                    res.json({success:true});
+                  }
+                });
               }
             });
           } else {
@@ -135,7 +140,14 @@ module.exports = function(){
                 console.log(err);
                 res.json({success:false, message: 'Грешка при изтриването на книгата.'});
               } else {
-                res.json({success:true});
+                lastService.removeLastBook(user._id, book_id, function(err){
+                  if(err){
+                    console.log("Error while removing book from lastBooks: " + err);
+                    res.json({success:false, message:"Възникна грешка при обновяването на информацията."});
+                  } else {
+                    res.json({success:true});
+                  }
+                });
               }
             });
           }
