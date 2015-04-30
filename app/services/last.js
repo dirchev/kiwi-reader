@@ -117,5 +117,15 @@ module.exports = {
           });
         }
       });
+  },
+  removeLastFile: function(user_id, file_id, callback){
+    User.update(
+      {_id: user_id},
+      { $pull: {'lastFiles' : file_id}},
+      {},
+      function(err){
+        callback(err);
+      }
+    );
   }
 };

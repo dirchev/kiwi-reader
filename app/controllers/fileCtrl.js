@@ -116,21 +116,22 @@ module.exports = function(){
       File
         .findOne({_id : file_id , users: req.user._id})
         .populate('users anotations.user anotations.comments.user', 'data.name data.email')
-        .exec(function(err, data){
-        var file = data;
-        if(err){
-          console.log(err);
-          res.json({success:false, message:'Възникна проблем при намирането на файла.'});
-        } else {
-          // add file do last files
-          lastService.addLastFile(req.user._id, file_id, function(err){
-            if(err){
-              res.json({success:false, message:err});
-            } else {
-              res.json({success:true, file:file});
-            }
-          });
-        }
+        .exec(function(err, file){
+          if(err){
+            console.log(err);
+            res.json({success:false, message:'Възникна проблем при намирането на файла.'});
+          } else if (!file) {
+            res.json({success:false, message:"Файлът не е намерен."});
+          } else {
+            // add file do last files
+            lastService.addLastFile(req.user._id, file_id, function(err){
+              if(err){
+                res.json({success:false, message:err});
+              } else {
+                res.json({success:true, file:file});
+              }
+            });
+          }
       });
     },
     delete: function(req, res){
@@ -138,16 +139,33 @@ module.exports = function(){
       File.findOne({_id: file_id, users: req.user._id}, function(err, file){
         if(file.users.length === 1){
           File.remove({_id: file_id, users: req.user._id}, function(err, file){
-            if(err)
-              console.log(err);
-            console.log('Deleting file: '+ file);
-            res.json({success:true});
+            if(err){
+              console.log("Error while deleting file: " + err);
+              res.json({success:false, message: "Възникна грешак при изтриването на файла."}); 
+            }
+            lastService.removeLastFile(req.user._id, file_id, function(err){
+              if(err){
+                console.log("Error while ramoving file from Last Files");
+                res.json({success:false, message: "Възникна грешка при изтриването на файла."});
+              } else {
+                res.json({success:true});
+              }
+            });
           });
         } else {
-          File.update({_id: file_id, users: req.user._id}, {$pull:{users:req.user._id}}, {upsert:true}, function(err){
-            if(err)
-              console.log(err);
-            res.json({success:true});
+          File.update({_id: file_id, users: req.user._id}, {$pull:{users:req.user._id}}, {upsert:false}, function(err){
+            if(err){
+              console.log("Error while deleting file: " + err);
+              res.json({success:false, message: "Възникна грешак при изтриването на файла."}); 
+            }
+            lastService.removeLastFile(req.user._id, file_id, function(err){
+              if(err){
+                console.log("Error while ramoving file from Last Files");
+                res.json({success:false, message: "Възникна грешка при изтриването на файла."});
+              } else {
+                res.json({success:true});
+              }
+            });
           });
         }
       });
