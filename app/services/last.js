@@ -137,5 +137,15 @@ module.exports = {
         callback(err);
       }
     );
+  },
+  removeLastPage: function(user_id, page_id, callback){
+    User.update(
+      {_id: user_id},
+      { $pull: {'lastPages' : page_id}},
+      {},
+      function(err){
+        callback(err);
+      }
+    );
   }
 };

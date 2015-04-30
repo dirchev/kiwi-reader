@@ -63,10 +63,18 @@ module.exports = function(){
       Page.findOne({_id: page_id, users: req.user._id}, function(err, page){
         if(page.users.length === 1){
           Page.remove({_id: page_id, users: req.user._id}, function(err, page){
-            if(err)
+            if(err){
               console.log(err);
-            console.log('Deleting page: '+ page);
-            res.json({success:true});
+              res.json({success:false, message:"Грешка при изтриването на статията."});
+            }
+            lastService.removeLastPage(req.user._id, page_id, function(err){
+              if(err){
+                console.log("Error while removing book from lastPages: " + err);
+                res.json({success:false, message:"Възникна грешка при обновяването на информацията."});
+              } else {
+                res.json({success:true});
+              }
+            });
           });
         } else {
           Page.update(
@@ -74,9 +82,19 @@ module.exports = function(){
             {$pull:{users:req.user._id}},
             {upsert:false},
             function(err){
-              if(err)
+              if(err){
                 console.log(err);
-              res.json({success:true});
+                res.json({success:false, message:"Грешка при изтриването на статията."});
+              } else {
+                lastService.removeLastPage(req.user._id, page_id, function(err){
+                  if(err){
+                    console.log("Error while removing book from lastPages: " + err);
+                    res.json({success:false, message:"Възникна грешка при обновяването на информацията."});
+                  } else {
+                    res.json({success:true});
+                  }
+                });
+              }
             }
           );
         }
