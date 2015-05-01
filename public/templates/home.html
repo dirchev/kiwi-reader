@@ -4,61 +4,57 @@
   </div>
   <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-3">
-
-      <!-- Last Books  -->
+      <!-- Last Books -->
       <div ng-show="user.lastBooks.length" class="panel panel-primary">
-        <div class="panel-heading" style="color: white;">
-        Последно прочетени книги
-        </div>
+        <div class="panel-heading" style="color: white;">Последно прочетени книги</div>
         <div class="list-group">
           <a class="list-group-item" ng-repeat="book in user.lastBooks" ui-sref="book({id : book._id})">{{book.title}}</a>
           <a class="list-group-item" ui-sref="books">Всички книги...</a>
         </div>
       </div>
-
       <!-- Last Files -->
       <div ng-show="user.lastFiles.length" class="panel panel-success">
-        <div class="panel-heading" style="color: white;">
-        Последно отворени файлове
-        </div>
+        <div class="panel-heading" style="color: white;">Последно отворени файлове</div>
         <div class="list-group">
           <a class="list-group-item" ng-repeat="file in user.lastFiles" ui-sref="file({id : file._id})">{{file.title}}</a>
           <a class="list-group-item" ui-sref="files()">Всички файлове...</a>
         </div>
       </div>
-
       <!-- Last Pages -->
       <div ng-show="user.lastPages.length" class="panel panel-warning">
-        <div class="panel-heading" style="color: white;">
-        Последно разгледани статии
-        </div>
+        <div class="panel-heading" style="color: white;">Последно разгледани статии</div>
         <div class="list-group">
           <a class="list-group-item" ng-repeat="page in user.lastPages" ui-sref="page({id : page._id})">{{page.title}}</a>
           <a class="list-group-item" ui-sref="pages">Всички статии...</a>
         </div>
       </div>
-
     </div>
     <div class="col-sm-8 col-lg-9">
-     <div class="well well-sm clearfix">
-       <form ng-submit="search(searchPhrase)">
-         <h4>Търси</h4>
+      <!--Search Field-->
+      <div class="well well-sm clearfix">
+        <form ng-submit="search(searchPhrase)">
+          <h4>Търси</h4>
           <div class="form-group">
             <input type="text" class="form-control" ng-model="searchPhrase" placeholder="въведете дума или фраза">
           </div>
           <button type="submit" class="btn btn-primary pull-right">Търси</button>
-       </form>
-     </div>
-     <div ng-show="searchResult">
-       <h5>Файлове</h5>
-       <div class="panel panel-default" ng-repeat="file in searchResult.files.results | orderBy:file.score">
-         <div class="panel-body">
-           <h6>{{file.obj.title}}</h6>
-           <a class="btn btn-primary btn-sm pull-right" ui-sref="file({id, file.obj._id})">Отвори</a>
-         </div>
-       </div>
-     </div>
-     {{searchResult}}
+        </form>
+      </div>
+      <!--Search Result-->
+      <div ng-show="searchResult">
+        <!--Files-->
+        <div ng-show="searchResult.files.results.length">
+          <h5>Файлове</h5>
+          <div class="list-group">
+            <a ui-sref="file({id: file.obj._id})" class="list-group-item" ng-repeat="file in searchResult.files.results | orderBy:file.score">{{file.obj.title}}</a>
+          </div>
+        </div>
+        <!--Pages-->
+        <div ng-show="searchResult.pages.results.length">
+          <h5>Статии</h5>
+          <div class="list-group">
+            <a ui-sref="page({id: page.obj._id})" class="list-group-item" ng-repeat="page in searchResult.pages.results | orderBy:page.score">{{page.obj.title}}</a>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>

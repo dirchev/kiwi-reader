@@ -9,7 +9,8 @@ module.exports = {
 	all : function(req, res) {
 		var search = req.params.search;
 		async.parallel({
-			files: searchInFiles.bind(null, search)
+			files: searchInFiles.bind(null, search),
+			pages: searchInPages.bind(null, search)
 		}, function(err, result){
 			if(err){
 				console.log("Error while searching: " + err);
@@ -17,12 +18,18 @@ module.exports = {
 			} else {
 				res.json({success:true, result:result});
 			}
-		})
+		});
 	}
 };
 
 var searchInFiles = function(search, callback){
 	File.textSearch(search, {project:'_id title'},function(err, result){
+		callback(err, result);
+	});
+};
+
+var searchInPages = function(search, callback){
+	Page.textSearch(search, {project:'_id title'},function(err, result){
 		callback(err, result);
 	});
 };
