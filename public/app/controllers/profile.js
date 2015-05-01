@@ -1,7 +1,5 @@
 app.controller('ProfileCtrl', function($rootScope, $scope, $http){
 
-  // TODO change password
-
   $scope.updateUser = function(user){
     var userData = {
       name : user.data.name,

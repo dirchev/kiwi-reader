@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var UserSchema = require('./user');
+var textSearch = require('mongoose-text-search');
 
 // define the schema for our user model
 var fileSchema = mongoose.Schema({
@@ -36,5 +37,8 @@ var fileSchema = mongoose.Schema({
     }]
   }]
 });
+
+fileSchema.plugin(textSearch);
+fileSchema.index({ title: "text", content: "text"});
 
 module.exports = mongoose.model('File', fileSchema);

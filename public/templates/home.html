@@ -39,5 +39,26 @@
       </div>
 
     </div>
+    <div class="col-sm-8 col-lg-9">
+     <div class="well well-sm clearfix">
+       <form ng-submit="search(searchPhrase)">
+         <h4>Търси</h4>
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="searchPhrase" placeholder="въведете дума или фраза">
+          </div>
+          <button type="submit" class="btn btn-primary pull-right">Търси</button>
+       </form>
+     </div>
+     <div ng-show="searchResult">
+       <h5>Файлове</h5>
+       <div class="panel panel-default" ng-repeat="file in searchResult.files.results | orderBy:file.score">
+         <div class="panel-body">
+           <h6>{{file.obj.title}}</h6>
+           <a class="btn btn-primary btn-sm pull-right" ui-sref="file({id, file.obj._id})">Отвори</a>
+         </div>
+       </div>
+     </div>
+     {{searchResult}}
+    </div>
   </div>
 </div>
