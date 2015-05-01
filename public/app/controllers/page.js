@@ -1,4 +1,4 @@
-app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope, $timeout, $anchorScroll, $location){
+app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $window, $rootScope, $timeout, $anchorScroll, $location, User){
 
   var page_id = $stateParams.id;
   $scope.chat = [];
@@ -14,7 +14,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
   };
 
   // Socket
-  socket = $window.io();
+  var socket = $window.io();
   socket.emit('open:page', page_id);
 
   socket.on('page:update:content', function(content){

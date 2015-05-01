@@ -12,9 +12,12 @@ module.exports = function(){
         .populate('lastBooks', '_id title')
         .exec(function(err, user){
           if(err){
-            // TODO make this
+            console.log("Error while getting user data: " + err);
+            res.json({succcess:false, message: "Грешка при вземането на инфоермацията"});
+          } else if(!user){
+            res.json({succcess:false, message: "Потребителят не беше намерен."});
           } else {
-            res.json(user);
+            res.json({success:true, user:user});
           }
         });
     }, // end of getUserInfo

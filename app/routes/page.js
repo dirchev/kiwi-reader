@@ -19,6 +19,9 @@ module.exports = function(app, passport, busboy){
 
   // share page
   app.post('/api/page/:page_id/share', isLoggedIn, pageCtrl.share);
+  
+  // rename file
+  app.post('/api/page/:page_id/rename', isLoggedIn, pageCtrl.rename);
 };
 
 // route middleware to make sure a user is logged in

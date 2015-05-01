@@ -5,7 +5,11 @@ app.factory('User', function($http, $rootScope){
     },
     update: function(){
       $http.get('/api/user').success(function(data){
-        $rootScope.user = data;
+        if(data.success){
+          $rootScope.user = data.user;
+        } else {
+          toastr.error(data.message);
+        }
       });
     },
     getLastFiles: function(){

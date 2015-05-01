@@ -1,13 +1,9 @@
 app.controller("FileCtrl", function($scope, $stateParams, File, $rootScope,
 $location, $anchorScroll, $window, $timeout, Bookmark, $state){
 
-  // $scope.editMode = false;
-  // $scope.selectedText = '';
-  // $scope.comment = '';
-  // $scope.anotationBox = false;
   $scope.chat = [];
   $scope.openedAnotations = [];
-  var socket;
+  var socket = $window.io();
   var file_id = $stateParams.id;
 
   // TODO move this to directives
@@ -42,8 +38,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
         }
       }
     },true);
-
-    socket = $window.io();
     socket.emit('open:file', file_id);
     // TODO show all online users
 

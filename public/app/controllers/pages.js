@@ -47,7 +47,14 @@ app.controller('PagesCtrl', function($scope, $sce, Page, $window, $http){
   };
 
   $scope.rename = function(page_id, name){
-    // TODO rename page
+    Page.rename(page_id, name).success(function(data){
+      if(data.success){
+        toastr.success('Статията е преименувана успешно.');
+        getPages();
+      } else {
+        toastr.error(data.message);
+      }
+    });
   };
 
   $scope.delete = function(page_id){

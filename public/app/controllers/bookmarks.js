@@ -1,5 +1,4 @@
 app.controller('BookmarksCtrl', function($scope, $rootScope, Bookmark, User){
-
   $scope.deleteBookmark = function(bookmark_index){
     Bookmark.delete(bookmark_index).success(function(data){
       if(data.success){

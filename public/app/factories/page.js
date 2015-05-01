@@ -19,9 +19,8 @@ app.factory('Page', function($http){
     share: function(page_id, user_email){
       return $http.post('/api/page/' + page_id + '/share', {user_email:user_email});
     },
-    // TODO rename pages
-    // rename: function(file_id, name){
-    //   return $http.post('/api/file/' + file_id + '/rename', {name:name});
-    // },
+    rename: function(page_id, name){
+     return $http.post('/api/page/' + page_id + '/rename', {name:name});
+    },
   };
 });

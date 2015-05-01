@@ -58,6 +58,24 @@ module.exports = function(){
         });
       });
     },
+    rename: function(req, res) {
+      var page_id = req.params.page_id;
+      var newName = req.body.name;
+      var user = req.user;
+      Page.update(
+        {_id: page_id, 'users' : user._id},
+        {title:newName},
+        {},
+        function(err){
+          if(err){
+            console.log("Error while renaming page: " + err);
+            res.json({success:false, message:"Грешка при обновяването на данните."}); 
+          } else {
+            res.json({success:true});
+          }
+        }
+      )
+    },
     delete: function(req, res){
       var page_id = req.params.page_id;
       Page.findOne({_id: page_id, users: req.user._id}, function(err, page){

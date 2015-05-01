@@ -75,6 +75,10 @@ app.filter('trustAsResourceUrl', ['$sce', function($sce) {
 
 app.run(function($rootScope, $http){
   $http.get('/api/user').success(function(data){
-    $rootScope.user = data;
+    if(data.success){
+      $rootScope.user = data.user;
+    } else {
+      toastr.error(data.message);
+    }
   });
 });

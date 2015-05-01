@@ -36,11 +36,11 @@
           </a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="page({id : page._id})">Отвори</a></li>
-            <!-- <li><a data-toggle="collapse" data-target="#renameBook{{page._id}}" aria-expanded="false" aria-controls="renameBook{{page.id}}">Преименувай</a></li> -->
+            <li><a data-toggle="collapse" data-target="#renamePage{{page._id}}" aria-expanded="false" aria-controls="renamePage{{page.id}}">Преименувай</a></li>
             <li class="divider"></li>
             <li><a ng-click="delete(page._id)">Изтрий</a></li>
           </ul>
-          <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="renameBook{{page._id}}">
+          <div class="collapse well well-sm" style="margin-top: 10px; overflow: hidden;" id="renamePage{{page._id}}">
             <form ng-submit="rename(page._id, newName)">
               <div class="input-group" style="margin-top: 10px">
                 <input type="text" class="form-control" required ng-model="newName" placeholder="Въведи ново име">
