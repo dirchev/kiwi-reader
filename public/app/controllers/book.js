@@ -1,10 +1,12 @@
-app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window, Bookmark, User){
+/// <reference path="../../../typings/jquery/jquery.d.ts"/>
+/* global toastr */
+app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $rootScope, Friend, $window, Bookmark, User, $timeout){
   var book_id = $stateParams.id;
   var userIndex;
-  var scrolled = 0;
   $scope.scrolled = 0;
   $scope.selectedText = '';
   $scope.chat = [];
+  var socket = $window.io();
 
 
   $scope.addBookmark = function(){
@@ -80,8 +82,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       var pageId = $scope.book.opf.spines[$scope.book.users[userIndex].position];
       renderPage(pageId);
 
-
-      socket = $window.io();
       socket.emit('open:book', book_id);
       // TODO show all online users
 
@@ -166,7 +166,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
           for(var j = 0; j<$scope.book.opf.spines.length; j++){
             if($scope.book.opf.spines[j] === i){
               $scope.book.users[userIndex].position = j;
-              var pageId = $scope.book.opf.spines[j];
               updateUserPosition();
               break;
             }

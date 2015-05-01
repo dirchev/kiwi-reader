@@ -1,3 +1,6 @@
+/* global app */
+/// <reference path="../../../typings/jquery/jquery.d.ts"/>
+/* global toastr */
 app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserService){
 
   var getBooks = function(){
@@ -12,7 +15,7 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserSe
   
   $scope.chooseFromDropbox = function(){
     dropboxChooserService.choose($scope.dropboxOptions);
-  }
+  };
   
   $scope.dropboxOptions = {
     success: function(books){

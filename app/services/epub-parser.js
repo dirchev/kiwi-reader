@@ -60,7 +60,7 @@ var getOpf = function(folderPath, cb){
   var container = fs.readFileSync(path.join(folderPath + '/META-INF/container.xml'), 'utf8');
   // convert xml to json
   xml_json.parseString(container, function(err, data){
-    container_content = data;
+    var container_content = data;
     var rootFilePath = container_content.container.rootfiles[0].rootfile[0].$['full-path'];
     getContentPath(rootFilePath);
     rootFilePath = folderPath + '/' + rootFilePath;

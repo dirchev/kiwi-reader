@@ -1,3 +1,4 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule']);
 
 //routes

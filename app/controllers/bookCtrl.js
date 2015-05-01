@@ -1,3 +1,4 @@
+/// <reference path="../../typings/node/node.d.ts"/>
 var Book = require('../models/book');
 var User = require('../models/user');
 var path = require('path');
@@ -255,7 +256,7 @@ module.exports = function(){
         }
       });
     }, // end of rename
-    addAnotation: function(book_id, anotation, cb){
+    addAnotation: function(book_id, anotation, callback){
       Book.update(
         {_id : book_id},
         {$push: {'anotations':anotation}},
