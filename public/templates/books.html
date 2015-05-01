@@ -53,19 +53,25 @@
           <h4 class="modal-title" id="">Вмъкни книга</h4>
         </div>
         <div class="modal-body">
-
-          <form ng-upload="newBook(content)" action="/api/book" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="">Файл</label>
-              <input class="btn btn-default" type="file" name="bookFile">
-              <p class="help-block">Избери .epub файл</p>
+          <div class="row">
+            <div class="col-sm-6">
+              <form ng-upload="newBook(content)" action="/api/book" enctype="multipart/form-data">
+                <h5>Избери файл</h5>
+                <div class="form-group">
+                  <input class="btn btn-default" type="file" name="bookFile">
+                  <p class="help-block">Избери .epub файл</p>
+                </div>
+                <button id="createDocFile" type="submit" class="btn btn-primary"
+                 upload-submit data-dismiss="modal">
+                  Създай
+                </button>
+              </form>
             </div>
-            <button id="createDocFile" type="submit" class="btn btn-primary"
-             upload-submit data-dismiss="modal">
-              Създай
-            </button>
-          </form>
-
+            <div class="col-sm-6">
+              <h5>Или вземи от Dropbox</h5>
+              <a class="btn btn-primary" ng-click="chooseFromDropbox()">Избор на файл</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

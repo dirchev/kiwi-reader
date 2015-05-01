@@ -1,4 +1,4 @@
-app.controller('BooksCtrl', function($scope, $http, $sce, Book){
+app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserService){
 
   var getBooks = function(){
     Book.get().success(function(data){
@@ -8,6 +8,28 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book){
         toastr.error(data.message);
       }
     });
+  };
+  
+  $scope.chooseFromDropbox = function(){
+    dropboxChooserService.choose($scope.dropboxOptions);
+  }
+  
+  $scope.dropboxOptions = {
+    success: function(books){
+      var dropboxBook = books[0][0];
+      Book.createDropboxBook(dropboxBook).success(function(data){
+        if(data.success){
+          toastr.success('Успешно добавихте нова книга.');
+          getBooks();
+        } else {
+          toastr.error(data.message);
+        }
+        $('#newBookModal').modal('hide');
+      });
+    },
+    linkType: "direct",
+    multiselect: false,
+    extensions: ['.txt', '.docx']
   };
 
   $scope.newBook = function(data){

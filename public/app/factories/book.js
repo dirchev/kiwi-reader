@@ -9,6 +9,9 @@ app.factory('Book', function($http){
     create: function(){
       return $http.post('/api/book');
     },
+    createDropboxBook: function(book){
+      return $http.post('/api/book/dropbox', {book:book});
+    },
     delete: function(id){
       return $http.delete('/api/book/' + id);
     },

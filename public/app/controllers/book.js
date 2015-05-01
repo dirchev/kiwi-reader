@@ -63,7 +63,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       $state.go('books');
     } else {
       $scope.book = data.book;
-      console.log($scope.book.users);
       for(var i in $scope.book.users){
         if($scope.book.users[i].user._id === $rootScope.user._id){
           userIndex = i;
@@ -76,9 +75,9 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
         var r = /[^\/]*$/;
         var tocFolder = tocFileHref.replace(r, ''); // '/this/is/a/folder/'
         $scope.toc = $scope.toc.replace(/href="/g, 'link-location="'+tocFolder);
+        setElementsHeight();
       });
       var pageId = $scope.book.opf.spines[$scope.book.users[userIndex].position];
-      console.log(pageId);
       renderPage(pageId);
 
 
@@ -143,10 +142,8 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   var renderPage = function(id){
     var pageHref = $scope.book.opf.manifest[id].href;
-    console.log(pageHref);
     var r = /[^\/]*$/;
     var pageFolder = pageHref.replace(r, ''); // '/this/is/a/folder/';
-    console.log('getting page content');
     // TODO make service, that parses the book
     $http.get(pageHref).success(function(data){
       $scope.page = data.replace(/src="/g, 'style="max-width:100%" src="'+pageFolder);
@@ -216,7 +213,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   var scrolledToBottom = function(){
     var elem = $('#page-preview');
-    return elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight();
+    return elem[0].scrollHeight - parseInt(elem.scrollTop()) - elem.outerHeight() <= 0;
   };
 
   var scrolledToTop = function(){

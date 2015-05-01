@@ -8,6 +8,9 @@ module.exports = function(app, passport){
 
   // create new book
   app.post('/api/book', isLoggedIn, bookCtrl.create);
+  
+  // create new book
+  app.post('/api/book/dropbox', isLoggedIn, bookCtrl.createDrobpoxBook);
 
   // get book
   app.get('/api/book/:book_id', isLoggedIn, bookCtrl.readOne);

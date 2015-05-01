@@ -5,6 +5,7 @@ var fstream = require('fstream');
 var xml_json = require('xml2js');
 var awsService = require('./aws');
 var fileStorageType = require('../../config/file_storage');
+var request = require('request');
 var folderPath;
 var bookId;
 var contentPath;
@@ -40,6 +41,17 @@ module.exports = {
         cb(result);
       });
     });
+  },
+  uploadDropbox : function(bookData, callback){
+    var bookPath = __dirname + '/../../uploads/books/' + bookData.name;
+    var r = request(bookData.link);
+    r.on('response', function(response){
+      response
+        .pipe(fs.createWriteStream(bookPath))
+        .on('close', function(){
+          callback(null, bookPath);
+        });
+    });
   }
 };
 
@@ -63,7 +75,6 @@ var getContentPath = function(rootFilePath){
     contentPath =  '.';
     return;
   } else {
-    console.log(a);
     a = a.split('/');
     if(typeof a[0] === 'undefined'){
       contentPath =  '.';

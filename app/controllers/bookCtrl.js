@@ -55,6 +55,37 @@ module.exports = function(){
         req.pipe(req.busboy);
       }
     },
+    createDrobpoxBook : function(req, res){
+      var user = req.user;
+      var bookData = req.body.book;
+      epubParser.uploadDropbox(bookData, function(err, epubPath){
+        var book = new Book();
+        book.title = bookData.name;
+        book.users = [];
+        book.users.push({user:user._id, position:'0'});
+        book.save(function(err, book){
+          if(err){
+            console.log("Error while saving book: " + err);
+            res.json({success:false, message:"Проблем при записването на книгата."});
+          } else {
+            var outputPath = path.join(__dirname + '/../../uploads/extracted/', book.id);
+            epubParser.unzip(epubPath, outputPath, function(){
+                var folderPath = path.join(__dirname + '/../../uploads/extracted/', book._id.toString());
+                epubParser.getContent(folderPath, book._id.toString(), function(opf){
+                  book.opf = opf;
+                  book.save(function(err, book){
+                    if(err){
+                      console.log(err);
+                      res.json({success:false, message: 'Грешка при създаването на нова книга.'});
+                    }
+                    res.send({success:true, book: book});
+                  });
+                });
+              });
+          }
+        });
+      });
+    },
     read: function(req, res){
       var user = req.user;
       Book
