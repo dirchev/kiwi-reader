@@ -26,7 +26,8 @@
     "angular-bootstrap": "~0.12.0",
     "ngUpload": "~0.5.14",
     "angular-socket-io": "~0.7.0",
-    "ng-ckeditor": "~0.2.1"
+    "ng-ckeditor": "~0.2.1",
+    "angular-loading-bar": "~0.7.1"
   },
   "resolutions": {
     "angular": ">=1.0.4",

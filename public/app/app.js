@@ -1,5 +1,5 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule', 'angular-loading-bar']);
 
 //routes
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -71,6 +71,10 @@ app.filter('trustAsResourceUrl', ['$sce', function($sce) {
     return function(val) {
         return $sce.trustAsResourceUrl(val);
     };
+}]);
+
+app.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeSpinner = false;
 }]);
 
 app.run(function($rootScope, $http){
