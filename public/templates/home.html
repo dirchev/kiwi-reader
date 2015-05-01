@@ -42,16 +42,23 @@
       </div>
       <!--Search Result-->
       <div ng-show="searchResult">
+        <!--Books-->
+        <div class="panel panel-primary" ng-show="searchResult.books.results.length">
+          <div class="panel-heading" style="color:white">Намерени книги (по заглавие)</div>
+          <div class="list-group">
+            <a ui-sref="book({id: book.obj._id})" class="list-group-item" ng-repeat="book in searchResult.books.results | orderBy:page.score">{{book.obj.title}}</a>
+          </div>
+        </div>
         <!--Files-->
-        <div ng-show="searchResult.files.results.length">
-          <h5>Файлове</h5>
+        <div ng-show="searchResult.files.results.length" class="panel panel-success">
+          <div class="panel-heading" style="color:white;">Намерени файлове</div>
           <div class="list-group">
             <a ui-sref="file({id: file.obj._id})" class="list-group-item" ng-repeat="file in searchResult.files.results | orderBy:file.score">{{file.obj.title}}</a>
           </div>
         </div>
         <!--Pages-->
-        <div ng-show="searchResult.pages.results.length">
-          <h5>Статии</h5>
+        <div class="panel panel-warning" ng-show="searchResult.pages.results.length">
+          <div class="panel-heading" style="color:white">Намерени статии</div>
           <div class="list-group">
             <a ui-sref="page({id: page.obj._id})" class="list-group-item" ng-repeat="page in searchResult.pages.results | orderBy:page.score">{{page.obj.title}}</a>
           </div>

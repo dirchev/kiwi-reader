@@ -2,7 +2,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-// defina the schema for our user model
+var textSearch = require('mongoose-text-search');
+
+// define the schema for our user model
 var bookSchema = mongoose.Schema({
   title: String,
   users: [{
@@ -30,4 +32,6 @@ var bookSchema = mongoose.Schema({
   }]
 });
 
+bookSchema.plugin(textSearch);
+bookSchema.index({ title: "text"});
 module.exports = mongoose.model('Book', bookSchema);
