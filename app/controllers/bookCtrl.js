@@ -90,7 +90,7 @@ module.exports = function(){
     read: function(req, res){
       var user = req.user;
       Book
-        .find({'users.user': user.id})
+        .find({'users.user': user._id})
         .exec(function(err, books){
           if(err){
             console.log(err);

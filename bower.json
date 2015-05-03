@@ -27,7 +27,9 @@
     "ngUpload": "~0.5.14",
     "angular-socket-io": "~0.7.0",
     "ng-ckeditor": "~0.2.1",
-    "angular-loading-bar": "~0.7.1"
+    "angular-loading-bar": "~0.7.1",
+    "angular-jwt": "~0.0.7",
+    "angular-local-storage": "~0.1.5"
   },
   "resolutions": {
     "angular": ">=1.0.4",

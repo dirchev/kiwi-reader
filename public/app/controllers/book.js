@@ -62,7 +62,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   Book.getOne(book_id).success(function(data){
     if(!data.success){
       toastr.error(data.message);
-      $state.go('books');
+      $state.go('app.books');
     } else {
       $scope.book = data.book;
       for(var i in $scope.book.users){

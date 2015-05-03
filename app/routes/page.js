@@ -1,6 +1,7 @@
-
 module.exports = function(app, passport, busboy){
   var pageCtrl = require('../controllers/pageCtrl')(app);
+  var isLoggedIn = require('../services/is-authenticated')(app);
+  
 
   // get all files
   app.get('/api/page', isLoggedIn, pageCtrl.get);
@@ -23,14 +24,3 @@ module.exports = function(app, passport, busboy){
   // rename file
   app.post('/api/page/:page_id/rename', isLoggedIn, pageCtrl.rename);
 };
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}

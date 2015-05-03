@@ -20,7 +20,7 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
   File.getOne(file_id).success(function(data){
     if(!data.success){
       toastr.error(data.message);
-      $state.go('files');
+      $state.go('app.files');
     }
     $scope.file = data.file;
     if(!$scope.file.content || $scope.file.content.length === 0){

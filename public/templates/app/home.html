@@ -8,24 +8,24 @@
       <div ng-show="user.lastBooks.length" class="panel panel-primary">
         <div class="panel-heading" style="color: white;">Последно прочетени книги</div>
         <div class="list-group">
-          <a class="list-group-item" ng-repeat="book in user.lastBooks" ui-sref="book({id : book._id})">{{book.title}}</a>
-          <a class="list-group-item" ui-sref="books">Всички книги...</a>
+          <a class="list-group-item" ng-repeat="book in user.lastBooks" ui-sref="app.book({id : book._id})">{{book.title}}</a>
+          <a class="list-group-item" ui-sref="app.books">Всички книги...</a>
         </div>
       </div>
       <!-- Last Files -->
       <div ng-show="user.lastFiles.length" class="panel panel-success">
         <div class="panel-heading" style="color: white;">Последно отворени файлове</div>
         <div class="list-group">
-          <a class="list-group-item" ng-repeat="file in user.lastFiles" ui-sref="file({id : file._id})">{{file.title}}</a>
-          <a class="list-group-item" ui-sref="files()">Всички файлове...</a>
+          <a class="list-group-item" ng-repeat="file in user.lastFiles" ui-sref="app.file({id : file._id})">{{file.title}}</a>
+          <a class="list-group-item" ui-sref="app.files">Всички файлове...</a>
         </div>
       </div>
       <!-- Last Pages -->
       <div ng-show="user.lastPages.length" class="panel panel-warning">
         <div class="panel-heading" style="color: white;">Последно разгледани статии</div>
         <div class="list-group">
-          <a class="list-group-item" ng-repeat="page in user.lastPages" ui-sref="page({id : page._id})">{{page.title}}</a>
-          <a class="list-group-item" ui-sref="pages">Всички статии...</a>
+          <a class="list-group-item" ng-repeat="page in user.lastPages" ui-sref="app.page({id : page._id})">{{page.title}}</a>
+          <a class="list-group-item" ui-sref="app.pages">Всички статии...</a>
         </div>
       </div>
     </div>
@@ -46,21 +46,21 @@
         <div class="panel panel-primary" ng-show="searchResult.books.results.length">
           <div class="panel-heading" style="color:white">Намерени книги (по заглавие)</div>
           <div class="list-group">
-            <a ui-sref="book({id: book.obj._id})" class="list-group-item" ng-repeat="book in searchResult.books.results | orderBy:page.score">{{book.obj.title}}</a>
+            <a ui-sref="app.book({id: book.obj._id})" class="list-group-item" ng-repeat="book in searchResult.books.results | orderBy:page.score">{{book.obj.title}}</a>
           </div>
         </div>
         <!--Files-->
         <div ng-show="searchResult.files.results.length" class="panel panel-success">
           <div class="panel-heading" style="color:white;">Намерени файлове</div>
           <div class="list-group">
-            <a ui-sref="file({id: file.obj._id})" class="list-group-item" ng-repeat="file in searchResult.files.results | orderBy:file.score">{{file.obj.title}}</a>
+            <a ui-sref="app.file({id: file.obj._id})" class="list-group-item" ng-repeat="file in searchResult.files.results | orderBy:file.score">{{file.obj.title}}</a>
           </div>
         </div>
         <!--Pages-->
         <div class="panel panel-warning" ng-show="searchResult.pages.results.length">
           <div class="panel-heading" style="color:white">Намерени статии</div>
           <div class="list-group">
-            <a ui-sref="page({id: page.obj._id})" class="list-group-item" ng-repeat="page in searchResult.pages.results | orderBy:page.score">{{page.obj.title}}</a>
+            <a ui-sref="app.page({id: page.obj._id})" class="list-group-item" ng-repeat="page in searchResult.pages.results | orderBy:page.score">{{page.obj.title}}</a>
           </div>
         </div>
       </div>

@@ -1,88 +1,166 @@
+/* global toastr */
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule', 'angular-loading-bar']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'LocalStorageModule', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule', 'angular-loading-bar', 'angular-jwt']);
 
 //routes
-app.config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise("/home");
+app.config(function ($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise("/");
   $stateProvider
-    .state('home', {
+    .state('index', {
+      isPublic: true,
+      url: "/",
+      controller: "IndexCtrl",
+      templateUrl: "/templates/index.html"
+    })
+    .state('login', {
+      isPublic: true,
+      url: "/login",
+      controller: "LoginCtrl",
+      templateUrl: "/templates/login.html"
+    })
+    .state('signup', {
+      isPublic: true,
+      url: "/signup",
+      controller: "SignupCtrl",
+      templateUrl: "/templates/signup.html"
+    })
+    .state('app', {
+      isPublic: false,
+      url: "/app",
+      templateUrl: "/templates/app.html",
+      controller: "AppCtrl",
+      abstract: true
+    })
+    .state('app.home', {
+      isPublic: false,
       url: "/home",
-      templateUrl: "/templates/home.html",
-      controller: "HomeCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/home.html",
+          controller: "HomeCtrl"
+        }
+      }
     })
-    .state('books', {
+    .state('app.books', {
+      isPublic: false,
       url: "/books",
-      templateUrl: "/templates/books.html",
-      controller: "BooksCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/books.html",
+          controller: "BooksCtrl"
+        }
+      }
     })
-    .state('book', {
+    .state('app.book', {
+      isPublic: false,
       url: "/book/:id",
-      templateUrl: "/templates/book.html",
-      controller: "BookCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/book.html",
+          controller: "BookCtrl"
+        }
+      }
     })
-    .state('files', {
+    .state('app.files', {
+      isPublic: false,
       url: "/files",
-      templateUrl: "/templates/files.html",
-      controller: "FilesCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/files.html",
+          controller: "FilesCtrl"
+        }
+      }
     })
-    .state('file', {
+    .state('app.file', {
+      isPublic: false,
       url: "/file/:id",
-      templateUrl: "/templates/file.html",
-      controller: "FileCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/file.html",
+          controller: "FileCtrl"
+        }
+      }
     })
-    .state('settings', {
+    .state('app.settings', {
+      isPublic: false,
       url: "/settings",
-      templateUrl: "/templates/settings.html",
-      controller: "SettingsCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/settings.html",
+          controller: "SettingsCtrl"
+        }
+      }
     })
-    .state('library', {
+    .state('app.library', {
+      isPublic: false,
       url: "/library",
-      templateUrl: "/templates/library.html",
-      //controller: "SettingsCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/library.html",
+          //controller: "SettingsCtrl"
+        }
+      }
     })
-    .state('bookmarks', {
+    .state('app.bookmarks', {
+      isPublic: false,
       url: "/bookmarks",
-      templateUrl: "/templates/bookmarks.html",
-      controller: "BookmarksCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/bookmarks.html",
+          controller: "BookmarksCtrl"
+        }
+      }
     })
-    .state('friends', {
+    .state('app.friends', {
+      isPublic: false,
       url: "/friends",
-      templateUrl: "/templates/friends.html",
-      controller: "FriendsCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/friends.html",
+          controller: "FriendsCtrl"
+        }
+      }
     })
-    .state('profile', {
+    .state('app.profile', {
+      isPublic: false,
       url: "/profile",
-      templateUrl: "/templates/profile.html",
-      controller: "ProfileCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/profile.html",
+          controller: "ProfileCtrl"
+        }
+      }
     })
-    .state('pages', {
+    .state('app.pages', {
+      isPublic: false,
       url: "/pages",
-      templateUrl: "/templates/pages.html",
-      controller: "PagesCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/pages.html",
+          controller: "PagesCtrl"
+        }
+      }
     })
-    .state('page', {
+    .state('app.page', {
+      isPublic: false,
       url: "/page/:id",
-      templateUrl: "/templates/page.html",
-      controller: "PageCtrl"
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/page.html",
+          controller: "PageCtrl"
+        }
+      }
     });
 });
 
-app.filter('trustAsResourceUrl', ['$sce', function($sce) {
-    return function(val) {
-        return $sce.trustAsResourceUrl(val);
-    };
+// filter to enable binding html in page
+app.filter('trustAsResourceUrl', ['$sce', function ($sce) {
+  return function (val) {
+    return $sce.trustAsResourceUrl(val);
+  };
 }]);
 
-app.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+// loading bar on all http requests (UX)
+app.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
   cfpLoadingBarProvider.includeSpinner = false;
 }]);
-
-app.run(function($rootScope, $http){
-  $http.get('/api/user').success(function(data){
-    if(data.success){
-      $rootScope.user = data.user;
-    } else {
-      toastr.error(data.message);
-    }
-  });
-});

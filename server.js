@@ -38,7 +38,12 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+app.set('superSecret', process.env.SECRET || 'dirchevMirchevScoobyDo'); // secret variable
+
 // routes ======================================================================
+app.get('/', function(req, res){
+  res.render('index.ejs');
+});
 require('./app/routes/auth.js')(app, passport);
 require('./app/routes/book.js')(app, passport);
 require('./app/routes/file.js')(app, passport, busboy);

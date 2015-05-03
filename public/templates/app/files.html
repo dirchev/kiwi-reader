@@ -35,7 +35,7 @@
         {{ file.title | limitTo: 35 }}{{file.title.length > 35 ? '...' : ''}} <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
-        <li><a ui-sref="file({id : file._id})">Отвори</a></li>
+        <li><a ui-sref="app.file({id : file._id})">Отвори</a></li>
         <li><a data-toggle="collapse" data-target="#renameFile{{file._id}}" aria-expanded="false" aria-controls="renameFile{{file.id}}">Преименувай</a></li>
         <li class="divider"></li>
         <li><a ng-click="deleteFile(file._id)">Изтрий</a></li>

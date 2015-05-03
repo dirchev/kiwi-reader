@@ -23,6 +23,7 @@
     "express": "~4.0.0",
     "express-session": "~1.0.0",
     "fstream": "^1.0.4",
+    "jsonwebtoken": "^5.0.0",
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
     "mongoose-text-search": "0.0.2",

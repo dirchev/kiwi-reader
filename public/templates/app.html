@@ -1,0 +1,38 @@
+<nav id="mainNavbar" class="navbar navbar-default border-sharp no-margin">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ui-sref="app.home">
+        Kiwi Reader
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ui-sref="app.books">Книги</a></li>
+        <li><a ui-sref="app.files">Файлове</a></li>
+        <li><a ui-sref="app.pages">Статии <span class="label label-warning">бета</span></a></li>
+        <li><a ui-sref="app.bookmarks">Цитати</a></li>
+        <li><a ui-sref="app.friends">Приятели</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{user.data.name}} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a ui-sref="app.profile">Профил</a></li>
+            <!-- <li><a ui-sref="app.settings">Настройки</a></li> -->
+            <li><a>Изход</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+<div ui-view="appView"></div>
