@@ -19,8 +19,15 @@ module.exports = function(app){
             res.json({success:false, message: "Грешен email или парола"});
           } else {
             
+            var user2 = {
+              _id : user._id,
+              data: {
+                name : user.data.name,
+                email : user.data.email
+              }
+            };
             // create a token
-            var token = jwt.sign(user, app.get('superSecret'), {
+            var token = jwt.sign(user2, app.get('superSecret'), {
               expiresInMinutes: 1440 // expires in 24 hours
             });
             
