@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="kiwiReader">
   <head>
     <meta charset="utf-8">
-    <title>Kiwi Reader</title>
-
-    <!-- Meta tags -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>Kiwi Reader</title>
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/angular-loading-bar/build/loading-bar.min.css">
@@ -68,10 +66,6 @@
     <script src="/app/factories/user.js"></script>
     <script src="/app/factories/page.js"></script>
     <script src="/app/factories/search.js"></script>
-
-  </head>
-  <body ng-app="kiwiReader">
-    <div ui-view=""></div>
     <script>
     toastr.options = {
       "closeButton": true,
@@ -91,5 +85,8 @@
       "hideMethod": "fadeOut"
     }
     </script>
+  </head>
+  <body ui-view="">
+    
   </body>
 </html>
