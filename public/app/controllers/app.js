@@ -1,4 +1,4 @@
-app.controller("AppCtrl", function ($rootScope, localStorageService, jwtHelper, $http, User, $location) {
+app.controller("AppCtrl", function ($scope, $state, $rootScope, localStorageService, jwtHelper, $http, User, $location) {
 	var token = localStorageService.get('access-token');
 	if (token && !jwtHelper.isTokenExpired(token)) {
 		$http.defaults.headers.common['x-access-token'] = token;
@@ -11,5 +11,10 @@ app.controller("AppCtrl", function ($rootScope, localStorageService, jwtHelper, 
 		});
 	} else {
 		$location.path('/login');
+	}
+	
+	$scope.logout = function(){
+		localStorageService.remove('access-token');
+		$state.go('index');
 	}
 });

@@ -23,7 +23,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   };
 
   $scope.onTextSelect = function(){
-    if($scope.selectedText.length >0 ){
+    if($scope.selectedText.length >0){
       $('#selectionModal').modal('show');
     }
   };
@@ -83,7 +83,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       renderPage(pageId);
 
       socket.emit('open:book', book_id);
-      // TODO show all online users
 
       socket.on('book:update:chat', function(message){
         $scope.$apply(function(){
@@ -159,7 +158,6 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   $scope.renderPageLink = function(link){
     if(validURL(link)) {
       window.open(link, '_tab');
-      return;
     } else {
       for(var i in $scope.book.opf.manifest){
         if($scope.book.opf.manifest[i].href === link){
@@ -190,7 +188,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   $scope.nextPage = function(){
     if(!scrolledToBottom()){
-      // if he does not, scroll down
+      // if he is not, scroll down
       $scope.scrolled = $("#page-preview").scrollTop() + ($("#page-preview").height() - 50);
       $("#page-preview").scrollTop($scope.scrolled);
     } else {
@@ -201,7 +199,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   $scope.previousPage = function(){
     if(!scrolledToTop()){
-      // if he does not, scroll up
+      // if he is not, scroll up
       $scope.scrolled = $("#page-preview").scrollTop() - ($("#page-preview").height() - 50);
       $("#page-preview").scrollTop($scope.scrolled);
     } else {
@@ -212,7 +210,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
 
   var scrolledToBottom = function(){
     var elem = $('#page-preview');
-    return elem[0].scrollHeight - parseInt(elem.scrollTop()) - elem.outerHeight() <= 0;
+    return elem[0].scrollHeight - elem.scrollTop() - elem.outerHeight() <= 0;
   };
 
   var scrolledToTop = function(){
@@ -226,9 +224,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
       position: $scope.book.users[userIndex].position
     };
     Book.updateUserPosition(book_id, data).success(function(data){
-      if(data.success){
-        //toastr.success('Успешно запазена позиция.');
-      } else {
+      if(!data.success){
         toastr.error(data.message);
       }
     });
