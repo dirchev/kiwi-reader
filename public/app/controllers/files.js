@@ -60,7 +60,8 @@ app.controller("FilesCtrl", function($scope, $http, File, dropboxChooserService)
     });
   };
 
-  $scope.newTxtFile = function(data){
+  $scope.newTxtFile = function(response){
+    var data = response.data;
     if(data.success){
       File.get().success(function(data2){
         $scope.files = data2;

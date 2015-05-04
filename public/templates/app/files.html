@@ -63,16 +63,12 @@
         </div>
         <div class="modal-body">
 
-          <form ng-upload="newTxtFile(content)" action="/api/file/txt" enctype="multipart/form-data">
+          <form>
             <div class="form-group">
               <label for="">Файл</label>
-              <input class="btn btn-default" type="file" name="txtFile">
+              <button class="btn btn-primary" upload-button url="/api/file/txt" on-complete="newTxtFile(response)"></button> 
               <p class="help-block">Избери .txt или .docx файл</p>
             </div>
-            <button id="createDocFile" type="submit" class="btn btn-primary"
-             upload-submit data-dismiss="modal">
-              Създай
-            </button>
           </form>
 
         </div>
