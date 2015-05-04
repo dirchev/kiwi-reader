@@ -11,6 +11,7 @@ var lastService = require('../services/last');
 module.exports = function(){
   return {
     create: function(req, res){
+      var user = req.user;
       var filePath;
       var fileName;
       if(req.busboy){
@@ -29,7 +30,7 @@ module.exports = function(){
         req.busboy.on('finish', function(){
           var book = new Book();
           book.title = fileName;
-          book.users.push({user: req.user._id, position: '0'});
+          book.users.push({user: user._id, position: '0'});
           book.save(function(err, book){
             if(err){
               console.log(err);
@@ -46,7 +47,7 @@ module.exports = function(){
                       console.log(err);
                       res.json({success:false, message: 'Грешка при създаването на нова книга.'});
                     }
-                    res.send({success:true, book: book});
+                    res.send({success:true});
                   });
                 });
               });

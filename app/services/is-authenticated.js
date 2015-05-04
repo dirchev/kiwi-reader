@@ -21,10 +21,9 @@ module.exports = function(app){
 			});
 	
 		} else {
-	
 			// if there is no token
-			// return an error
-			return res.status(403).send({
+			// return with an error
+			return res.status(403).send({	
 				success: false,
 				message: 'Не успяхме да Ви идентифицираме.'
 			});

@@ -1,6 +1,6 @@
 /* global toastr */
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('kiwiReader', ['ui.bootstrap', 'LocalStorageModule', 'ui.router', 'ngUpload', 'ngCkeditor', 'dropboxChooserModule', 'angular-loading-bar', 'angular-jwt']);
+var app = angular.module('kiwiReader', ['ui.bootstrap', 'LocalStorageModule', 'ui.router', 'ngCkeditor', 'lr.upload', 'dropboxChooserModule', 'angular-loading-bar', 'angular-jwt']);
 
 //routes
 app.config(function ($stateProvider, $urlRouterProvider) {

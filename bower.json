@@ -24,12 +24,12 @@
     "bootstrap": "~3.3.2",
     "ui-router": "~0.2.13",
     "angular-bootstrap": "~0.12.0",
-    "ngUpload": "~0.5.14",
     "angular-socket-io": "~0.7.0",
     "ng-ckeditor": "~0.2.1",
     "angular-loading-bar": "~0.7.1",
     "angular-jwt": "~0.0.7",
-    "angular-local-storage": "~0.1.5"
+    "angular-local-storage": "~0.1.5",
+    "angular-upload": "~1.0.11"
   },
   "resolutions": {
     "angular": ">=1.0.4",

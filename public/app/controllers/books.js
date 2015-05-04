@@ -1,7 +1,7 @@
 /* global app */
 /// <reference path="../../../typings/jquery/jquery.d.ts"/>
 /* global toastr */
-app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserService){
+app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserService, upload, localStorageService){
 
   var getBooks = function(){
     Book.get().success(function(data){
@@ -35,7 +35,8 @@ app.controller('BooksCtrl', function($scope, $http, $sce, Book, dropboxChooserSe
     extensions: ['.txt', '.docx']
   };
 
-  $scope.newBook = function(data){
+  $scope.newBook = function(response){
+    var data = response.data;
     if(data.success){
       getBooks();
       toastr.success('Успешно добавихте нова книга.');
