@@ -5,6 +5,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
   var userIndex;
   $scope.scrolled = 0;
   $scope.selectedText = '';
+  $scope.sidePanel = 'none';
   $scope.chat = [];
   var socket = $window.io();
 
@@ -119,7 +120,7 @@ app.controller('BookCtrl', function($scope, $http, $stateParams, $state, Book, $
         if(data.success){
           toastr.success('Успешно споделяне.');
         } else {
-          toastr.error(data.message.toString(), 'Неуспешно споделяне.');
+          toastr.error(data.message, 'Неуспешно споделяне.');
         }
       });
   };

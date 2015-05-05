@@ -164,7 +164,7 @@ module.exports = function(){
             });
           } else {
             for(var i = 0 ; i < book.users.length ; i++){
-              if(book.users[i]._id.toString() === user._id.toString()){
+              if(book.users[i].user.toString() === user._id.toString()){
                 book.users.splice(i, 1);
               }
             }
@@ -195,31 +195,34 @@ module.exports = function(){
         var book_id = req.params.book_id;
         var user_email = req.body.user_email;
         // Get all data for the user, we want to share file to
-        User.findOne({'data.email': user_email}, function(err, user){
-          if(err){
-            console.log('Error while searching for user: ' + err);
-          } else if(!user){
-            // if user not exists (bad email) send message to client
-            res.json({success:false, message: 'Не е намерен потребител с този email.'});
-          } else {
-            // update file, that is with mentioned id, if the user who wants
-            //to share it is its owner and if it is not shared to the samo user before
-            Book
-              .update(
-                {$and:[{_id: book_id, "users.user": req.user._id},
-                {"users.user": {$ne: user._id}}]},
-                {$push: {'users':{_id: user._id, position: 0}}},
-                {upsert:false})
-              .exec(function(err, book){
-                if(err){
-                  console.log('Error while updating book: ' + err);
-                  res.json({success:false, message: 'Тази книга вече е споделена с този потребител.'});
-                } else {
-                  res.json({success:true});
-                }
-              });
-          }
-        });
+        User
+          .findOne({'data.email': user_email})
+          .select('_id data.email data.name')
+          .exec(function(err, user){
+            if(err){
+              console.log('Error while searching for user: ' + err);
+            } else if(!user){
+              // if user not exists (bad email) send message to client
+              res.json({success:false, message: 'Не е намерен потребител с този email.'});
+            } else {
+              // update file, that is with mentioned id, if the user who wants
+              //to share it is its owner and if it is not shared to the samo user before
+              Book
+                .update(
+                  {$and:[{_id: book_id, "users.user": req.user._id},
+                  {"users.user": {$ne: user._id}}]},
+                  {$push: {'users':{user: user._id, position: 0}}},
+                  {upsert:false})
+                .exec(function(err, book){
+                  if(err){
+                    console.log('Error while updating book: ' + err);
+                    res.json({success:false, message: 'Тази книга вече е споделена с този потребител.'});
+                  } else {
+                    res.json({success:true, user:user});
+                  }
+                });
+            }
+          });
       }
     },
     setUserPosition: function(req, res){
