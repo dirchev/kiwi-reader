@@ -1,6 +1,11 @@
+/// <reference path="../../../typings/jquery/jquery.d.ts"/>
+/* global app */
+/* global toastr */
 app.controller("FileCtrl", function($scope, $stateParams, File, $rootScope,
 $location, $anchorScroll, $window, $timeout, Bookmark, $state){
-
+  
+  $scope.mainPanel = 'preview';
+  $scope.sidePanel = 'none';
   $scope.chat = [];
   $scope.openedAnotations = [];
   var socket = $window.io();
@@ -192,21 +197,14 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
     $('#selection' + anotation._id).css('background-color', '#f7ff00');
   };
 
-  $scope.toggleEditMode = function(){
-    $scope.editMode = !$scope.editMode;
-    $scope.checkForDeletedAnotations();
-  };
-
   // share file to another user
   $scope.shareFile = function(user){
     File.share(file_id, user).success(function(data){
         if(data.success){
-          File.getOne(file_id).success(function(data){
-            $scope.file = data;
-            toastr.success('Успешно споделяне.');
-          });
+          toastr.success('Успешно споделяне.');
+          $scope.file.users.push(data.user);
         } else {
-          toastr.error(data.message.toString(), 'Неуспешно споделяне.');
+          toastr.error(data.message);
         }
       });
   };
@@ -240,8 +238,12 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
   };
 
   // checks if the element has content
-  var emptyElement =  function( el ){
+  var emptyElement = function( el ){
       return !$.trim(el.html());
+  };
+  
+  $scope.onTextSelect = function(){
+    $scope.sidePanel = 'anotations';
   };
 
   // reserts all variables linked with anotation
@@ -270,10 +272,6 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
         content: comment_content
       }
     };
-    var comment = {
-      user: $rootScope.user._id,
-      content: comment_content
-    };
     // check if comments is defined
     if( typeof $scope.file.anotations[anotation_index].comments  === 'undefined'){
       // if not - define it
@@ -287,14 +285,18 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
   };
 
   $scope.addBookmark = function(){
+    // get bookmark text
     var bookmark = $scope.selectedText;
+    // add bookmark to database
     Bookmark.add(bookmark).success(function(data){
       if(data.success){
+        // show success message and reset variables
         toastr.success('Цитатът е запазен успешно.');
-        $scope.cancelAnotation();
       } else {
+        // show error message and reset variables
         toastr.error(data.message);
       }
+      $scope.cancelAnotation();
     });
   };
 
@@ -321,17 +323,11 @@ $location, $anchorScroll, $window, $timeout, Bookmark, $state){
       });
       $(this).popover('show');
     }
-    // if(!found){
-    //   $(this).contents().unwrap();
-    //   $scope.file.content = $('#previewBox').html();
-    // }
   });
 
   // hide anotations popups
   $(document).on("mouseleave", ".selected", function() {
     $(this).popover('hide');
   });
-
-
 
 });

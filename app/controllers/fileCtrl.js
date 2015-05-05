@@ -178,35 +178,38 @@ module.exports = function(){
         var file_id = req.params.file_id;
         var user_email = req.body.user_email;
         // Get all data for the user, we want to share file to
-        User.findOne({'data.email': user_email}, function(err, user){
-          if(err){
-            console.log('Error while searching for user: ' + err);
-          } else if(!user){
-            // if user not exists (bad email) send message to client
-            res.json({success:false, message: 'Не е намерен потребител с този email.'});
-          } else {
-            // update file, that is with mentioned id, if the user who wants
-            //to share it is its owner and if it is not shared to the samo user before
-            File
-            .update(
-              // select the file with id = file_id and one of his users is req.user
-              {$and:[{_id: file_id, users: req.user._id},
-              // check if file is not already shared with that user
-              {users: {$ne: user._id}}]},
-              // push the user to file.users array
-              {$push: {'users':user._id}},
-              // options
-              {upsert:false})
-            .exec(function(err, file){
-              if(err){
-                console.log('Error while updating file: ' + err);
-                res.json({success:false, message: 'Този файл вече е споделен с този потребител.'});
-              } else {
-                res.json({success:true, file: file});
-              }
-            });
-          }
-        });
+        User
+          .findOne({'data.email': user_email})
+          .select('_id data.name data.email')
+          .exec(function(err, user){
+            if(err){
+              console.log('Error while searching for user: ' + err);
+            } else if(!user){
+              // if user not exists (bad email) send message to client
+              res.json({success:false, message: 'Не е намерен потребител с този email.'});
+            } else {
+              // update file, that is with mentioned id, if the user who wants
+              //to share it is its owner and if it is not shared to the samo user before
+              File
+              .update(
+                // select the file with id = file_id and one of his users is req.user
+                {$and:[{_id: file_id, users: req.user._id},
+                // check if file is not already shared with that user
+                {users: {$ne: user._id}}]},
+                // push the user to file.users array
+                {$push: {'users':user._id}},
+                // options
+                {upsert:false})
+              .exec(function(err, file){
+                if(err){
+                  console.log('Error while updating file: ' + err);
+                  res.json({success:false, message: 'Този файл вече е споделен с този потребител.'});
+                } else {
+                  res.json({success:true, user:user});
+                }
+              });
+            }
+          });
       }
     },
     updateTitle: function(file_id, title, callback){
