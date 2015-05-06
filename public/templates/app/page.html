@@ -14,8 +14,8 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a ng-href="{{page.link}}" target="_blank">Отвори линк</a></li>
-        <li><a ng-click="showAnotations = !showAnotations">Анотации</a></li>
-        <li ng-show="page.users.length > 1"><a ng-click="showChat = !showChat; showAnotations = false; scrollChatBox();">Чат</a></li>
+        <li><a ng-click="sidePanel = 'anotations'">Анотации</a></li>
+        <li ng-show="page.users.length > 1"><a ng-click="sidePanel = 'chat'">Чат</a></li>
         <li><a data-toggle="modal" data-target="#shareModal">Сподели</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -25,8 +25,9 @@
 <div id="contentWrapper" class="container-fluid">
   <div class="row" style="height:100%; overflow: hidden;">
     <!-- Anotations -->
-    <div ng-show="showAnotations" class="col-md-3 hidden-sm hidden-xs fullheight" style="position: relative; overflow-y: auto;">
-        <h3 class="text-center">Анотации</h3>
+    <div ng-show="sidePanel === 'anotations'" class="col-md-3 hidden-sm hidden-xs fullheight well well-sm" style="position: relative; overflow-y: auto;">
+      <button ng-click="sidePanel = 'none'" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h3 class="text-center">Анотации</h3>
         <div ng-hide="page.anotations.length">
           <p>
             Към този текст няма създадени анотации. Може да създадете такава, като селектирате избран от вас текст.
@@ -68,7 +69,7 @@
 
         <div ng-show="selectedText" class="panel panel-default">
           <div class="panel-body text-center">
-            {{selectedText}}
+          {{ selectedText | limitTo: 100 }}{{selectedText.length > 100 ? '...' : ''}}
           </div>
           <div class="panel-footer" ng-hide="anotationBox">
             <a class="btn btn-primary btn-sm" ng-click="anotationBox = true">Създай анотация</a>
@@ -87,7 +88,8 @@
     </div>
 
     <!-- Chat -->
-    <div  id="chatContainer" ng-show="showChat" class="col-md-3 hidden-sm hidden-xs fullheight">
+    <div id="chatContainer" ng-show="sidePanel === 'chat'" class="col-md-3 hidden-sm hidden-xs fullheight well well-sm">
+      <button ng-click="sidePanel = 'none'" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h3 class="text-center">Чат</h3>
       <div class="chat-box fullheight" style="overflow:hidden;">
         <div id="chatBox" style="height:65%; overflow-y:auto;">
@@ -106,7 +108,7 @@
     </div>
 
     <!-- Content -->
-    <div ng-class="showAnotations || showChat ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
+    <div ng-class="sidePanel !== 'none' ? 'col-md-9' : 'col-md-offset-1 col-md-10'" class="fullheight">
       <div id="previewBox" class="fullheight" preview-box text-select style="padding: 50px 30px 30px; overflow: auto; border: solid 1px #b6b6b6;" content="page.content">
       </div>
     </div>

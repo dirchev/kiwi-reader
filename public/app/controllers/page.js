@@ -2,6 +2,7 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
 
   var page_id = $stateParams.id;
   $scope.chat = [];
+  $scope.sidePanel = 'none';
 
   var getPage = function(socket){
     Page.getOne(page_id).success(function(data){
