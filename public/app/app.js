@@ -161,7 +161,18 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
       }
     })
+    .state('app.collection', {
+      isPublic: false,
+      url: "/collection/:collection_id",
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/collection.html",
+          controller: "CollectionCtrl"
+        }
+      }
+    })
     ;
+    
 });
 
 // filter to enable binding html in page

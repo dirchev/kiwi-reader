@@ -39,6 +39,7 @@ var fileSchema = mongoose.Schema({
 });
 
 fileSchema.plugin(textSearch);
-fileSchema.index({ title: "text", content: "text"});
+fileSchema.index({ title: "text"});
+fileSchema.index({ content: "text"});
 
 module.exports = mongoose.model('File', fileSchema);

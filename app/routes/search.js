@@ -5,4 +5,7 @@ module.exports = function(app, passport){
 
   // get all files
   app.get('/api/search/:search', isLoggedIn, searchCtrl.all);
+  app.get('/api/search/:search/file', isLoggedIn, searchCtrl.file);
+  app.get('/api/search/:search/book', isLoggedIn, searchCtrl.book);
+  app.get('/api/search/:search/page', isLoggedIn, searchCtrl.page);
 };

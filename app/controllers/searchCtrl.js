@@ -21,6 +21,42 @@ module.exports = {
 				res.json({success:true, result:result});
 			}
 		});
+	},
+	file: function(req, res){
+		var search = req.params.search;
+		var user_id = req.user._id;
+		searchInFiles(search, user_id, function(err, result){
+			if(err){
+				console.log("Error while searching: " + err);
+				res.json({success:false, message: "Грешка при намирането на резултатите."});
+			} else {
+				res.json({success:true, result:result});
+			}
+		});
+	},
+	book: function(req, res){
+		var search = req.params.search;
+		var user_id = req.user._id;
+		searchInBooks(search, user_id, function(err, result){
+			if(err){
+				console.log("Error while searching: " + err);
+				res.json({success:false, message: "Грешка при намирането на резултатите."});
+			} else {
+				res.json({success:true, result:result});
+			}
+		});
+	},
+	page: function(req, res){
+		var search = req.params.search;
+		var user_id = req.user._id;
+		searchInPages(search, user_id, function(err, result){
+			if(err){
+				console.log("Error while searching: " + err);
+				res.json({success:false, message: "Грешка при намирането на резултатите."});
+			} else {
+				res.json({success:true, result:result});
+			}
+		});
 	}
 };
 

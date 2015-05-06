@@ -26,7 +26,7 @@
         {{ collection.title | limitTo: 35 }}{{collection.title.length > 35 ? '...' : ''}} <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
-        <li><a ui-sref="app.collection({id : collection._id})">Отвори</a></li>
+        <li><a ui-sref="app.collection({collection_id : collection._id})">Отвори</a></li>
         <li><a data-toggle="collapse" data-target="#renameCollection{{collection._id}}" aria-expanded="false" aria-controls="#renameCollection{{collection._id}}">Преименувай</a></li>
         <li class="divider"></li>
         <li><a ng-click="remove(collection._id)">Изтрий</a></li>
