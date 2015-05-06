@@ -1,3 +1,4 @@
+/* global toastr */
 /* global app */
 app.controller("AppCtrl", function ($scope, $state, $rootScope, localStorageService, jwtHelper, $http, User, $location) {
 	var token = localStorageService.get('access-token');
