@@ -28,5 +28,7 @@ module.exports = function(app, passport, busboy){
       }
     }
   */
-  app.post('/api/collection/add', isLoggedIn, collectionCtrl.add);
+  app.post('/api/collection/add', isLoggedIn, collectionCtrl.addThing);
+  
+  app.post('/api/collection/remove', isLoggedIn, collectionCtrl.removeThing)
 };

@@ -89,7 +89,7 @@ module.exports = {
 		});
 	},
 	// adds thing to collection
-	add: function(req, res){
+	addThing: function(req, res){
 		var user = req.user;
 		var collection_id = req.body.collection_id;
 		var thing = req.body.thing;
@@ -122,17 +122,44 @@ module.exports = {
 				res.json({success:false, message:"Елементът, който искате да добавите не е намерен."});
 			}
 		});
+	},
+	// removes thing from collection
+	removeThing : function(req, res){
+		var user = req.user;
+		var thing = req.body.thing;
+		var collection_id = req.body.collection_id;
+		Collection
+			.findOne({_id:collection_id, users: user._id})
+			.exec(function(err, collection){
+				if(err || !collection){
+					console.log("Error while finding collection: " + err);
+					res.json({success:false, message:"Грешка при намирането на колекцията."});
+				} else {
+					var things = thing.type+'s';
+					for(var i in collection[things]){
+						if(collection[things][i] === thing.id){
+							collection[things].splice(i, 1);
+							break;
+						}
+					}
+					collection.save(function(err){
+						if(err){
+							console.log('Error while saving collection: ' + err);
+							res.json({success:false, message:"Възникна грешка при запазването на промените."});
+						} else {
+							res.json({success:true});
+						}
+					})
+				}
+			});
 	}
-	// TODO remove page
-	// TODO remove book
-	// TODO remove file
 };
 
 // checks if file, page or book exists
 var checkIfThingExists = function (user_id, thing, callback){
 	if(thing.type === 'file'){
 		File
-			.findOne(_id:thing.id, users: user_id)
+			.findOne({_id:thing.id, users: user_id})
 			.select('_id') // for minimum data transfer
 			.exec(function(err, file){
 				if(err || !file){
@@ -151,7 +178,7 @@ var checkIfThingExists = function (user_id, thing, callback){
 				} else {
 					callback(true);
 				}
-			})
+			});
 	} else if (thing.type === 'page'){
 		Page
 			.findOne({_id:thing.id, users: user_id})
