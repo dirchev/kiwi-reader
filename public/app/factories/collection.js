@@ -15,6 +15,9 @@ app.factory('Collection', function($http){
     },
     rename: function(collection_id, title){
       return $http.post('/api/collection/' + collection_id + '/rename', {title: title});
+    },
+    addThing: function(data){
+      return $http.post('/api/collection/add', data);
     }
   };
 });

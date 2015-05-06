@@ -16,8 +16,8 @@
        <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false">Добави <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ng-click="addFileModal()">Файл</a></li>
-            <li><a data-toggle="modal" data-target="#addBookModal">Книга</a></li>
-            <li><a data-toggle="modal" data-target="#addPageModal">Статия</a></li>
+            <li><a ng-click="addBookModal()">Книга</a></li>
+            <li><a ng-click="addPageModal()">Статия</a></li>
           </ul>
         </li>
       </ul>
@@ -26,7 +26,7 @@
 </nav>
 
 <div class="container-fluid">
-    
+  
 </div>
 
 <div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -37,7 +37,56 @@
         <h4 class="modal-title" id="">Добави файл</h4>
       </div>
       <div class="modal-body">
-        <input type="text" ng-model="file" typeahead="file._id as file.title for file in files | filter:$viewValue | limitTo:5" class="form-control">
+        <form ng-submit="add('file', file._id)">
+          <div class="form-group">
+            <label>Файл</label>
+            <input type="text" ng-model="file" typeahead="file as file.title for file in files | filter:$viewValue" class="form-control">
+            <p class="help-block">Напишете името на файла, който искате да добавите.</p>
+          </div>
+          <button type="submit" class="btn btn-success">Създай</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addPageModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="">Добави статия</h4>
+      </div>
+      <div class="modal-body">
+        <form ng-submit="add('page', page._id)">
+          <div class="form-group">
+            <label>Статия</label>
+            <input type="text" ng-model="page" typeahead="page as page.title for page in pages | filter:$viewValue" class="form-control">
+            <p class="help-block">Напишете името на статията, която искате да добавите.</p>
+          </div>
+          <button type="submit" class="btn btn-success">Създай</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Добави книга</h4>
+      </div>
+      <div class="modal-body">
+        <form ng-submit="add('book', book._id)">
+          <div class="form-group">
+            <label>Книга</label>
+            <input type="text" ng-model="book" typeahead="book as book.title for book in books | filter:$viewValue" class="form-control">
+            <p class="help-block">Напишете името на книгата, която искате да добавите.</p>
+          </div>
+          <button type="submit" class="btn btn-success">Създай</button>
+        </form>
       </div>
     </div>
   </div>
