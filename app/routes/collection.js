@@ -30,5 +30,16 @@ module.exports = function(app, passport, busboy){
   */
   app.post('/api/collection/add', isLoggedIn, collectionCtrl.addThing);
   
+  // removes file,book or page from collection
+  // requires something like
+  /*
+    {
+      collection_id : "somecollectionidhere",
+      thing: {
+        type: 'file',
+        id: 'someid'
+      }
+    }
+  */
   app.post('/api/collection/remove', isLoggedIn, collectionCtrl.removeThing)
 };
