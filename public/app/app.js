@@ -150,7 +150,18 @@ app.config(function ($stateProvider, $urlRouterProvider) {
           controller: "PageCtrl"
         }
       }
-    });
+    })
+    .state('app.collections', {
+      isPublic: false,
+      url: "/collections",
+      views: {
+        'appView': {
+          templateUrl: "/templates/app/collections.html",
+          controller: "CollectionsCtrl"
+        }
+      }
+    })
+    ;
 });
 
 // filter to enable binding html in page

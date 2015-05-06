@@ -1,9 +1,19 @@
 /* global toastr */
-app.controller('CollectionCtrl', function($scope, Collection){
+app.controller('CollectionsCtrl', function($scope, Collection){
+	var getCollections = function(){
+		Collection.get().success(function(data){
+			if(data.success){
+				$scope.collections = data.collections;
+			} else {
+				toastr.error(data.message);
+			}
+		});	
+	};
+	
 	getCollections();
 		
-	$scope.add = function(title){
-		Collection.add(title).success(function(data){
+	$scope.create = function(title){
+		Collection.create(title).success(function(data){
 			if(data.success){
 				toastr.success('Успешно създадохте колекция.');
 				getCollections();
@@ -33,15 +43,5 @@ app.controller('CollectionCtrl', function($scope, Collection){
 				toastr.error(data.message);
 			}
 		});
-	};
-	
-	var getCollections = function(){
-		Collection.get().success(function(data){
-			if(data.success){
-				$scope.collections = data.collections;
-			} else {
-				toastr.error(data.message);
-			}
-		});	
 	};
 });

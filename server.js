@@ -54,6 +54,7 @@ require('./app/routes/bookmark.js')(app, passport);
 require('./app/routes/friend.js')(app, passport);
 require('./app/routes/page.js')(app, passport);
 require('./app/routes/search.js')(app, passport);
+require('./app/routes/collection.js')(app);
 
 // socket ======================================================================
 require('./app/services/socket.js')(io);

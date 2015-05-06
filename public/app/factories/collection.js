@@ -10,7 +10,7 @@ app.factory('Collection', function($http){
     create: function(title){
       return $http.post('/api/collection', {title:title});
     },
-    delete: function(collection_id){
+    remove: function(collection_id){
       return $http.delete('/api/collection/' + collection_id);
     },
     rename: function(collection_id, title){

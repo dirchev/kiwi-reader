@@ -52,7 +52,7 @@ module.exports = {
 				console.log("Error while saving collection" + err);
 				res.json({success:false, message:"Грешка при създаването на колекцията"});
 			} else {
-				res.json({success:false, collection:collection});
+				res.json({success:true});
 			}
 		});
 	},
@@ -70,7 +70,7 @@ module.exports = {
 					console.log("Error while upadting collection" + err);
 					res.json({success:false, message:"Грешка при преименуването на колекцията"});
 				} else {
-					res.json({success:false});
+					res.json({success:true});
 				}
 			}
 		);
@@ -84,7 +84,7 @@ module.exports = {
 				console.log("Error while deleting collection" + err);
 				res.json({success:false, message:"Грешка при изтриването на колекцията"});
 			} else {
-				res.json({success:false});
+				res.json({success:true});
 			}
 		});
 	},
