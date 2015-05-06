@@ -26,7 +26,59 @@
 </nav>
 
 <div class="container-fluid">
-  
+  <div class="row">
+    <div class="col-md-4">
+      <!-- Books -->
+      <div ng-hide="collection.books.length" class="alert alert-info">
+        Нямате добавени книги. <br>
+        <a ng-click="addBookModal()" class="btn btn-primary btn-sm">Добави книга.</a>
+      </div>
+      <div ng-show="collection.books.length" class="panel panel-primary">
+        <div class="panel-heading" style="color: white;">Книги</div>
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="book in collection.books" >
+            <h5 class="text-center">{{book.title}}</h5>
+            <a ui-sref="app.book({id : book._id})" class="btn btn-sm btn-primary">Отвори</a>
+            <a ng-click="remove('book', book._id)" class="btn btn-sm btn-danger pull-right">Премахни</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <!-- Files -->
+      <div ng-hide="collection.files.length" class="alert alert-info">
+        Нямате добавени файлове. <br>
+        <a ng-click="addFileModal()" class="btn btn-success btn-sm">Добави файл.</a>
+      </div>
+      <div ng-show="collection.files.length" class="panel panel-success">
+        <div class="panel-heading" style="color: white;">Файлове</div>
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="file in collection.files">
+            <h5 class="text-center">{{file.title}}</h5>
+            <a ui-sref="app.file({id : file._id})" class="btn btn-sm btn-success">Отвори</a>
+            <a ng-click="remove('file', file._id)" class="btn btn-sm btn-danger pull-right">Премахни</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <!-- Pages -->
+      <div ng-hide="collection.pages.length" class="alert alert-info">
+        Нямате добавени статии. <br>
+        <a ng-click="addPageModal()" class="btn btn-warning btn-sm">Добави статия.</a>
+      </div>
+      <div ng-show="collection.pages.length" class="panel panel-warning">
+        <div class="panel-heading" style="color: white;">Статии</div>
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="page in collection.pages">
+            <h5 class="text-center">{{page.title}}</h5>
+            <a ui-sref="app.page({id : page._id})" class="btn btn-sm btn-warning">Отвори</a>
+            <a ng-click="remove('page', page._id)" class="btn btn-sm btn-danger pull-right">Премахни</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">

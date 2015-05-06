@@ -53,5 +53,23 @@ app.controller('CollectionCtrl', function($scope, $stateParams, $state, Collecti
 		});	
 	};
 	
+	$scope.remove = function(type, id){
+		var data = {
+			collection_id : collection_id,
+			thing:{
+				type:type,
+				id:id
+			}
+		};
+		Collection.removeThing(data).success(function(data){
+			if(data.success){
+				toastr.success('Елементът беше премахнат.');
+			} else {
+				toastr.error(data.message);
+			}
+			getCollectionData();
+		});
+	};
+	
 	getCollectionData();
 });

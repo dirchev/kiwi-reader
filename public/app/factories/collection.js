@@ -18,6 +18,9 @@ app.factory('Collection', function($http){
     },
     addThing: function(data){
       return $http.post('/api/collection/add', data);
+    },
+    removeThing: function(data){
+      return $http.post('/api/collection/remove', data);      
     }
   };
 });

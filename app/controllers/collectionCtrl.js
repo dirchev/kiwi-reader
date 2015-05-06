@@ -137,7 +137,7 @@ module.exports = {
 				} else {
 					var things = thing.type+'s';
 					for(var i in collection[things]){
-						if(collection[things][i] === thing.id){
+						if(collection[things][i] == thing.id){
 							collection[things].splice(i, 1);
 							break;
 						}
