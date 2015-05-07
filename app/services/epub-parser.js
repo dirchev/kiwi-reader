@@ -24,7 +24,7 @@ module.exports = {
         var localDir = outputPath;
         var arr = localDir.split('/');
         var remoteDir = arr[arr.length-2] + '/' + arr[arr.length-1];
-        if(fileStorageType === 'aws'){
+        if(fileStorageType.get() === 'aws'){
           awsService().uploadDir(localDir, remoteDir, cb);
         } else {
           cb();
