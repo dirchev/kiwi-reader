@@ -35,7 +35,7 @@ module.exports = function(){
         localDir: localDir,
         deleteRemoved: true,
         s3Params: {
-          Bucket  : "kiwi-reader-app",
+          Bucket  : "kiwireader",
           Prefix  : remoteDir,
           ACL     : "public-read"
         },
@@ -49,14 +49,14 @@ module.exports = function(){
       });
     },
     getFile: function(filePath, req, res){
-      var url = s3.getPublicUrlHttp('kiwi-reader-app', filePath);
+      var url = s3.getPublicUrlHttp('kiwireader', filePath);
       var x = request(url);
        req.pipe(x);
        x.pipe(res);
     },
     deleteDir: function(remoteDir, cb){
       var s3Params =  {
-        Bucket  : "kiwi-reader-app",
+        Bucket  : "kiwireader",
         Prefix  : remoteDir
       };
       var deleter = client.deleteDir(s3Params);
