@@ -3,6 +3,7 @@ var File = require('../models/file');
 var Page = require('../models/page');
 var Book = require('../models/book');
 var User = require('../models/user');
+var lastService = require('../services/last');
 
 module.exports = { 
 	// get all user's collections
@@ -34,8 +35,8 @@ module.exports = {
 					console.log("Error while getting collection" + err);
 					res.json({success:false, message:"Грешка при взимането на данните"});
 				} else if(!collection){
-					res.json({success:false, message:"Колекцията не беше намерена"});
 				} else {
+					lastService.addLastCollection(user._id, collection_id, function(){});
 					res.json({success:true, collection:collection});
 				}
 			});
@@ -79,6 +80,7 @@ module.exports = {
 	delete: function(req, res){
 		var user = req.user;
 		var collection_id = req.params.collection_id;
+		lastService.removeLastCollection(user._id, collection_id, function(){});
 		Collection.remove({_id : collection_id, "users":user._id}, function(err){
 			if(err){
 				console.log("Error while deleting collection" + err);
