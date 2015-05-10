@@ -5,11 +5,12 @@ module.exports = function(){
     getUserInfo: function(req, res){
       User
         .findById(req.user._id)
-        .select('_id data.name data.email friends bookmarks lastFiles lastPages lastBooks')
+        .select('_id data.name data.email friends bookmarks lastFiles lastPages lastBooks lastCollections')
         .populate('friends', 'data.name data.email')
         .populate('lastFiles', '_id title')
         .populate('lastPages', '_id title')
         .populate('lastBooks', '_id title')
+        .populate('lastCollections', '_id title')
         .exec(function(err, user){
           if(err){
             console.log("Error while getting user data: " + err);

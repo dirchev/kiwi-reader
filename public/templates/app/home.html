@@ -28,6 +28,14 @@
           <a class="list-group-item" ui-sref="app.pages">Всички статии...</a>
         </div>
       </div>
+      <!-- Last Collections -->
+      <div ng-show="user.lastCollections.length" class="panel panel-danger">
+        <div class="panel-heading" style="color: white;">Последно разгледани статии</div>
+        <div class="list-group">
+          <a class="list-group-item" ng-repeat="collection in user.lastCollections" ui-sref="app.collection({id : collection._id})">{{collection.title}}</a>
+          <a class="list-group-item" ui-sref="app.collection">Всички статии...</a>
+        </div>
+      </div>
     </div>
     <div class="col-sm-8 col-lg-9">
       <!--Search Field-->

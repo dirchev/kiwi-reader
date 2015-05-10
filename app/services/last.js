@@ -123,7 +123,8 @@ module.exports = {
         if(err){
           console.log('Error while getting last collections: ' + err);
           callback(err);
-        } else if(!user) {
+        } else if(!user_id) {
+          console.log('User not found.');
           callback('User not found');
         } else {
           // create lastCollections array if undefined
@@ -144,7 +145,7 @@ module.exports = {
           user.lastCollections.unshift(collection_id);
           
           // save user data
-          user.save(function(err){
+          user.save(function(err, user){
             callback(err);
           });
         }
