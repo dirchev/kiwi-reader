@@ -15,8 +15,8 @@
       <ul class="nav navbar-nav navbar-right">
         <li ng-show="mainPanel !== 'edit'"><a ng-click="mainPanel = 'edit'">Редакция</a></li>
         <li ng-show="mainPanel !== 'preview'"><a ng-click="mainPanel = 'preview'">Преглед</a></li>
-        <li><a ng-click="sidePanel = 'anotations'">Анотации</a></li>
-        <li ng-show="file.users.length > 1"><a ng-click="sidePanel = 'chat'">Чат</a></li>
+        <li><a class="hidden-sm" ng-click="sidePanel = 'anotations'">Анотации</a></li>
+        <li ng-show="file.users.length > 1"><a class="hidden-sm" ng-click="sidePanel = 'chat'">Чат</a></li>
         <li>
           <a class="dropdown-toggle" data-toggle="dropdown">Споделяне <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="">

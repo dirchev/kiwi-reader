@@ -154,5 +154,11 @@ module.exports = function(io){
         }
       });
     });
+    
+    socket.on('page:add:chat', function(data){
+      message = data.message;
+      page_id = data.page_id;
+      socket.broadcast.to('page' + page_id).emit('page:update:chat', message);
+    });
   });
 };

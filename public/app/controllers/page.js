@@ -30,15 +30,6 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
     });
   });
 
-  socket.on('page:update:chat', function(message){
-    $scope.$apply(function(){
-      $scope.chat.push(message);
-      $timeout(function(){
-        $("#chatBox").scrollTop($scope.chat.length*66);
-      }, 200);
-    });
-  });
-
   socket.on('page:delete:anotation', function(anotation_index){
     $scope.$apply(function(){
       $scope.page.anotations.splice(anotation_index, 1);
@@ -53,6 +44,15 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
       $scope.page.anotations[data.anotation_index].comments.push(data.comment);
     });
   });
+  
+   socket.on('page:update:chat', function(message){
+      $scope.$apply(function(){
+        $scope.chat.push(message);
+        $timeout(function(){
+          $("#chatBox").scrollTop($scope.chat.length*66);
+        }, 200);
+      });
+    });
 
 
   // TODO move this to directives
@@ -207,6 +207,24 @@ app.controller('PageCtrl', function($scope, Page, $stateParams, Bookmark, $windo
         toastr.error(data.message);
       }
     });
+  };
+  
+  $scope.addChatMessage = function(message){
+    var data = {
+      page_id : page_id,
+      message: {
+        user : $rootScope.user.data.name,
+        content : message
+      }
+    };
+    socket.emit('page:add:chat', data);
+    $scope.chat.push(data.message);
+    $scope.chatMessage = '';
+
+    // TODO fix this quickfix
+    $timeout(function(){
+      $("#chatBox").scrollTop($scope.chat.length*66);
+    }, 200);
   };
 
   // highlights anotation and opens its dialog

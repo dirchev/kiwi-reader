@@ -36,6 +36,6 @@ function readStylesXml(xml) {
 function readStyleElement(styleElement) {
     var type = styleElement.attributes["w:type"];
     var styleId = styleElement.attributes["w:styleId"];
-    var name = styleElement.first("w:name").attributes["w:val"];
-    return {type: type, styleId: styleId, name: name};
+//    var name = styleElement.first("w:name").attributes["w:val"];
+    return {type: type, styleId: styleId};
 }

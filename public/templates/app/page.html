@@ -14,8 +14,8 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a ng-href="{{page.link}}" target="_blank">Отвори линк</a></li>
-        <li><a ng-click="sidePanel = 'anotations'">Анотации</a></li>
-        <li ng-show="page.users.length > 1"><a ng-click="sidePanel = 'chat'">Чат</a></li>
+        <li><a ng-click="sidePanel = 'anotations'" class="hidden-sm">Анотации</a></li>
+        <li ng-show="page.users.length > 1"><a ng-click="sidePanel = 'chat'" class="hidden-sm">Чат</a></li>
         <li><a data-toggle="modal" data-target="#shareModal">Сподели</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -93,9 +93,9 @@
       <h3 class="text-center">Чат</h3>
       <div class="chat-box fullheight" style="overflow:hidden;">
         <div id="chatBox" style="height:65%; overflow-y:auto;">
-          <div class="well well-sm" ng-repeat="message in chat">
+          <div ng-repeat="message in chat track by $index">
             <p>
-              <b>{{message.user}}</b> : {{message.content}}
+              <b>{{ message.user | limitTo: 15 }}</b> : {{message.content}}
             </p>
           </div>
         </div>
