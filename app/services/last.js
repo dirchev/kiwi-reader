@@ -109,11 +109,43 @@ module.exports = {
 
           //save user data
           user.save(function(err){
-            if(err){
-              callback(err);
-            } else {
-              callback();
+            callback(err);
+          });
+        }
+      });
+  },
+  addLastCollection : function(user_id, collection_id, callback){
+    User
+      // get current last collections array
+      .findById(user_id)
+      .select('lastCollections')
+      .exec(function(err, user){
+        if(err){
+          console.log('Error while getting last collections: ' + err);
+          callback(err);
+        } else if(!user) {
+          callback('User not found');
+        } else {
+          // create lastCollections array if undefined
+          if(typeof user.lastCollections === 'undefined'){
+            user.lastCollections = [];
+          }
+          
+          // check if collection is already in list
+          for(var i in user.lastCollections){
+            if(user.lastCollections[i] == collection_id){
+              // if collection is already in list - remove it
+              user.lastCollections.splice(i, 1);
+              break;
             }
+          }
+          
+          // add book to array
+          user.lastCollections.unshift(collection_id);
+          
+          // save user data
+          user.save(function(err){
+            callback(err);
           });
         }
       });
@@ -142,6 +174,16 @@ module.exports = {
     User.update(
       {_id: user_id},
       { $pull: {'lastPages' : page_id}},
+      {},
+      function(err){
+        callback(err);
+      }
+    );
+  },
+  removeLastCollection : function(user_id, collection_id, callback){
+    User.update(
+      {_id: user_id},
+      { $pull: {'lastCollections' : collection_id}},
       {},
       function(err){
         callback(err);
