@@ -27,8 +27,10 @@
 </nav>
 
 <div class="container-fluid">
+  <div class="alert alert-info text-center col-sm-offset-4 col-sm-4" ng-hide="files.length">
+    <p>Нямате добавени файлове.</p>
+  </div>
   
-  <!-- Single button -->
   <div class="row">
     <div ng-repeat="file in files track by $index" class="col-sm-6 col-md-4 col-lg-3" style="margin-bottom: 10px;">
       <button type="button" class="btn btn-success dropdown-toggle text-center fullwidth border-sharp" data-toggle="dropdown" aria-expanded="false">
