@@ -20,6 +20,10 @@
 </nav>
 
 <div class="container-fluid">
+  <div class="alert alert-info text-center col-sm-offset-4 col-sm-4" ng-hide="friends.length">
+    <p>Нямате добавени приятели.</p>
+  </div>
+  
   <div class="row">
     <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="friend in user.friends">
       <div class="panel panel-default">
