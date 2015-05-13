@@ -17,6 +17,7 @@ app.controller('CollectionsCtrl', function($scope, Collection){
 			if(data.success){
 				toastr.success('Успешно създадохте колекция.');
 				getCollections();
+				$('#newCollectionModal').modal('hide');
 			} else {
 				toastr.error(data.message);
 			}
