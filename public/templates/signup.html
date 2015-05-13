@@ -2,21 +2,21 @@
       <div class="col-sm-6 col-sm-offset-3">
         <h1><span class="fa fa-sign"></span> Регистрация</h1>
         <!-- SIGNUP FORM -->
-        <form action="/signup" method="post">
+        <form ng-submit="signup(user)">
           <div class="form-group">
             <label for="name">Име</label>
-            <input type="text" name="name" class="form-control" id="name">
+            <input type="text" ng-model="user.name" class="form-control" id="name">
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" id="email">
+            <input type="email" ng-model="user.email" class="form-control" id="email">
           </div>
           <div class="form-group">
             <label for="password">Парола</label>
-            <input type="password" name="password" class="form-control" id="password">
+            <input type="password" ng-model="user.password" class="form-control" id="password">
           </div>
 
-          <button type="submit" class="btn btn-warning btn-lg">
+          <button type="submit" class="btn btn-success btn-lg">
             Регистрация
           </button>
         </form>

@@ -14,6 +14,9 @@ app.factory('User', function($http, $rootScope){
     },
     getLastFiles: function(){
       return $http.get('/api/user/' + $rootScope.user._id + '/lastFiles');
+    },
+    signup: function(user){
+      return $http.post('/api/user/new', {user:user});
     }
   };
 });

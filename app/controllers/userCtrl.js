@@ -39,7 +39,22 @@ module.exports = function(){
           }
         });
       });
-    } // end of updateUserInfo
+    }, // end of updateUserInfo
+    createUser : function(req, res){
+      var userdata = req.body.user;
+      var user = new User();
+      user.data.name = userdata.name;
+      user.data.email = userdata.email;
+      user.local.email = userdata.email;
+      user.local.password = user.generateHash(userdata.password);
+      user.save(function(err){
+        if(err){
+          res.send({success:false, message:err});
+        } else {
+          res.send({success:true});
+        }
+      });
+    }
   }; // end of return object
 }; // end of module.exports
 

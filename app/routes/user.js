@@ -5,4 +5,5 @@ module.exports = function(app, passport){
 
   app.get('/api/user', isLoggedIn, userCtrl.getUserInfo);
   app.post('/api/user', isLoggedIn, userCtrl.updateUserInfo);
+  app.post('/api/user/new', userCtrl.createUser);
 };
