@@ -1,3 +1,5 @@
+/* global app */
+/* global toastr */
 app.controller('HomeCtrl', function($rootScope, User, $scope, Search){
   // update user to get last visited files
   User.update();

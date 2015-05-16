@@ -15,6 +15,15 @@ module.exports = {
           if(typeof user.lastFiles === "undefined"){
             user.lastFiles = [];
           }
+          
+          for(;;){
+            // if files are 5, remove last
+            if(user.lastFiles.length >= 5){
+              user.lastFiles.pop();
+            } else {
+              break;
+            }
+          }
 
           //check if this file is alredy in array
           for(var i in user.lastFiles){
@@ -55,6 +64,15 @@ module.exports = {
           if(typeof user.lastPages === 'undefined'){
             user.lastPages = [];
           }
+          
+          for(;;){
+            // if pages are 5, remove last
+            if (user.lastPages.length >= 5){
+              user.lastPages.pop();
+            } else {
+              break;
+            }
+          }
 
           // check if page is already in list
           for(var i in user.lastPages){
@@ -94,6 +112,15 @@ module.exports = {
           if(typeof user.lastBooks === 'undefined'){
             user.lastBooks = [];
           }
+          
+          for(;;){
+            // if books are 5, remove last
+            if (user.lastBooks.length >= 5){
+              user.lastBooks.pop();
+            } else {
+              break;
+            }
+          }
 
           // check if book is already in list
           for(var i in user.lastBooks){
@@ -130,6 +157,14 @@ module.exports = {
           // create lastCollections array if undefined
           if(typeof user.lastCollections === 'undefined'){
             user.lastCollections = [];
+          }
+          
+          for(;;){
+            if (user.lastCollections.length >= 5){
+              user.lastCollections.pop();
+            } else {
+              break;
+            }
           }
           
           // check if collection is already in list
